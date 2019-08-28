@@ -1,25 +1,25 @@
 from django.db import models
 
 # Create your models here.
-class Rutina(models.Model):
+class Detalle(models.Model):
     id = models.AutoField(primary_key = True)
-    nombre = models.CharField(max_length = 60, blank = False, null = False)
-    descripcion = models.TextField(blank = False, null = False)
-    actividad_id = models.ManyToManyField(Actividad)
+    atributo = models.CharField(max_length = 30, blank = False, null = False)
+    aspectoMejora = models.CharField(max_length = 30, blank = False, null = False)
     class Meta:
-        verbose_name = 'Rutina'
-        verbose_name_plural = 'Rutinas'
-        ordering = ['nombre']
+        verbose_name = 'Detalle'
+        verbose_name_plural = 'Detalles'
+        ordering = ['atributo']
     
     def __str__ (self):
-        return self.nombre
+        return self.atributo
     
-    
+
+
 class Actividad(models.Model):
     id = models.AutoField(primary_key = True)
     nombre = models.CharField(max_length = 60, blank = False, null = False)
     descripcion = models.TextField(blank = False, null = False)
-    rutina_id = models.ManyToManyField(Rutina)
+    detalle_id = models.ManyToManyField(Detalle, verbose_name="Detalle")
     class Meta:
         verbose_name = 'Actividad'
         verbose_name_plural = 'Actividades'
@@ -27,4 +27,20 @@ class Actividad(models.Model):
     
     def __str__ (self):
         return self.nombre
+    
+
+class Rutina(models.Model):
+    id = models.AutoField(primary_key = True)
+    nombre = models.CharField(max_length = 60, blank = False, null = False)
+    descripcion = models.TextField(blank = False, null = False)
+    actividad_id = models.ManyToManyField(Actividad, verbose_name="Actividad")
+    class Meta:
+        verbose_name = 'Rutina'
+        verbose_name_plural = 'Rutinas'
+        ordering = ['nombre']
+    
+    def __str__ (self):
+        return self.nombre
+
+
     
