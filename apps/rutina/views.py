@@ -21,7 +21,7 @@ def listarRutinas(request):
 def agregarDetalle(request):
     if request.method == 'POST':
         detalleForm = DetalleForm(request.POST)
-        if DetalleForm.is_valid():
+        if detalleForm.is_valid():
             detalleForm.save()
             return redirect ('/rutinas')
     else:
