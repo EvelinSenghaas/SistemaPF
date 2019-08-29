@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Rutina
+from .models import Rutina, Actividad
 from .forms import DetalleForm, ActividadForm, RutinaForm
 
 # Create your views here.
@@ -14,8 +14,11 @@ def Rutinas(request):
 
 def listarRutinas(request):
     rutinas = Rutina.objects.all()
-    print(rutinas)
     return render(request, 'rutina/rutinas.html', {'rutinas':rutinas})
+
+def listarActividades(request):
+    actividad = Actividad.objects.all()
+    return render(request, 'rutina/rutinas.html', {'actividad':actividad})   
 
 
 def agregarDetalle(request):

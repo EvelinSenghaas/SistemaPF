@@ -1,8 +1,8 @@
 from django.urls import path, re_path
-from .views import Rutinas, agregarDetalle, agregarActividad, agregarRutina
+from .views import Rutinas, agregarDetalle, agregarActividad, agregarRutina, listarRutinas
 
 urlpatterns = [
-    path('', Rutinas, name = 'rutinas'),
+    path('',  listarRutinas, name = 'rutinas'),
 
 
     path('agregar_detalle',agregarDetalle, name = 'agregar_detalle'),
