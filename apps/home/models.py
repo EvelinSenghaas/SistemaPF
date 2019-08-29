@@ -6,16 +6,17 @@ class Usuario(models.Model):
     nombreUsuario = models.CharField(max_length = 60, blank = False, null = False)
     contrasena = models.CharField(max_length = 20, blank = False, null = False)
     correo = models.EmailField(max_length = 70, blank = False, null = False)
-    fechaCreacion = models.DateField('Fecha de creacion', auto_now = True, auto_now_add = False)
+    #fechaCreacion = models.DateField('Fecha de creacion', auto_now = True, auto_now_add = False)
     
     #Datos generales
     nombres= models.CharField(max_length = 70, blank = False, null = False)
     apellidos= models.CharField(max_length = 60, blank = False, null = False)
-    fechaNac = models.DateField('Fecha de nacimiento', blank = False, null = False)
+    fechaNac = models.DateField('Fecha de nacimiento', blank = True, null = True)
     sexo = models.CharField(max_length = 1, blank = False, null = False)
+    nacionalidad = models.CharField(max_length = 25, blank = False, null = False)
     
     #Datos especiales
-    altura = models.DecimalField(max_digits=1, decimal_places=2,)
+    altura = models.DecimalField(max_digits=2, decimal_places=2,)
     peso =   models.DecimalField(max_digits=3, decimal_places=3,)
 
     
