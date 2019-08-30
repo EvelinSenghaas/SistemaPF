@@ -2,15 +2,27 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login as dj_login, logout, authenticate
 from django.contrib import messages
-from .forms import UsuarioForm
 from .models import Usuario
+from .forms import NewUserForm
 
 
 # Create your views here.
 def Home(request):
     return render(request,'home/home.html')
 
-#def registro(request):
+def registro(request):               
+    if request.method == 'POST':
+        form = NewUserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            dj_login(request, user)
+            return redirect ('/home')
+        else:
+            for msg in form.error_messages:
+                messages.error(request, f"{msg}: {form.error_messages[msg]}")
+
+    form = NewUserForm
+    return render(request, 'registro.html', context={'form': form})
     
 
 def login (request):
