@@ -20,10 +20,14 @@ class Actividad(models.Model):
     nombre = models.CharField(max_length = 60, blank = False, null = False)
     descripcion = models.TextField(blank = False, null = False)
     detalle_id = models.ManyToManyField(Detalle, verbose_name="Detalle")
+    estado = models.BooleanField(default=True)
     class Meta:
         verbose_name = 'Actividad'
         verbose_name_plural = 'Actividades'
         ordering = ['nombre']
+        permissions = (
+            
+        )
     
     def __str__ (self):
         return self.nombre

@@ -4,11 +4,14 @@ from django.contrib.auth import login as dj_login, logout, authenticate
 from django.contrib import messages
 from .forms import NewUserForm, UsuarioForm
 from django.views.generic import TemplateView
-
+from apps.rutina.views import ListadoRutinas
 
 # Create your views here.
 class Home(TemplateView):
     template_name = "home/home.html"
+    
+class Administrar(TemplateView):
+    template_name = "home/administracion.html"
 
 
 def registro(request):               

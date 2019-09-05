@@ -1,0 +1,50 @@
+{%extends 'home/home.html'%}
+{%load staticfiles%}
+
+{%block titulo%}Administracion{%endblock titulo%}
+{%block imagen_principal%}
+{%endblock imagen_principal%}
+
+{%block contenido%}
+<body class="container mt-2">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active">Administracion</li>
+        </ol>
+        <div class="row">
+                <div class="col-lg-4 col-sm-6 portfolio-item">
+                  <div class="card h-100">
+                    <a href="/rutinas"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+                    <div class="card-body">
+                      <h4 class="card-title">
+                        <a href="/rutinas">Ver Rutinas</a>
+                      </h4>
+                      <p class="card-text">Ver mas información sobre las rutinas ofrecidas en el sistema</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 portfolio-item">
+                  <div class="card h-100">
+                    <a href="{% url 'rutinas:actividades' %}"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+                    <div class="card-body">
+                      <h4 class="card-title">
+                        <a href="{% url 'rutinas:actividades' %}">Ver Actividades</a>
+                      </h4>
+                      <p class="card-text">Ver información sobre las actividades que hay en el sistema</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 portfolio-item">
+                  <div class="card h-100">
+                    <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+                    <div class="card-body">
+                      <h4 class="card-title">
+                        <a href="#">Ver Detalles</a>
+                      </h4>
+                      <p class="card-text">Ver los detalles</p>
+                    </div>
+                  </div>
+        </div>
+</body>
+{%endblock contenido%}
+{%block pie%}
+{%endblock pie%}

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.rutina',
     'apps.home',
+    'rolepermissions',
 ]
 
 MIDDLEWARE = [
