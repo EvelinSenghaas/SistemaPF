@@ -1,8 +1,16 @@
 from django import forms
+from .models import Usuario
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-        
+
+class UsuarioForm():
+    class Meta:
+        model = Usuario
+        fields = ['nombreUsuario', 'contrasena', 'correo', 'nombres', 'apellidos', 'fechaNac', 'sexo', 'nacionalidad', 'altura', 'peso']
+    
+            
 class NewUserForm(UserCreationForm):
+
     email = forms.EmailField(required=True)
 
     class Meta:

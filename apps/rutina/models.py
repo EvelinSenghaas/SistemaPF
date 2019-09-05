@@ -33,6 +33,7 @@ class Rutina(models.Model):
     id = models.AutoField(primary_key = True)
     nombre = models.CharField(max_length = 60, blank = False, null = False)
     descripcion = models.TextField(blank = False, null = False)
+    estado = models.BooleanField(default=True)
     actividad_id = models.ManyToManyField(Actividad, verbose_name="Actividad")
     class Meta:
         verbose_name = 'Rutina'

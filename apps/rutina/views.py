@@ -1,53 +1,72 @@
 from django.shortcuts import render, redirect
-from .models import Rutina, Actividad
+from .models import Rutina, Actividad, Detalle
 from .forms import DetalleForm, ActividadForm, RutinaForm
+from django.views.generic import View, TemplateView, ListView, UpdateView, CreateView, DeleteView
+from django.urls import reverse_lazy
 
 # Create your views here.
-
-
-"""def listarAutores(request):
-    autores = Autor.objects.all()
-    return render(request, 'libro/listar_autor.html', {'autores':autores})"""
     
-def Rutinas(request):
-    return render(request, 'rutina/rutinas.html')
-
-def listarRutinas(request):
-    rutinas = Rutina.objects.all()
-    return render(request, 'rutina/rutinas.html', {'rutinas':rutinas})
-
-def listarActividades(request):
-    actividad = Actividad.objects.all()
-    return render(request, 'rutina/rutinas.html', {'actividad':actividad})   
-
-
-def agregarDetalle(request):
-    if request.method == 'POST':
-        detalleForm = DetalleForm(request.POST)
-        if detalleForm.is_valid():
-            detalleForm.save()
-            return redirect ('/rutinas')
-    else:
-        detalleForm = DetalleForm()
-        return render(request, 'rutina/agregarDetalle.html',{'detalleForm':detalleForm})
-
-
-def agregarActividad(request):
-    if request.method == 'POST':
-        actividadForm = ActividadForm(request.POST)
-        if actividadForm.is_valid():
-            actividadForm.save()
-            return redirect ('/rutinas')
-    else:
-        actividadForm = ActividadForm()
-        return render(request, 'rutina/agregarActividad.html',{'actividadForm':actividadForm})
+class Rutinas (TemplateView):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'rutina/rutinas.html')
     
-def agregarRutina(request):
-    if request.method == 'POST':
-        rutinaForm = RutinaForm(request.POST)
-        if rutinaForm.is_valid():
-            rutinaForm.save()
-            return redirect ('/rutinas')
-    else:
-        rutinaForm = RutinaForm()
-        return render(request, 'rutina/agregarRutina.html',{'rutinaForm':rutinaForm})
+#Listados
+class ListadoRutinas (ListView):
+    template_name = 'rutina/rutinas.html'
+    context_object_name = 'rutinas'
+    queryset = Rutina.objects.filter(estado=True)
+    
+    
+    
+def verRutina(request, pk):
+    rutina = Rutina.objects.get(id = pk)
+    return render (request, 'rutina/verRutina.html', { 'rutina': rutina})
+       
+
+#Agregar    
+class AgregarDetalle(CreateView):
+    model = Detalle
+    form_class = DetalleForm
+    template_name = 'rutina/agregarDetalle.html'
+    succes_name = reverse_lazy('/rutinas')
+    
+class AgregarActividad(CreateView):
+    model = Actividad
+    template_name = 'rutina/agregarActividad.html'
+    form_class = ActividadForm
+    succes_name = reverse_lazy('/rutinas')
+    
+class AgregarRutina(CreateView):
+    model = Rutina
+    form_class = RutinaForm
+    template_name = 'rutina/agregarRutina.html'
+    succes_name = reverse_lazy('/rutinas')
+ 
+#Editar    
+class EditarRutina(UpdateView):
+    model = Rutina
+    template_name = 'rutina/agregarRutina.html'
+    form_class = RutinaForm
+    succes_url = reverse_lazy('/rutinas')
+    
+
+class EditarActividad(UpdateView):
+    model = Actividad
+    template_name = 'rutina/agregarActividad.html'
+    form_class = ActividadForm
+    succes_url = reverse_lazy('/rutinas')
+    
+class EditarDetalle(UpdateView):
+    model = Detalle
+    template_name = 'rutina/agregarDetalle.html'
+    form_class = DetalleForm
+    succes_url = reverse_lazy('/rutinas')
+    
+#Eliminar
+class EliminarRutina(DeleteView):
+    model = Rutina
+    def post(self,request, pk, *args, **kwargs):
+        object = Rutina.objects.get(id = pk)
+        object.estado = False
+        object.save()
+        return redirect('/rutinas')

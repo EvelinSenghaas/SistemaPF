@@ -4,17 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!--BOOTSTRAP-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Agregar actividad</title>
 </head>
-<body>
-        <form method="POST">
-                {% csrf_token %}
-
-
-        {{actividadForm.as_p}}
-        <button type="submit" class="btn btn-primary">Crear</button>
-
-
-    </form>
+<body class="container">
+    <div class="card">
+        <div class="card-header"><strong>Administracion de Actividad</strong></div>
+            <div class="card-body card-block">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="">
+                        <div class="form-group">
+                            <div class="row form-group">
+                                <div class="col col-md-3">{{form.nombre.label}}</div>
+                                <div class="col-12 col-md-9">{{form.nombre}}</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row form-group">
+                                <div class="col col-md-3">{{form.descripcion.label}}</div>
+                                <div class="col-12 col-md-9">{{form.descripcion}}</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row form-group">
+                                <div class="col col-md-3">{{form.detalle_id.label}}</div>
+                                <div class="col-12 col-md-9">{{form.detalle_id}}</div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Agregar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--SCRIPTS-->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
