@@ -18,7 +18,7 @@ class ActividadForm (forms.ModelForm):
                 attrs = { 'class':'form-control', 'placeholder': 'Ingrese el nombre de la actividad'}
                 ), 'descripcion' : forms.Textarea(
                     attrs = {
-                        'class' : 'form-control', 'placeholder': 'ingrese la descripcion de la actividad'
+                        'class' : 'form-control', 'placeholder': 'Ingrese la descripcion de la actividad'
                     }
                 )
         }
@@ -35,7 +35,7 @@ class RutinaForm (forms.ModelForm):
                 attrs = { 'class':'form-control', 'placeholder': 'Ingrese el nombre de la rutina'}
                 ), 'descripcion' : forms.Textarea(
                     attrs = {
-                        'class' : 'form-control', 'placeholder': 'ingrese la descripcion de la rutina'
+                        'class' : 'form-control', 'placeholder': 'Ingrese la descripcion de la rutina'
                     }
                 )
         }
