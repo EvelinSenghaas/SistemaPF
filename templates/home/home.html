@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Modern Business - Start Bootstrap Template</title>
+  <title> {%block titulo%} FitRou Home {%endblock titulo%}</title>
 
   <!-- Bootstrap core CSS -->
   <link href=" {% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -64,9 +64,14 @@
       <div class="carousel-inner" role="listbox">
         <!-- Slide One - Set the background image for this slide in the line below -->
         <div class="carousel-item active" style="background-image: url('http://placehold.it/1900x1080')">
+          {%block imagen%}
+          <img src="{% static 'img/img_home.jpg'%}" alt="">
+          {%endblock imagen%}
           <div class="carousel-caption d-none d-md-block">
-            <h3>First Slide</h3>
-            <p>This is a description for the first slide.</p>
+            {%block titulo_imagen%}
+            <h2><strong>FitRou</strong></h2>
+            <p>Mantente en forma estés donde estés</p>
+            {%endblock titulo_imagen%}
           </div>
         </div>
     {%endblock imagen_principal%}
@@ -212,15 +217,6 @@
 
     <hr>
 
-    <!-- Call to Action Section -->
-    <div class="row mb-4">
-      <div class="col-md-8">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias, expedita, saepe, vero rerum deleniti beatae veniam harum neque nemo praesentium cum alias asperiores commodi.</p>
-      </div>
-      <div class="col-md-4">
-        <a class="btn btn-lg btn-secondary btn-block" href="#">Call to Action</a>
-      </div>
-    </div>
 
   </div>
   <!-- /.container -->
