@@ -22,9 +22,9 @@
 <body>
   {%block body%}
 
+  {%block barra_navegacion%}
   <!-- Navigation -->
   <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
-  {%block barra_navegacion%}
     <div class="container">
       <a class="navbar-brand" href="/home">FitRou</a>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +48,7 @@
           {%endif%}
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              {{user.username}}
+            {{user.username}}
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
               <a class="dropdown-item" href="">Perfil</a>
@@ -58,18 +58,16 @@
         </ul>
       </div>
     </div>
-  {%endblock barra_navegacion%}  
   </nav>
+  {%endblock barra_navegacion%}
 
   {%block imagen_principal%}
   <header>
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
       <ol class="carousel-indicators"></ol>
         <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-      </ol>
       <div class="carousel-inner" role="listbox">
         <!-- Slide One - Set the background image for this slide in the line below -->
-        
         <div class="carousel-item active" style="background-image: url('http://placehold.it/1900x1080')">
           {%block imagen%}
           <img src="{% static 'img/img_home.jpg'%}" alt="">
