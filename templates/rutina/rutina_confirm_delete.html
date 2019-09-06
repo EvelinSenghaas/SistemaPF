@@ -1,21 +1,21 @@
 {%extends 'home/home.html'%}
 {%load staticfiles%}
 
-{%block titulo%}Eliminar rutina{%endblock titulo%}
+{%block titulo%}Modificar rutina{%endblock titulo%}
 {%block imagen_principal%}
 {%endblock imagen_principal%}
 
 {%block contenido%}
 <body class="container mt-2">
         <div class="card">
-            <div class="card-header"><strong>Confirmar eliminacion de una rutina</strong></div>
+            <div class="card-header"><strong>Confirmar cambio de estado de rutina</strong></div>
                 <div class="card-body card-block">
                     <form method="POST">
                         {% csrf_token %}
                         <div class="">
                             <div class="form-group">
                                 <div class="row form-group">
-                                    <p><strong>Seguro que desea eliminar la rutina {{object}}? </strong></p>
+                                    <p><strong>Seguro que desea cambiar el estado de {{object}}? </strong></p>
                                 </div>
                                 <button type="submit" class="btn btn-danger" display="block">Confirmar</button>
                             </div>

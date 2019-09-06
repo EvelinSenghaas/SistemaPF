@@ -1,0 +1,55 @@
+{% extends 'home/home.html'%}
+{% load staticfiles%}
+
+{%block titulo%}Rutinas{%endblock titulo%}
+
+            {%block imagen%}
+            <img src="{%static 'img/img_rutinas.jpg'%}" alt="">
+            {%endblock imagen%}
+            {%block titulo_imagen%}
+                <h2><strong>Rutinas</strong></h2>
+                <p>Hay cada una especial para ti</p>
+            {%endblock titulo_imagen%}
+
+    {%block contenido%}
+    <section class="container mt-2">
+        <div class="list-group" >
+            <div class="list-group-item active">
+                <div class="row">
+                    <div class="col-md-11 col-sm-11">Lista de Rutinas</div>
+                    {% if perms.rutina.add_rutina%}
+                    <div class="col-0"><a class="btn btn-light" href="agregar_rutina" src="">
+                        <img src="{% static 'img/img_agregar_rutina.png'%}" alt=""></a>
+                    </div>
+                    {%endif%}
+                </div>
+            </div>
+                {% if perms.rutina.view_rutina%}
+                {% for rutina in rutinas %}
+                <div class="list-group-item ">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-3">
+                            <a href="ver_rutina/{{rutina.id}}">{{rutina.nombre}}</a>
+                        </div>
+                        <div class="col-md-7 col-sm-7">
+                            {{rutina.descripcion}}
+                        </div>
+                        {% if perms.rutina.edit_rutina and perms.rutina.delete_rutina%}
+                        <div class="col-0">
+                            <a class="btn btn-outline-secondary" href="editar_rutina/{{rutina.id}}">Editar</a>
+                        </div>
+                        <div class="col-1">
+                                <a class="btn btn-outline-danger" href="eliminar_rutina/{{rutina.id}}">Borrar</a>
+                        </div>
+                        {%endif%}
+                    </div>
+                </div>      
+                {%endfor%}
+                {%endif%}
+        </div>
+    </section>
+    {%endblock contenido%}
+    <hr>
+
+
+

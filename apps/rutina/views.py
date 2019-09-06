@@ -8,15 +8,18 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 # Create your views here.
     
 class Rutinas (TemplateView):
-    def get(self, request, *args, **kwargs):
-        return render(request, 'rutina/rutinas.html')
+    permission_required = ('rutina.view_rutina')
+    template_name = 'rutina/administrarRutinas.html'
+    context_object_name = 'rutinas'
+    queryset = Rutina.objects.all()
+    succes_url = reverse_lazy('/rutinas/administrarRutinas')
 
     
 
 #Listados
 class ListadoRutinas (PermissionRequiredMixin,ListView):
     permission_required = ('rutina.view_rutina')
-    template_name = 'rutina/blog-home-2.html'
+    template_name = 'rutina/rutinas.html'
     context_object_name = 'rutinas'
     queryset = Rutina.objects.filter(estado=True)
 
@@ -91,7 +94,7 @@ class EliminarRutina(DeleteView):
     model = Rutina
     def post(self,request, pk, *args, **kwargs):
         object = Rutina.objects.get(id = pk)
-        object.estado = False
+        object.estado = not(object.estado)
         object.save()
         return redirect('/rutinas')
     
