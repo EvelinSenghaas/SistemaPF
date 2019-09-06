@@ -22,6 +22,18 @@
                             </div>
                             <div class="card">
                                 <strong>Lista de actividades</strong>
+                                {%for actividad in actividades%}
+                                <div class="list-group-item ">
+                                        <div class="row">
+                                            <div class="col-md-3 col-sm-3">
+                                                {{actividad.nombre}}
+                                            </div>
+                                            <div class="col-md-7 col-sm-7">
+                                                {{actividad.descripcion}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {%endfor%}
                             </div>
                             <!-- <button type="submit" class="btn btn-primary">Agregar</button> -->
                         </div>

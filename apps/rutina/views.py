@@ -29,7 +29,15 @@ class ListadoActividades (PermissionRequiredMixin,ListView):
     
 def verRutina(request, pk):
     rutina = Rutina.objects.get(id = pk)
-    return render (request, 'rutina/verRutina.html', { 'rutina': rutina})
+    actividades = []
+    act = Rutina.objects.values_list('actividad_id').filter(id=pk)
+    for a in act:
+        i=0
+        actividades += Actividad.objects.filter(id=a[i])
+        i=i+1
+    
+    
+    return render (request, 'rutina/verRutina.html', { 'rutina': rutina, 'actividades':actividades})
        
 
 #Agregar    
