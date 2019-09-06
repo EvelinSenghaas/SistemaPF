@@ -15,13 +15,13 @@ class Rutinas (TemplateView):
 
 #Listados
 class ListadoRutinas (PermissionRequiredMixin,ListView):
-    permission_required = ('rutina.view_rutina','rutina.add_rutina','rutina.edit_rutina','rutina.delete_rutina')
-    template_name = 'rutina/rutinas.html'
+    permission_required = ('rutina.view_rutina')
+    template_name = 'rutina/blog-home-2.html'
     context_object_name = 'rutinas'
     queryset = Rutina.objects.filter(estado=True)
 
 class ListadoActividades (PermissionRequiredMixin,ListView):
-    permission_required = ('actividad.view_actividad','actividad.add_actividad','actividad.edit_actividad','actividad.delete_actividad')
+    permission_required = ('actividad.view_actividad')
     template_name = 'rutina/actividades.html'
     context_object_name = 'actividades'
     queryset = Actividad.objects.filter(estado=True)    

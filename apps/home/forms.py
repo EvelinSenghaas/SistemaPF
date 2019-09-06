@@ -1,7 +1,7 @@
 from django import forms
 from .models import Usuario
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 
 class UsuarioForm():
     class Meta:
@@ -16,6 +16,9 @@ class NewUserForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2','first_name', 'last_name']
+        labels = {
+            'username' : 'Nombre deusuario', 'email': 'Correo electronico', 'password1': 'Contraseña', 'password2': 'Repetir contraseña', 'first_name': 'Nombres', 'last_name': 'Apellidos',
+        }
     
     def save (self, commit=True):
         user = super(NewUserForm, self).save(commit=False)
@@ -24,4 +27,5 @@ class NewUserForm(UserCreationForm):
         user.last_name = self.cleaned_data['last_name']
         if commit:
             user.save()
+
         return user

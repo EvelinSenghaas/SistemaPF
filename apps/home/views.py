@@ -5,6 +5,7 @@ from django.contrib import messages
 from .forms import NewUserForm, UsuarioForm
 from django.views.generic import TemplateView
 from apps.rutina.views import ListadoRutinas
+from django.contrib.auth.models import User, Permission
 
 # Create your views here.
 class Home(TemplateView):
@@ -18,9 +19,11 @@ def registro(request):
     if request.method == 'POST':
         form = NewUserForm(request.POST)
         if form.is_valid():
+            permission = Permission.objects.get(name='Can view Rutina')
+            form.user_permissions.add(permission)
             user = form.save()
             dj_login(request, user)
-            return redirect ('/home/cargar_datos')
+            return redirect ('/home')
         else:
             for msg in form.error_messages:
                 messages.error(request, f"{msg}: {form.error_messages[msg]}")
@@ -48,6 +51,7 @@ def login (request):
     return render(request, 'login.html', {'form': form})
 
 
+#Esto no se va a usar
 def cargarDatosUsuario(request):
     if request.method == 'POST':
         userForm = UsuarioForm(request.POST)

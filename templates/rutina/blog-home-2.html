@@ -1,0 +1,63 @@
+{% extends 'home/home.html'%}
+{% load staticfiles%}
+
+{%block titulo%}Rutinas{%endblock titulo%}
+
+            {%block imagen%}
+            <img src="{%static 'img/img_rutinas.jpg'%}" alt="">
+            {%endblock imagen%}
+            {%block titulo_imagen%}
+                <h2><strong>Rutinas</strong></h2>
+                <p>Hay cada una especial para ti</p>
+            {%endblock titulo_imagen%}
+{%block contenido%}            
+<body>
+  <!-- Page Content -->
+  <div class="container mt-2">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active">Listado de rutinas</li>
+      </ol>
+    <!-- Blog Post -->
+    {% for rutina in rutinas %}
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-6">
+            <a href="#">
+              <img class="img-fluid rounded" src="http://placehold.it/750x300" alt="">
+            </a>
+          </div>
+          <div class="col-lg-6">
+            <h2 class="card-title">{{rutina.nombre}}</h2>
+            <p class="card-text">{{rutina.descripcion}}</p>
+            <a href="#" class="btn btn-primary">Inscribirse</a>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-muted">
+        <div class="row">
+          <div class="col-md-10 col-sm-10">Profesor Nombre</div>
+          {% if perms.rutina.edit_rutina and perms.rutina.delete_rutina%}
+            <div class="col-0">
+              <a class="btn btn-outline-secondary" href="editar_rutina/{{rutina.id}}">Editar</a>
+            </div>
+            <div class="col-1">
+              <a class="btn btn-outline-danger" href="eliminar_rutina/{{rutina.id}}">Borrar</a>
+            </div>
+          {%endif%}
+        </div>
+    </div>
+    </div>
+    {%endfor%}
+  </div>
+
+ 
+
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+{%endblock contenido%}
+
