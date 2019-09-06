@@ -17,7 +17,7 @@ class NewUserForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2','first_name', 'last_name']
         labels = {
-            'username' : 'Nombre deusuario', 'email': 'Correo electronico', 'password1': 'Contraseña', 'password2': 'Repetir contraseña', 'first_name': 'Nombres', 'last_name': 'Apellidos',
+            'username' : 'Nombre de usuario', 'email': 'Correo electronico', 'password1': 'Contraseña', 'password2': 'Repetir contraseña', 'first_name': 'Nombres', 'last_name': 'Apellidos',
         }
     
     def save (self, commit=True):
