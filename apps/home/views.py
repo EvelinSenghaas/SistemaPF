@@ -19,10 +19,12 @@ def registro(request):
     if request.method == 'POST':
         form = NewUserForm(request.POST)
         if form.is_valid():
-            permission = Permission.objects.get(name='Can view Rutina')
-            form.user_permissions.add(permission)
+
             user = form.save()
             dj_login(request, user)
+            permission = Permission.objects.get(name='Can view Rutina')
+            user.user_permissions.add(permission)
+            user.save()
             return redirect ('/home')
         else:
             for msg in form.error_messages:
