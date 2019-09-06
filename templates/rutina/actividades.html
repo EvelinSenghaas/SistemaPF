@@ -18,7 +18,7 @@
                 <div class="row">
                     <div class="col-md-11 col-sm-11">Lista de Actividades</div>
                     {% if perms.actividad.add_actividad%}
-                    <div class="col-0"><a class="btn btn-light" href="agregar_actividad" src="">
+                    <div class="col-0"><a class="btn btn-light" href="/rutinas/agregar_actividad" src="">
                         <img src="{% static 'img/img_agregar_rutina.png'%}" alt=""></a>
                     </div>
                     {%endif%}
@@ -29,7 +29,7 @@
                 <div class="list-group-item ">
                     <div class="row">
                         <div class="col-md-3 col-sm-3">
-                            <a href="ver_rutina/{{rutina.id}}">{{actividad.nombre}}</a>
+                            <a href="#">{{actividad.nombre}}</a>
                         </div>
                         <div class="col-md-7 col-sm-7">
                             {{actividad.descripcion}}
