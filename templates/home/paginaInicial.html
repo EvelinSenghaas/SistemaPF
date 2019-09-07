@@ -1,0 +1,56 @@
+{%load staticfiles%}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Bienvenido a FitRou</title>
+    <!-- Bootstrap core CSS -->
+  <link href=" {% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/modern-business.css' %}" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+  <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="">FitRou</a>
+          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="/accounts/login">Loguearse</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/registro">Registrarse</a>
+              </li>
+
+            </ul>
+          </div>
+        </div>
+    </nav>   
+      
+      <header>
+            <div id="carouselExampleIndicators" class="carousel slide mt-1" data-ride="carousel">
+              <ol class="carousel-indicators"></ol>
+              <div class="carousel-inner" role="listbox">
+                <!-- Slide One - Set the background image for this slide in the line below -->
+                <div class="carousel-item active" style="background-image: url('http://placehold.it/1900x1080')">
+                  {%block imagen%}
+                  <img src="{% static 'img/mc_gregor.jpg'%}" alt="">
+                  {%endblock imagen%}
+                  <div class="carousel-caption d-none d-md-block">
+                    {%block titulo_imagen%}
+                    <h2><strong>Bienvenido a FitRou</strong></h2>
+                    <p>Un sitio para poder entrenar a tu forma</p>
+                    {%endblock titulo_imagen%}
+                  </div>
+                </div>
+        </header>
+</body>
+</html>

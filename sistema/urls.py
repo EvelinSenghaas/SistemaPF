@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import logout_then_login
-from apps.home.views import Home, Login, registro, logoutUsuario
+from apps.home.views import Home, Login, registro, logoutUsuario, PaginaInicial
 
 
 urlpatterns = [
@@ -27,5 +27,5 @@ urlpatterns = [
     path('accounts/login/', Login.as_view(success_url="/home/"),  name = 'login'),
     path('registro/', registro,  name = 'registro'),
     path('logout/', login_required(logoutUsuario), name='logout'),
-    path('', Login.as_view(success_url="/home/"),  name = 'login'),
+    path('', PaginaInicial.as_view(),  name = 'pag_inicial'),
 ]

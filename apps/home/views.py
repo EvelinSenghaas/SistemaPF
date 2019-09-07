@@ -20,6 +20,9 @@ class Home(TemplateView):
     
 class Administrar(TemplateView):
     template_name = "home/administracion.html"
+    
+class PaginaInicial(TemplateView):
+    template_name = "home/paginaInicial.html"
 
 
 def registro(request):               
