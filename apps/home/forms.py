@@ -19,7 +19,29 @@ class NewUserForm(UserCreationForm):
         labels = {
             'username' : 'Nombre de usuario', 'email': 'Correo electronico', 'password1': 'Contraseña', 'password2': 'Repetir contraseña', 'first_name': 'Nombres', 'last_name': 'Apellidos',
         }
-    
+        widgets = {
+            'username' : forms.TextInput(
+                attrs = { 'class':'form-control', 'placeholder': 'Ingrese su nombre de usuario'}
+                ),
+            'email' : forms.EmailInput(
+                attrs = { 'class':'form-control', 'placeholder': 'Ingrese su correo electrónico'}
+                ),
+            'password1' : forms.PasswordInput(
+                attrs = { 'class':'form-control', 'placeholder': 'Ingrese su contraseña'}
+                ),
+            'password2' : forms.PasswordInput(
+                attrs = { 'class':'form-control', 'placeholder': 'Repita su contraseña'}
+                ),
+            'first_name' : forms.TextInput(
+                attrs = { 'class':'form-control', 'placeholder': 'Ingrese sus nombres'}
+                ),
+            'last_name' : forms.TextInput(
+                attrs = { 'class':'form-control', 'placeholder': 'Ingrese sus apellidos'}
+                ),
+        }
+        
+        
+        
     def save (self, commit=True):
         user = super(NewUserForm, self).save(commit=False)
         user.email = self.cleaned_data['email']

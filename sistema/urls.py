@@ -27,4 +27,5 @@ urlpatterns = [
     path('accounts/login/', Login.as_view(success_url="/home/"),  name = 'login'),
     path('registro/', registro,  name = 'registro'),
     path('logout/', login_required(logoutUsuario), name='logout'),
+    path('', Login.as_view(success_url="/home/"),  name = 'login'),
 ]
