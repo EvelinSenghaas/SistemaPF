@@ -8,12 +8,12 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 
 # Create your views here.
     
-class Rutinas (TemplateView):
+class Rutinas (PermissionRequiredMixin,ListView):
     permission_required = ('rutina.view_rutina')
     template_name = 'rutina/administrarRutinas.html'
     context_object_name = 'rutinas'
-    queryset = Rutina.objects.all()
-    succes_url = reverse_lazy('/rutinas/administrarRutinas')
+    queryset = Rutina.objects.filter(estado=True)
+
 
     
 
