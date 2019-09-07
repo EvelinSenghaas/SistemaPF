@@ -29,17 +29,17 @@
                 <div class="list-group-item ">
                     <div class="row">
                         <div class="col-md-3 col-sm-3">
-                            <a href="ver_rutina/{{rutina.id}}">{{rutina.nombre}}</a>
+                            <a href="/rutinas/ver_rutina/{{rutina.id}}">{{rutina.nombre}}</a>
                         </div>
                         <div class="col-md-7 col-sm-7">
                             {{rutina.descripcion}}
                         </div>
                         {% if perms.rutina.edit_rutina and perms.rutina.delete_rutina%}
                         <div class="col-0">
-                            <a class="btn btn-outline-secondary" href="editar_rutina/{{rutina.id}}">Editar</a>
+                            <a class="btn btn-outline-secondary" href="/rutinas/editar_rutina/{{rutina.id}}">Editar</a>
                         </div>
                         <div class="col-1">
-                                <a class="btn btn-outline-danger" href="eliminar_rutina/{{rutina.id}}">Borrar</a>
+                                <a class="btn btn-outline-danger" href="/rutinas/eliminar_rutina/{{rutina.id}}">Borrar</a>
                         </div>
                         {%endif%}
                     </div>
