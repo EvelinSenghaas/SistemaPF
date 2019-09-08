@@ -4,7 +4,8 @@ from .forms import DetalleForm, ActividadForm, RutinaForm
 from django.views.generic import View, TemplateView, ListView, UpdateView, CreateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import PermissionRequiredMixin
-
+from apps.home.models import Profesor
+from django.contrib.auth.models import User
 
 # Create your views here.
     
@@ -59,13 +60,37 @@ class AgregarActividad(PermissionRequiredMixin, CreateView):
     form_class = ActividadForm
     succes_name = reverse_lazy('/rutinas')
 
-    
+
+#ESTO NO SE USA    
 class AgregarRutina(PermissionRequiredMixin, CreateView):
     permission_required = 'rutina.add_rutina'
     model = Rutina
     form_class = RutinaForm
     template_name = 'rutina/agregarRutina.html'
     succes_name = reverse_lazy('/rutinas')
+    
+    def post(self,request, pk, *args, **kwargs):
+        user = User.objects.get(id = pk)
+        profesor = Profesor.objects.get(id=user.id)
+        model.profesor_id=profesor.id
+        model.save()
+        return redirect('/rutinas')
+    
+def agregarRutina(request, pk):
+    user = User.objects.get(id = pk)
+    profesor = Profesor.objects.get(user_id=user.id)
+    if request.method == 'POST':
+        rutinaForm = RutinaForm(request.POST)
+        if rutinaForm.is_valid():
+            rutina = rutinaForm.save(commit=False)
+            rutina.profesor_id=profesor
+            rutina.save()
+            return redirect ('/rutinas/administrar_rutinas/')
+    else:
+        rutinaForm = RutinaForm()
+        return render(request, 'rutina/agregarRutina.html',{'rutinaForm':rutinaForm})
+    
+    return redirect ('/rutinas/administrar_rutinas/')
  
 #Editar    
 class EditarRutina(PermissionRequiredMixin,UpdateView):
@@ -103,6 +128,9 @@ class EliminarActividad(DeleteView):
     model = Actividad
     def post(self,request, pk, *args, **kwargs):
         object = Actividad.objects.get(id = pk)
-        object.estado = False
+        object.estado = not(object.estado)
         object.save()
         return redirect('/rutinas/actividades')
+    
+    
+    

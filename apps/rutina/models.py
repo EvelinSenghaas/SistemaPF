@@ -50,3 +50,5 @@ class Rutina(models.Model):
     def __str__ (self):
         return self.nombre
     
+    def asociarProfesor(self, pk):
+        self.profesor_id=pk

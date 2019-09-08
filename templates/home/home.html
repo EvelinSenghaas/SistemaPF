@@ -41,7 +41,7 @@
           <li class="nav-item">
             <a class="nav-link" href="">vacio</a>
           </li>
-          {% if perms.actividad.edit_actividad and perms.actividad.delete_actividad and perms.rutina.edit_rutina and perms.rutina.delete_rutina%}
+          {% if perms.actividad.edit_actividad or perms.actividad.delete_actividad or perms.rutina.edit_rutina or perms.rutina.delete_rutina%}
           <li class="nav-item">
               <a class="nav-link" href="/home/administracion">Administrar</a>
           </li>
