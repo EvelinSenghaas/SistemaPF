@@ -35,10 +35,10 @@ class Profesor(models.Model):
     apellido = models.CharField(max_length = 60, blank = False, null = True)
     fecha_nac = models.DateField(blank = False, null = True)
     sexo = models.CharField(max_length = 1, blank = False, null = True)
-    """class Meta:
+    class Meta:
         verbose_name = 'Profesor'
         verbose_name_plural = 'Profesores'
-        ordering = ['nombre']"""
+        ordering = ['nombre']
     
     def __str__(self):
         return self.nombre
@@ -52,10 +52,10 @@ class Alumno(models.Model):
     sexo = models.CharField(max_length = 1, blank = False, null = True)
     rutina_id = models.ForeignKey('rutina.Rutina', related_name='rutina', on_delete=models.CASCADE, verbose_name="Rutina", null = True)
     
-    """class Meta:
+    class Meta:
         verbose_name = 'Alumno'
         verbose_name_plural = 'Alumnos'
-        ordering = ['nombre']"""
+        ordering = ['nombre']
     
     def __str__(self):
         return self.nombre
