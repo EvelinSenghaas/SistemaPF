@@ -35,6 +35,7 @@ class Profesor(models.Model):
     apellido = models.CharField(max_length = 60, blank = False, null = True)
     fecha_nac = models.DateField(blank = False, null = True)
     sexo = models.CharField(max_length = 1, blank = False, null = True)
+    estado = models.BooleanField(default=True)
     class Meta:
         verbose_name = 'Profesor'
         verbose_name_plural = 'Profesores'
@@ -50,6 +51,7 @@ class Alumno(models.Model):
     apellido = models.CharField(max_length = 60, blank = False, null = True)
     fecha_nac = models.DateField(blank = False, null = True)
     sexo = models.CharField(max_length = 1, blank = False, null = True)
+    estado = models.BooleanField(default=True)
     rutina_id = models.ForeignKey('rutina.Rutina', related_name='rutina', on_delete=models.CASCADE, verbose_name="Rutina", null = True)
     
     class Meta:
