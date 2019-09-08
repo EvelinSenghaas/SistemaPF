@@ -45,7 +45,7 @@ class Profesor(models.Model):
         return self.nombre
     
 class Alumno(models.Model):
-    id = models.AutoField(primary_key = True)
+    id = models.AutoField(primary_key = True, null=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     nombre = models.CharField(max_length = 60, blank = False, null = True)
     apellido = models.CharField(max_length = 60, blank = False, null = True)

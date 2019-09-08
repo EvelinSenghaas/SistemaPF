@@ -41,7 +41,7 @@ class Rutina(models.Model):
     descripcion = models.TextField(blank = False, null = True)
     estado = models.BooleanField(default=True)
     actividad_id = models.ManyToManyField(Actividad, verbose_name="Actividad")
-    profesor_id = models.ForeignKey('home.Profesor', related_name='home', on_delete=models.CASCADE, null = True)
+    profesor_id = models.ForeignKey('home.Profesor', related_name='home', on_delete=models.CASCADE)
     class Meta:
         verbose_name = 'Rutina'
         verbose_name_plural = 'Rutinas'
