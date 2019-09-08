@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 # Create your views here.
     
 class Rutinas (PermissionRequiredMixin,ListView):
-    permission_required = ('rutina.view_rutina')
+    permission_required = ('rutina.view_rutina', 'rutina.add_rutina')
     template_name = 'rutina/administrarRutinas.html'
     context_object_name = 'rutinas'
     queryset = Rutina.objects.filter(estado=True)
