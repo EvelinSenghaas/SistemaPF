@@ -39,6 +39,4 @@ class RutinaForm (forms.ModelForm):
                     }
                 )
         }
-    def asociarProfesor(self,id):
-        self.profesor_id=id
         

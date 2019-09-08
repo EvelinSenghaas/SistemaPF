@@ -36,7 +36,7 @@
       </div>
       <div class="card-footer text-muted">
         <div class="row">
-          <div class="col-md-10 col-sm-10">Profesor Nombre</div>
+          <div class="col-md-10 col-sm-10">Profesor: <strong>{{rutina.profesor_id}}</strong></div>
           {% if perms.rutina.edit_rutina and perms.rutina.delete_rutina%}
             <div class="col-0">
               <a class="btn btn-outline-secondary" href="editar_rutina/{{rutina.id}}">Editar</a>
