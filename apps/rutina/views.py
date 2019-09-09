@@ -49,14 +49,14 @@ class AgregarDetalle(PermissionRequiredMixin, CreateView):
     model = Detalle
     form_class = DetalleForm
     template_name = 'rutina/agregarDetalle.html'
-    succes_name = reverse_lazy('home/administracion')
+    succes_name = reverse_lazy('/home/administracion')
     
 class AgregarActividad(PermissionRequiredMixin, CreateView):
     permission_required = 'actividad.add_actividad'
     model = Actividad
     template_name = 'rutina/agregarActividad.html'
     form_class = ActividadForm
-    succes_name = reverse_lazy('home/administracion')
+    succes_name = reverse_lazy('/rutinas/actividades/')
 
 
 #ESTO NO SE USA    

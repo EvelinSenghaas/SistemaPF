@@ -32,6 +32,10 @@ class ActividadForm (forms.ModelForm):
                     attrs = {
                         'class' : 'form-control', 'placeholder': 'Ingrese la descripcion de la actividad'
                     }
+                ), 'detalle_id' : forms.SelectMultiple(
+                    attrs = {
+                        'class' : 'form-control'
+                    }
                 )
         }
     
