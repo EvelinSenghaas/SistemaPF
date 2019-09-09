@@ -131,4 +131,15 @@ class EliminarActividad(DeleteView):
         return redirect('/rutinas/actividades')
     
     
+def inscribirseRutina(request, pk1, pk2):
+    #Identificamos al user que se quiere inscribir (pk es de usuario)
+    user = User.objects.get(id = pk1)
+    
+    #Identificamos la rutina a la que se quiere inscribir
+    rutina = Rutina.objects.get(id = pk2)
+    
+    
+    
+    
+    
     

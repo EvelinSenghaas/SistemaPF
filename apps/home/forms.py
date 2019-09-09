@@ -1,5 +1,5 @@
 from django import forms
-from .models import Usuario, Profesor
+from .models import Usuario, Profesor, Alumno
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User, Permission
 
@@ -59,4 +59,10 @@ class LoginForm(AuthenticationForm):
        
        self.fields['password'].widget.attrs['class'] = 'form-control'
        self.fields['password'].widget.attrs['class'] = 'Contraseña'
+       
+class AlumnoForm(forms.ModelForm):
+    class Meta:
+        model = Alumno
+        fields = ['user', 'nombre', 'apellido', 'fecha_nac', 'sexo', 'email', 'rutina_id']
+    
         

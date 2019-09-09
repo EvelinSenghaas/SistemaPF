@@ -55,6 +55,7 @@ class Alumno(models.Model):
     email = models.EmailField(max_length = 70, blank = False, null = True)
     estado = models.BooleanField(default=True)
     rutina_id = models.ForeignKey('rutina.Rutina', related_name='rutina', on_delete=models.CASCADE, verbose_name="Rutina", null = True)
+    profesor_id = models.ForeignKey(Profesor, on_delete=models.CASCADE, verbose_name="Profesor")
     
     class Meta:
         verbose_name = 'Alumno'
@@ -63,7 +64,21 @@ class Alumno(models.Model):
     
     def __str__(self):
         return self.nombre
+
+class FichaAlumno (models.Model):
+    id = models.AutoField(primary_key=True, null=False)
+    peso = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    grupo_sanguineo = models.CharField(max_length = 2, blank = False, null = False)
+    enfermedades = models.TextField(blank = False, null = True)
+    alumno_id = models.OneToOneField(Alumno, on_delete=models.CASCADE)
     
+    class Meta:
+        verbose_name = 'Ficha'
+        verbose_name_plural = 'Fichas'
+        ordering = ['id']
+    
+    def __str__(self):
+        return self.id
 
     
     
