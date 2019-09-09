@@ -92,7 +92,7 @@ def agregarRutina(request, pk):
  
 #Editar    
 class EditarRutina(PermissionRequiredMixin,UpdateView):
-    permission_required = 'rutina.edit_rutina'
+    permission_required = 'rutina.change_rutina'
     model = Rutina
     template_name = 'rutina/agregarRutina.html'
     form_class = RutinaForm
@@ -100,14 +100,14 @@ class EditarRutina(PermissionRequiredMixin,UpdateView):
     
 
 class EditarActividad(PermissionRequiredMixin,UpdateView):
-    permission_required = 'actividad.edit_actividad'
+    permission_required = 'actividad.echange_actividad'
     model = Actividad
     template_name = 'rutina/agregarActividad.html'
     form_class = ActividadForm
     succes_url = reverse_lazy('/rutinas')
     
 class EditarDetalle(PermissionRequiredMixin,UpdateView):
-    permission_required = 'detalle.edit_detalle'
+    permission_required = 'detalle.change_detalle'
     model = Detalle
     template_name = 'rutina/agregarDetalle.html'
     form_class = DetalleForm
@@ -137,6 +137,8 @@ def inscribirseRutina(request, pk1, pk2):
     
     #Identificamos la rutina a la que se quiere inscribir
     rutina = Rutina.objects.get(id = pk2)
+    
+    
     
     
     

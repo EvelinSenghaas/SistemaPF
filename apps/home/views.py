@@ -20,7 +20,7 @@ class Home(TemplateView):
     template_name = "home/home.html"
     
 class Administrar(PermissionRequiredMixin,TemplateView):
-    permission_required = 'rutina.edit_rutina'
+    permission_required = 'rutina.change_rutina'
     template_name = "home/administracion.html"
     
 class PaginaInicial(TemplateView):

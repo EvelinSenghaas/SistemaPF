@@ -63,6 +63,7 @@ class LoginForm(AuthenticationForm):
 class AlumnoForm(forms.ModelForm):
     class Meta:
         model = Alumno
-        fields = ['user', 'nombre', 'apellido', 'fecha_nac', 'sexo', 'email', 'rutina_id']
+        fields = ['user', 'nombre', 'apellido', 'fecha_nac', 'sexo', 'email', 'rutina_id', 'profesor_id']
+    
     
         
