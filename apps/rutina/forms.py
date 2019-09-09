@@ -53,6 +53,10 @@ class RutinaForm (forms.ModelForm):
                     attrs = {
                         'class' : 'form-control', 'placeholder': 'Ingrese la descripcion de la rutina'
                     }
+                ), 'actividad_id' : forms.SelectMultiple(
+                    attrs = {
+                        'class' : 'form-control'
+                    }
                 )
         }
         
