@@ -16,7 +16,7 @@
         <div class="list-group" >
             <div class="list-group-item active">
                 <div class="row">
-                    <div class="col-md-11 col-sm-11">Lista de Rutinas</div>
+                    <div class="col-md-11 col-sm-11"><a href="/home/administracion/"><img src="{% static 'img/back.png'%}"></a>Lista de Rutinas</div>
                     {% if perms.rutina.add_rutina%}
                     <div class="col-0"><a class="btn btn-light" href="/rutinas/agregar_rutina/{{user.id}}" src="">
                         <img src="{% static 'img/img_agregar_rutina.png'%}" alt=""></a>
