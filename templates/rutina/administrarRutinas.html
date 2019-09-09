@@ -34,7 +34,7 @@
                         <div class="col-md-7 col-sm-7">
                             {{rutina.descripcion}}
                         </div>
-                        {% if perms.rutina.edit_rutina and perms.rutina.delete_rutina%}
+                        {% if perms.rutina.change_rutina and perms.rutina.delete_rutina%}
                         <div class="col-0">
                             <a class="btn btn-outline-secondary" href="/rutinas/editar_rutina/{{rutina.id}}">Editar</a>
                         </div>
