@@ -1,4 +1,5 @@
 {%extends 'home/home.html'%}
+{%load staticfiles%}
 
 {%block titulo%}Ver rutina{%endblock titulo%}
 
@@ -6,7 +7,7 @@
 {%block contenido%}
 <body class="container mt-2">
     <div class="card">
-        <div class="card-header"><strong>{{rutina.nombre}}</strong></div>
+        <div class="card-header"><a href="/rutinas/administrar_rutinas/"><img src="{% static 'img/back.png'%}"></a><strong>{{rutina.nombre}}</strong></div>
             <div class="card-body card-block">
                     {% csrf_token %}
                     <div class="">
