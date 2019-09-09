@@ -36,7 +36,7 @@ def verRutina(request, pk):
     act = Rutina.objects.values_list('actividad_id').filter(id=pk)
     for a in act:
         i=0
-        actividades += Actividad.objects.filter(id=a[i])
+        actividades += Actividad.objects.filter(id=a[i], estado=True)
         i=i+1
     
     
