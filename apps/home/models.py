@@ -34,6 +34,7 @@ class Profesor(models.Model):
     nombre = models.CharField(max_length = 60, blank = False, null = True)
     apellido = models.CharField(max_length = 60, blank = False, null = True)
     fecha_nac = models.DateField(blank = False, null = True)
+    email = models.EmailField(max_length = 70, blank = False, null = True)
     sexo = models.CharField(max_length = 1, blank = False, null = True)
     estado = models.BooleanField(default=True)
     class Meta:
@@ -51,6 +52,7 @@ class Alumno(models.Model):
     apellido = models.CharField(max_length = 60, blank = False, null = True)
     fecha_nac = models.DateField(blank = False, null = True)
     sexo = models.CharField(max_length = 1, blank = False, null = True)
+    email = models.EmailField(max_length = 70, blank = False, null = True)
     estado = models.BooleanField(default=True)
     rutina_id = models.ForeignKey('rutina.Rutina', related_name='rutina', on_delete=models.CASCADE, verbose_name="Rutina", null = True)
     
