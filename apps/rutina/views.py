@@ -49,14 +49,14 @@ class AgregarDetalle(PermissionRequiredMixin, CreateView):
     model = Detalle
     form_class = DetalleForm
     template_name = 'rutina/agregarDetalle.html'
-    succes_name = reverse_lazy('/rutinas')
+    succes_name = reverse_lazy('home/administracion')
     
 class AgregarActividad(PermissionRequiredMixin, CreateView):
     permission_required = 'actividad.add_actividad'
     model = Actividad
     template_name = 'rutina/agregarActividad.html'
     form_class = ActividadForm
-    succes_name = reverse_lazy('/rutinas')
+    succes_name = reverse_lazy('home/administracion')
 
 
 #ESTO NO SE USA    
@@ -65,7 +65,7 @@ class AgregarRutina(PermissionRequiredMixin, CreateView):
     model = Rutina
     form_class = RutinaForm
     template_name = 'rutina/agregarRutina.html'
-    succes_name = reverse_lazy('/rutinas')
+    succes_name = reverse_lazy('/rutinas/administrar_rutinas/')
     
     def post(self,request, pk, *args, **kwargs):
         user = User.objects.get(id = pk)

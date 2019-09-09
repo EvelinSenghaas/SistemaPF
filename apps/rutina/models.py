@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import *
 
 
 
@@ -13,7 +14,7 @@ class Detalle(models.Model):
         ordering = ['categoria']
     
     def __str__ (self):
-        return self.atributo
+        return self.musculo
     
 
 
@@ -22,6 +23,7 @@ class Actividad(models.Model):
     nombre = models.CharField(max_length = 60, blank = False, null = True)
     descripcion = models.TextField(blank = False, null = True)
     detalle_id = models.ManyToManyField(Detalle, verbose_name="Detalle")
+    nivel_exigencia = IntegerField(default=0)
     estado = models.BooleanField(default=True)
     class Meta:
         verbose_name = 'Actividad'

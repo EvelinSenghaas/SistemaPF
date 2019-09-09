@@ -21,9 +21,9 @@ class DetalleForm (forms.ModelForm):
 class ActividadForm (forms.ModelForm):
     class Meta:
         model = Actividad
-        fields = ['nombre', 'descripcion', 'detalle_id']
+        fields = ['nombre', 'descripcion', 'detalle_id', 'nivel_exigencia']
         labels = {
-            'nombre' : 'Nombre de la actividad', 'descripcion': 'Descripcion de la actividad', 'detalle_id': 'Detalles de la actividad',
+            'nombre' : 'Nombre de la actividad', 'descripcion': 'Descripcion de la actividad', 'detalle_id': 'Detalles de la actividad', 'nivel_exigencia' : 'Nivel de exigencia'
         }
         widgets = {
             'nombre' : forms.TextInput(
