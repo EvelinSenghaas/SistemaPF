@@ -37,10 +37,19 @@ def verRutina(request, pk):
     for a in act:
         i=0
         actividades += Actividad.objects.filter(id=a[i], estado=True)
-        i=i+1
-    
-    
+        i+=1
     return render (request, 'rutina/verRutina.html', { 'rutina': rutina, 'actividades':actividades})
+
+
+def verActividad(request, pk):
+    actividad = Actividad.objects.get(id = pk)
+    detalles = []
+    det = Actividad.objects.values_list('detalle_id').filter(id=pk)
+    for a in det:
+        i=0
+        detalles += Detalle.objects.filter(id=a[i])
+        i+=1
+    return render (request, 'rutina/verActividad.html', { 'actividad': actividad, 'detalles':detalles})
        
 
 #Agregar    
