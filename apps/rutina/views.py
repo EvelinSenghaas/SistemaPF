@@ -24,7 +24,7 @@ class ListadoRutinas (PermissionRequiredMixin,ListView):
     queryset = Rutina.objects.filter(estado=True)
 
 class ListadoActividades (PermissionRequiredMixin,ListView):
-    permission_required = ('actividad.view_actividad')
+    permission_required = ('rutina.view_actividad')
     template_name = 'rutina/actividades.html'
     context_object_name = 'actividades'
     queryset = Actividad.objects.filter(estado=True)    
@@ -45,14 +45,14 @@ def verRutina(request, pk):
 
 #Agregar    
 class AgregarDetalle(PermissionRequiredMixin, CreateView):
-    permission_required = 'detalle.add_detalle'
+    permission_required = 'rutina.add_detalle'
     model = Detalle
     form_class = DetalleForm
     template_name = 'rutina/agregarDetalle.html'
     succes_name = reverse_lazy('/home/administracion')
     
 class AgregarActividad(PermissionRequiredMixin, CreateView):
-    permission_required = 'actividad.add_actividad'
+    permission_required = ('rutina.add_actividad' or 'ruitna.change_actividad')
     model = Actividad
     template_name = 'rutina/agregarActividad.html'
     form_class = ActividadForm
@@ -100,14 +100,14 @@ class EditarRutina(PermissionRequiredMixin,UpdateView):
     
 
 class EditarActividad(PermissionRequiredMixin,UpdateView):
-    permission_required = 'actividad.echange_actividad'
+    permission_required = 'rutina.change_actividad'
     model = Actividad
     template_name = 'rutina/agregarActividad.html'
     form_class = ActividadForm
     succes_url = reverse_lazy('/rutinas')
     
 class EditarDetalle(PermissionRequiredMixin,UpdateView):
-    permission_required = 'detalle.change_detalle'
+    permission_required = 'rutina.change_detalle'
     model = Detalle
     template_name = 'rutina/agregarDetalle.html'
     form_class = DetalleForm
@@ -123,6 +123,7 @@ class EliminarRutina(DeleteView):
         return redirect('/rutinas')
     
 class EliminarActividad(DeleteView):
+    
     model = Actividad
     def post(self,request, pk, *args, **kwargs):
         object = Actividad.objects.get(id = pk)

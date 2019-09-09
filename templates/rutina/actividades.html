@@ -17,14 +17,14 @@
             <div class="list-group-item active">
                 <div class="row">
                     <div class="col-md-11 col-sm-11">Lista de Actividades</div>
-                    {% if perms.actividad.add_actividad%}
+                    {% if perms.rutina.add_actividad%}
                     <div class="col-0"><a class="btn btn-light" href="/rutinas/agregar_actividad" src="">
                         <img src="{% static 'img/img_agregar_rutina.png'%}" alt=""></a>
                     </div>
                     {%endif%}
                 </div>
             </div>
-                {% if perms.actividad.view_actividad%}
+                {% if perms.rutina.view_actividad%}
                 {% for actividad in actividades %}
                 <div class="list-group-item ">
                     <div class="row">
@@ -34,7 +34,7 @@
                         <div class="col-md-7 col-sm-7">
                             {{actividad.descripcion}}
                         </div>
-                        {% if perms.actividad.edit_actividad and perms.rutina.delete_actividad%}
+                        {% if perms.rutina.change_actividad and perms.rutina.delete_actividad%}
                         <div class="col-0">
                             <a class="btn btn-outline-secondary" href="/rutinas/editar_actividad/{{actividad.id}}">Editar</a>
                         </div>

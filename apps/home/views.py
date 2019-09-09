@@ -14,13 +14,12 @@ from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
-
 # Create your views here.
 class Home(TemplateView):
     template_name = "home/home.html"
     
 class Administrar(PermissionRequiredMixin,TemplateView):
-    permission_required = 'rutina.change_rutina'
+    permission_required = ('rutina.view_actividad')
     template_name = "home/administracion.html"
     
 class PaginaInicial(TemplateView):
