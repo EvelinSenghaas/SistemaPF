@@ -14,12 +14,12 @@
                     {% csrf_token %}
                     <div class="">
                         <div class="form-group">
-                            <label for="">Atributo</label>
-                            <input class="form-control" type="text" placeholder="Ingrese un atributo" name="atributo">
+                            <label for="">{{form.categoria.label}}</label>
+                            {{form.categoria}}
                         </div>
                         <div class="form-group">
-                            <label for="exampleFormControlTextarea1">Aspecto de mejora</label>
-                            <input class="form-control" type="text" placeholder="Ingrese un aspecto de mejora" name="aspectoMejora">
+                            <label for="exampleFormControlTextarea1">{{form.musculo.label}}</label>
+                            {{form.musculo}}
                         </div>
                         <button type="submit" class="btn btn-primary">Agregar</button>
                     </div>

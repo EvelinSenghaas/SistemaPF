@@ -5,12 +5,12 @@ from django.db import models
 # Create your models here.
 class Detalle(models.Model):
     id = models.AutoField(primary_key = True)
-    atributo = models.CharField(max_length = 30, blank = False, null = True)
-    aspectoMejora = models.CharField(max_length = 30, blank = False, null = True)
+    categoria = models.CharField(max_length = 30, blank = False, null = True)
+    musculo = models.CharField(max_length = 30, blank = False, null = True)
     class Meta:
         verbose_name = 'Detalle'
         verbose_name_plural = 'Detalles'
-        ordering = ['atributo']
+        ordering = ['categoria']
     
     def __str__ (self):
         return self.atributo

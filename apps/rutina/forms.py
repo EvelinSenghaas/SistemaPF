@@ -4,7 +4,19 @@ from .models import Detalle, Actividad, Rutina
 class DetalleForm (forms.ModelForm):
     class Meta:
         model = Detalle
-        fields = ['atributo', 'aspectoMejora']
+        fields = ['categoria', 'musculo']
+        labels = {
+            'categoria' : 'Tren', 'musculo': 'Nombre del músculo',
+        }
+        widgets = {
+            'categoria' : forms.TextInput(
+                attrs = { 'class':'form-control', 'placeholder': 'Ingrese el tren'}
+                ), 'musculo' : forms.TextInput(
+                    attrs = {
+                        'class' : 'form-control', 'placeholder': 'Ingrese el musculo'
+                    }
+                )
+        }
     
 class ActividadForm (forms.ModelForm):
     class Meta:
