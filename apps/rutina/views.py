@@ -56,7 +56,7 @@ def verActividad(request, pk):
     det = Actividad.objects.values_list('detalle_id').filter(id=pk)
     for a in det:
         i=0
-        detalles += Detalle.objects.filter(id=a[i])
+        detalles += Detalle.objects.filter(id=a[i], estado=True)
         i+=1
     return render (request, 'rutina/verActividad.html', { 'actividad': actividad, 'detalles':detalles})
        
@@ -75,7 +75,6 @@ class AgregarActividad(PermissionRequiredMixin, CreateView):
     template_name = 'rutina/agregarActividad.html'
     form_class = ActividadForm
     succes_name = reverse_lazy('/rutinas/actividades/')
-    
 
         
 
