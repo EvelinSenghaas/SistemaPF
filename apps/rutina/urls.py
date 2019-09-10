@@ -21,4 +21,6 @@ urlpatterns = [
     path('eliminar_rutina/<int:pk>', login_required(EliminarRutina.as_view(success_url="/rutinas/administrar_rutinas/")), name='eliminar_rutina'),    
     path('ver_rutina/<int:pk>', login_required(verRutina), name='ver_rutina'),
     path('administrar_rutinas/', login_required(Rutinas.as_view()), name='administrar_rutinas/'),
+    
+    
 ]
