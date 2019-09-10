@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Rutina, Actividad, Detalle
+from ..home.models import Alumno, FichaAlumno, Profesor
+from ..home.forms import AlumnoForm, FichaForm
 from .forms import DetalleForm, ActividadForm, RutinaForm
 from django.views.generic import View, TemplateView, ListView, UpdateView, CreateView, DeleteView
 from django.urls import reverse_lazy
@@ -167,6 +169,30 @@ def inscribirseRutina(request, pk1, pk2):
     
     #Identificamos la rutina a la que se quiere inscribir
     rutina = Rutina.objects.get(id = pk2)
+    
+    if request.method == 'POST':
+        fichaForm = FichaForm(request.POST)
+        alumnoForm = AlumnoForm(request.POST)
+        if fichaForm.is_valid() and alumnoForm.is_valid():
+            alumno = alumnoForm.save(commit=False)
+            ficha = fichaForm.save(commit=False)
+            alumno.user = user
+            alumno.rutina_id = rutina
+            alumno.profesor_id = rutina.profesor_id
+            alumno.save()
+            
+            
+            ficha.alumno_id = alumno
+            ficha.save()
+            
+            return redirect ('/rutinas/')
+    else:
+        fichaForm = FichaForm()
+        alumnoForm = AlumnoForm()
+        return render (request, 'rutina/inscribirseRutina.html', {'ficha':fichaForm, 'alumno':alumnoForm})
+    return redirect ('/rutinas/')
+            
+            
     
     
     

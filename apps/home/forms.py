@@ -1,5 +1,5 @@
 from django import forms
-from .models import Usuario, Profesor, Alumno
+from .models import Usuario, Profesor, Alumno, FichaAlumno
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User, Permission
 
@@ -50,7 +50,8 @@ class NewUserForm(UserCreationForm):
         if commit:
             user.save()
         return user
-    
+
+#Esto CREO que no se usa    
 class LoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
        super(LoginForm, self).__init__(*args, **kwargs)
@@ -63,7 +64,22 @@ class LoginForm(AuthenticationForm):
 class AlumnoForm(forms.ModelForm):
     class Meta:
         model = Alumno
-        fields = ['user', 'nombre', 'apellido', 'fecha_nac', 'sexo', 'email', 'rutina_id', 'profesor_id']
+        fields = ['nombre', 'apellido', 'fecha_nac', 'sexo', 'email']
+        
+        labels = {
+            'nombre' : 'Nombre', 'apellido': 'Apellido', 'fecha_nac': 'Fecha de nacimiento', 'sexo': 'Sexo', 'email': 'Correo electrónico',
+            }
+        
+        
+        
+class FichaForm(forms.ModelForm):
+    class Meta:
+        model = FichaAlumno
+        fields = ['peso', 'grupo_sanguineo', 'enfermedades']
+        labels = {
+            'peso' : 'Peso', 'grupo_sanguineo': 'Grupo sanguíneo', 'enfermedades': 'Enfermedades',
+            }
+
     
     
         

@@ -54,7 +54,7 @@ class Alumno(models.Model):
     sexo = models.CharField(max_length = 1, blank = False, null = True)
     email = models.EmailField(max_length = 70, blank = False, null = True)
     estado = models.BooleanField(default=True)
-    rutina_id = models.ForeignKey('rutina.Rutina', related_name='rutina', on_delete=models.CASCADE, verbose_name="Rutina", null = True)
+    rutina_id = models.ForeignKey('rutina.Rutina', related_name='rutina', on_delete=models.CASCADE, verbose_name="Rutina")
     profesor_id = models.ForeignKey(Profesor, on_delete=models.CASCADE, verbose_name="Profesor")
     
     class Meta:

@@ -4,14 +4,84 @@
 
 {%block contenido%}
 <div class="container mt-2">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item active">Inscribirse a </li>
-    </ol>
-    <div class="alert alert-light">
-        <p>Antes de inscribirse a la rutina es necesario que completes los datos de tu ficha de inscripción</p>
+    
+    <div class="card">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active">Inscribirse a una rutina</li>
+        </ol>
+        <div class="alert alert-light">
+            <p>Antes de inscribirse a la rutina es necesario que completes los datos de tu ficha de inscripción</p>
+        </div>
     </div>
-
-
+    <div class="card">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="card-header">Datos personales</div>
+                <div class="card-body card-block">
+                    
+                        <div class="">
+                            <div class="form-group">
+                                <div class="row form-group">
+                                    <div class="col col-md-3">{{alumno.nombre.label}}</div>
+                                    <div class="col-12 col-md-9">{{alumno.nombre}}</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row form-group">
+                                    <div class="col col-md-3">{{alumno.apellido.label}}</div>
+                                    <div class="col-12 col-md-9">{{alumno.apellido}}</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row form-group">
+                                    <div class="col col-md-3">{{alumno.fecha_nac.label}}</div>
+                                    <div class="col-12 col-md-9">{{alumno.fecha_nac}}</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row form-group">
+                                    <div class="col col-md-3">{{alumno.sexo.label}}</div>
+                                        <div class="col-12 col-md-9">{{alumno.sexo}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row form-group">
+                                    <div class="col col-md-3">{{alumno.email.label}}</div>
+                                        <div class="col-12 col-md-9">{{alumno.email}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row form-group">
+                                    <div class="col col-md-3">{{ficha.peso.label}}</div>
+                                        <div class="col-12 col-md-9">{{ficha.peso}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row form-group">
+                                    <div class="col col-md-3">{{ficha.grupo_sanguineo.label}}</div>
+                                        <div class="col-12 col-md-9">{{ficha.grupo_sanguineo}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row form-group">
+                                    <div class="col col-md-3">{{ficha.enfermedades.label}}</div>
+                                        <div class="col-12 col-md-9">{{ficha.enfermedades}}
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                            <div class="col col-1"><a href="/rutinas"><button type="button" class="btn btn-outline-danger">Cancelar</button></a></div>
+                            <div class="col col-0"><button type="submit" class="btn btn-primary">Inscribirse</button></div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </form>
+    </div>
 
 </div>
 
