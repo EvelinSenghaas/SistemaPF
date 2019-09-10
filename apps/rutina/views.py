@@ -154,6 +154,7 @@ class EliminarActividad(DeleteView):
 class EliminarDetalle(DeleteView):
     
     model = Detalle
+
     def post(self,request, pk, *args, **kwargs):
         object = Detalle.objects.get(id = pk)
         object.estado = not(object.estado)

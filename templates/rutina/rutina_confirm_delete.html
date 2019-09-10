@@ -1,21 +1,25 @@
 {%extends 'home/home.html'%}
 {%load staticfiles%}
 
-{%block titulo%}Modificar rutina{%endblock titulo%}
+{%block titulo%}Modificar {{object}}{%endblock titulo%}
 {%block imagen_principal%}
 {%endblock imagen_principal%}
 
 {%block contenido%}
 <body class="container mt-2">
         <div class="card">
-            <div class="card-header"><strong>Confirmar cambio de estado de rutina</strong></div>
+            <div class="alert alert-danger"><strong>Confirmar modificacion de una rutina</strong></div>
                 <div class="card-body card-block">
                     <form method="POST">
                         {% csrf_token %}
                         <div class="">
                             <div class="form-group">
                                 <div class="row form-group">
-                                    <p><strong>Seguro que desea cambiar el estado de {{object}}? </strong></p>
+                                    <p>Usted esta queriendo modificar el estado de la rutina <strong>{{object}}</strong>. Si cambia su estado, pasará a estar inactivo.</p>
+                                    </p>
+                                </div>
+                                <div class="row form-group">
+                                    <p>¿Seguro que desea modificar el estado de <strong>{{object}}</strong>?</p>
                                 </div>
                                 <button type="submit" class="btn btn-danger" display="block">Confirmar</button>
                             </div>
