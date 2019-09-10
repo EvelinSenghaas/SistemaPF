@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from apps.home.models import Profesor
 from django.contrib.auth.models import User
+import operator
 
 # Create your views here.
     
@@ -14,6 +15,7 @@ class Rutinas (PermissionRequiredMixin,ListView):
     template_name = 'rutina/administrarRutinas.html'
     context_object_name = 'rutinas'
     queryset = Rutina.objects.filter(estado=True)
+    
 
 
 #Listados
@@ -24,10 +26,17 @@ class ListadoRutinas (PermissionRequiredMixin,ListView):
     queryset = Rutina.objects.filter(estado=True)
 
 class ListadoActividades (PermissionRequiredMixin,ListView):
-    permission_required = ('rutina.view_actividad')
+    permission_required = ('rutina.add_actividad')
     template_name = 'rutina/actividades.html'
     context_object_name = 'actividades'
-    queryset = Actividad.objects.filter(estado=True)    
+    queryset = Actividad.objects.filter(estado=True)
+    
+class ListadoDetalles (PermissionRequiredMixin,ListView):
+    permission_required = ('rutina.add_detalle')
+    template_name = 'rutina/administrarDetalles.html'
+    context_object_name = 'detalles'
+    queryset = Detalle.objects.filter(estado=True)
+
     
     
 def verRutina(request, pk):
@@ -58,7 +67,7 @@ class AgregarDetalle(PermissionRequiredMixin, CreateView):
     model = Detalle
     form_class = DetalleForm
     template_name = 'rutina/agregarDetalle.html'
-    succes_name = reverse_lazy('/home/administracion')
+    succes_name = reverse_lazy('/rutinas/administrar_detalles/')
     
 class AgregarActividad(PermissionRequiredMixin, CreateView):
     permission_required = ('rutina.add_actividad' or 'ruitna.change_actividad')
@@ -66,7 +75,9 @@ class AgregarActividad(PermissionRequiredMixin, CreateView):
     template_name = 'rutina/agregarActividad.html'
     form_class = ActividadForm
     succes_name = reverse_lazy('/rutinas/actividades/')
+    
 
+        
 
 #ESTO NO SE USA    
 class AgregarRutina(PermissionRequiredMixin, CreateView):
@@ -120,7 +131,7 @@ class EditarDetalle(PermissionRequiredMixin,UpdateView):
     model = Detalle
     template_name = 'rutina/agregarDetalle.html'
     form_class = DetalleForm
-    succes_url = reverse_lazy('/rutinas')
+    succes_url = reverse_lazy('/rutinas/administrar_detalles')
     
 #Eliminar
 class EliminarRutina(DeleteView):
@@ -129,7 +140,7 @@ class EliminarRutina(DeleteView):
         object = Rutina.objects.get(id = pk)
         object.estado = not(object.estado)
         object.save()
-        return redirect('/rutinas')
+        return redirect('/rutinas/administrar_rutinas')
     
 class EliminarActividad(DeleteView):
     
@@ -139,6 +150,15 @@ class EliminarActividad(DeleteView):
         object.estado = not(object.estado)
         object.save()
         return redirect('/rutinas/actividades')
+    
+class EliminarDetalle(DeleteView):
+    
+    model = Detalle
+    def post(self,request, pk, *args, **kwargs):
+        object = Detalle.objects.get(id = pk)
+        object.estado = not(object.estado)
+        object.save()
+        return redirect('/rutinas/administrar_detalles')
     
     
 def inscribirseRutina(request, pk1, pk2):

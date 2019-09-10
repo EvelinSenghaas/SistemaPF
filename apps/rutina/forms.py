@@ -59,4 +59,5 @@ class RutinaForm (forms.ModelForm):
                     }
                 )
         }
+        exclude = [ 'actividad_id']
         

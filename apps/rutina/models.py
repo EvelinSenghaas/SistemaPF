@@ -8,6 +8,7 @@ class Detalle(models.Model):
     id = models.AutoField(primary_key = True)
     categoria = models.CharField(max_length = 30, blank = False, null = True)
     musculo = models.CharField(max_length = 30, blank = False, null = True)
+    estado = models.BooleanField(default=True)
     class Meta:
         verbose_name = 'Detalle'
         verbose_name_plural = 'Detalles'
