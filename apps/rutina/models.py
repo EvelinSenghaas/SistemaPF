@@ -7,7 +7,7 @@ from django.db.models import *
 class Detalle(models.Model):
     id = models.AutoField(primary_key = True)
     categoria = models.CharField(max_length = 30, blank = False, null = True)
-    musculo = models.CharField(max_length = 30, blank = False, null = True)
+    musculo = models.CharField(max_length = 30, blank = False, null = True, unique=True)
     estado = models.BooleanField(default=True)
     class Meta:
         verbose_name = 'Detalle'
@@ -21,7 +21,7 @@ class Detalle(models.Model):
 
 class Actividad(models.Model):
     id = models.AutoField(primary_key = True)
-    nombre = models.CharField(max_length = 60, blank = False, null = True)
+    nombre = models.CharField(max_length = 60, blank = False, null = True, unique=True)
     descripcion = models.TextField(blank = False, null = True)
     detalle_id = models.ManyToManyField(Detalle, verbose_name="Detalle")
     nivel_exigencia = IntegerField(default=0)
