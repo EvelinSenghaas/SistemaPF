@@ -74,10 +74,8 @@ class AgregarDetalle(PermissionRequiredMixin, CreateView):
 class AgregarActividad(PermissionRequiredMixin, CreateView):
     permission_required = ('rutina.add_actividad' or 'ruitna.change_actividad')
     model = Actividad
-    model2 = Detalle
     template_name = 'rutina/agregarActividad.html'
     form_class = ActividadForm
-    form_class2 = DetalleForm
     succes_name = reverse_lazy('/rutinas/actividades/')
 
         
