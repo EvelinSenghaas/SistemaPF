@@ -169,17 +169,20 @@ def inscribirseRutina(request, pk1, pk2):
     #Identificamos la rutina a la que se quiere inscribir
     rutina = Rutina.objects.get(id = pk2)    
     if (user.is_staff):
-        return render (request, 'rutina/errorInscribirseRutina.html', { 'rutina': rutina})
+        mensaje = "Usted pertenece al staff, por lo que no puede inscribirse a una rutina"
+        return render (request, 'rutina/errorInscribirseRutina.html', { 'rutina': rutina, 'mensaje':mensaje})
         #Usted no puede inscribirse a la rutina     porque es un administrador
     else:
         if (Profesor.objects.filter(user_id=user.id).exists()):
             profesor = Profesor.objects.get(user_id = user.id)
-            return render (request, 'rutina/errorInscribirseRutina.html', { 'rutina': rutina, 'profesor':profesor})
+            mensaje = "Usted es un profesor, por lo que no puede inscribirse a una rutina"
+            return render (request, 'rutina/errorInscribirseRutina.html', { 'rutina': rutina, 'profesor':profesor, 'mensaje':mensaje})
             #Usted no se puede inscribir a la rutina     porque es un profesor
         elif (Alumno.objects.filter(user_id=user.id).exists()):
             alum = Alumno.objects.get(user_id=user.id)
             if (alum.rutina_id.id == Rutina.objects.get(id = alum.rutina_id.id).id):
-                return render (request, 'rutina/errorInscribirseRutina.html', { 'rutina': rutina, 'alumno':alum})
+                mensaje = "Usted esta inscipto a la rutina " + alum.rutina_id.nombre + ", por lo que primero debe darse de baja en la misma."
+                return render (request, 'rutina/errorInscribirseRutina.html', { 'rutina': rutina, 'alumno':alum, 'mensaje':mensaje})
                 #Usted no puede inscribirse a la rutina      porque pertenece a la rutina     
         else:
             if request.method == 'POST':
