@@ -75,10 +75,10 @@ class FichaAlumno (models.Model):
     class Meta:
         verbose_name = 'Ficha'
         verbose_name_plural = 'Fichas'
-        ordering = ['id']
+        ordering = ['alumno_id']
     
     def __str__(self):
-        return self.id
+        return 'Ficha '+self.alumno_id.nombre
 
     
     

@@ -22,7 +22,6 @@ urlpatterns = [
     path('ver_rutina/<int:pk>', login_required(verRutina), name='ver_rutina'),
     path('administrar_rutinas/', login_required(Rutinas.as_view()), name='administrar_rutinas/'),
     
-    path('inscribir_rutina/<int:pk1>/<int:pk2>', login_required(inscribirseRutina), name='inscribir_rutina/'),
-    
+    path('inscribir_rutina/<int:pk1>/<int:pk2>', login_required(inscribirseRutina), name='inscribir_rutina/'), 
     
 ]

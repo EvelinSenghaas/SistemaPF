@@ -166,32 +166,53 @@ class EliminarDetalle(DeleteView):
 def inscribirseRutina(request, pk1, pk2):
     #Identificamos al user que se quiere inscribir (pk es de usuario)
     user = User.objects.get(id = pk1)
-    
     #Identificamos la rutina a la que se quiere inscribir
-    rutina = Rutina.objects.get(id = pk2)
-    
-    if request.method == 'POST':
-        fichaForm = FichaForm(request.POST)
-        alumnoForm = AlumnoForm(request.POST)
-        if fichaForm.is_valid() and alumnoForm.is_valid():
-            alumno = alumnoForm.save(commit=False)
-            ficha = fichaForm.save(commit=False)
-            alumno.user = user
-            alumno.rutina_id = rutina
-            alumno.profesor_id = rutina.profesor_id
-            alumno.save()
-            
-            
-            ficha.alumno_id = alumno
-            ficha.save()
-            
-            return redirect ('/rutinas/')
+    rutina = Rutina.objects.get(id = pk2)    
+    if (user.is_staff):
+        return render (request, 'rutina/errorInscribirseRutina.html', { 'rutina': rutina})
+        #Usted no puede inscribirse a la rutina     porque es un administrador
     else:
-        fichaForm = FichaForm()
-        alumnoForm = AlumnoForm()
-        return render (request, 'rutina/inscribirseRutina.html', {'ficha':fichaForm, 'alumno':alumnoForm})
+        if (Profesor.objects.filter(user_id=user.id).exists()):
+            profesor = Profesor.objects.get(user_id = user.id)
+            return render (request, 'rutina/errorInscribirseRutina.html', { 'rutina': rutina, 'profesor':profesor})
+            #Usted no se puede inscribir a la rutina     porque es un profesor
+        elif (Alumno.objects.filter(user_id=user.id).exists()):
+            alum = Alumno.objects.get(user_id=user.id)
+            if (alum.rutina_id.id == Rutina.objects.get(id = alum.rutina_id.id).id):
+                return render (request, 'rutina/errorInscribirseRutina.html', { 'rutina': rutina, 'alumno':alum})
+                #Usted no puede inscribirse a la rutina      porque pertenece a la rutina     
+        else:
+            if request.method == 'POST':
+                fichaForm = FichaForm(request.POST)
+                alumnoForm = AlumnoForm(request.POST)
+                if fichaForm.is_valid() and alumnoForm.is_valid():
+                    alumno = alumnoForm.save(commit=False)
+                    ficha = fichaForm.save(commit=False)
+                    alumno.user = user
+                    alumno.rutina_id = rutina
+                    alumno.profesor_id = rutina.profesor_id
+                    alumno.save()            
+                    ficha.alumno_id = alumno
+                    ficha.save()
+                    return redirect ('/rutinas/')
+            else:
+                fichaForm = FichaForm()
+                alumnoForm = AlumnoForm()
+    return render (request, 'rutina/inscribirseRutina.html', {'ficha':fichaForm, 'alumno':alumnoForm})
     return redirect ('/rutinas/')
-            
+    
+"""  
+si es staff renderizo el template
+sino
+    si es profesor renderizo el template
+    sino
+        si es alumno
+            si ya tiene rutina renderizo el template
+            sino le permito
+"""
+                
+    
+    
             
     
     
