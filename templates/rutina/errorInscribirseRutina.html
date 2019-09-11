@@ -1,7 +1,7 @@
 {%extends 'home/home.html'%}
 {%load staticfiles%}
 
-{%block titulo%}Error{%endblock titulo%}
+{%block titulo%}Error de inscripcion{%endblock titulo%}
 {%block imagen_principal%}
 {%endblock imagen_principal%}
 
@@ -16,12 +16,9 @@
                             <div class="form-group">
                                 <div class="row form-group">
                                     <p>{{mensaje}}</p>
-                                    </p>
                                 </div>
-                                <!-- <div class="row form-group">
-                                    <p>¿Seguro que desea modificar el estado de <strong>{{object}}</strong>?</p>
-                                </div>
-                                <button type="submit" class="btn btn-danger" display="block">Confirmar</button> -->
+                                <div class="row form-group">
+                                    <a href="/rutinas" class="btn btn-primary">Aceptar</a>
                             </div>
                         </div>
                     </form>
