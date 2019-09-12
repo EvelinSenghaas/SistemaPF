@@ -15,72 +15,28 @@
                         <div class="">
                             <div class="form-group">
                                 <div class="row form-group">
-                                    <div class="col col-md-3">{{form.nombre.label}}</div>
-                                    <div class="col-12 col-md-9">{{form.nombre}}</div>
+                                    <div class="col col-md-3">{{actividadForm.nombre.label}}</div>
+                                    <div class="col-12 col-md-9">{{actividadForm.nombre}}</div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="row form-group">
-                                    <div class="col col-md-3">{{form.descripcion.label}}</div>
-                                    <div class="col-12 col-md-9">{{form.descripcion}}</div>
+                                    <div class="col col-md-3">{{actividadForm.descripcion.label}}</div>
+                                    <div class="col-12 col-md-9">{{actividadForm.descripcion}}</div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="row form-group">
-                                    <div class="col col-md-3">{{form.nivel_exigencia.label}}</div>
-                                    <div class="col-12 col-md-9">
-                                        <div class ="card">
-                                            <div class ="card-body">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="nivel_exigencia"  value="1" checked>
-                                                    <label class="form-check-label" for="exampleRadios1">1</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="nivel_exigencia"  value="2" checked>
-                                                    <label class="form-check-label" for="exampleRadios1">2</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="nivel_exigencia"  value="3" checked>
-                                                    <label class="form-check-label" for="exampleRadios1">3</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="nivel_exigencia"  value="4" checked>
-                                                    <label class="form-check-label" for="exampleRadios1">4</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="nivel_exigencia"  value="5" checked>
-                                                    <label class="form-check-label" for="exampleRadios1">5</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="nivel_exigencia"  value="6" checked>
-                                                    <label class="form-check-label" for="exampleRadios1">6</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="nivel_exigencia"  value="7" checked>
-                                                    <label class="form-check-label" for="exampleRadios1">7</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="nivel_exigencia"  value="8" checked>
-                                                    <label class="form-check-label" for="exampleRadios1">8</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="nivel_exigencia"  value="9" checked>
-                                                    <label class="form-check-label" for="exampleRadios1">9</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="nivel_exigencia"  value="10" checked>
-                                                    <label class="form-check-label" for="exampleRadios1">10</label>
-                                                </div>
-                                            </div>
+                                    <div class="row form-group">
+                                        <div class="col col-md-3">Selecciona los detalles</div>
+                                        <div class="col-12 col-md-9">
+                                            <select name="detalle" class="custom-select" multiple>
+                                                {%for det in detalle%}
+                                                <option value="{{det.id}}" name="detalle">{{det.musculo}}</option>
+                                                {%endfor%}
+                                            </select>
+
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row form-group">
-                                    <div class="col col-md-3">{{form.detalle_id.label}}</div>
-                                    
-                                    <div class="col-12 col-md-9">{{form.detalle_id}}</div>
                                 </div>
                             </div>
                             <div class="float-right"><a href="/rutinas/actividades/">

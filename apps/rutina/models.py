@@ -17,14 +17,16 @@ class Detalle(models.Model):
     def __str__ (self):
         return self.musculo
     
+    def obtenerId(self):
+        return self.id
+    
 
 
 class Actividad(models.Model):
     id = models.AutoField(primary_key = True)
     nombre = models.CharField(max_length = 60, blank = False, null = True, unique=True)
     descripcion = models.TextField(blank = False, null = True)
-    detalle_id = models.ManyToManyField(Detalle, verbose_name="Detalle")
-    nivel_exigencia = IntegerField(default=0)
+    detalle_id = models.ManyToManyField(Detalle, verbose_name="Detalle", null=True)
     estado = models.BooleanField(default=True)
     class Meta:
         verbose_name = 'Actividad'

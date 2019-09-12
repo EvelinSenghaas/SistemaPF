@@ -77,7 +77,24 @@ class AgregarActividad(PermissionRequiredMixin, CreateView):
     template_name = 'rutina/agregarActividad.html'
     form_class = ActividadForm
     succes_name = reverse_lazy('/rutinas/actividades/')
-
+    
+def agregarActividad(request):
+    detalle = Detalle.objects.filter(estado=True)
+    if request.method == 'POST':
+        actividadForm = ActividadForm(request.POST)
+        peticion = request.POST.copy()
+        det = peticion.pop('detalle')
+        if actividadForm.is_valid():
+            actividad = actividadForm.save(commit=False)
+            actividad.save()
+            for a in det:
+                actividad.detalle_id.add(a)     
+            actividad.save()
+            return redirect('/rutinas/actividades/')     
+    else:
+        actividadForm = ActividadForm()
+        return render(request, 'rutina/agregarActividad.html',{'actividadForm':actividadForm,'detalle':detalle})
+    return redirect('/rutinas/actividades/')  
         
 
 #ESTO NO SE USA    
@@ -124,7 +141,7 @@ class EditarActividad(PermissionRequiredMixin,UpdateView):
     permission_required = 'rutina.change_actividad'
     model = Actividad
     template_name = 'rutina/agregarActividad.html'
-    form_class = ActividadForm
+    actividadForm = ActividadForm
     succes_url = reverse_lazy('/rutinas')
     
 class EditarDetalle(PermissionRequiredMixin,UpdateView):

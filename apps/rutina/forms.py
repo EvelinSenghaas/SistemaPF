@@ -21,7 +21,7 @@ class DetalleForm (forms.ModelForm):
 class ActividadForm (forms.ModelForm):
     class Meta:
         model = Actividad
-        fields = ['nombre', 'descripcion', 'detalle_id', 'nivel_exigencia']
+        fields = ['nombre', 'descripcion']
         labels = {
             'nombre' : 'Nombre de la actividad', 'descripcion': 'Descripcion de la actividad', 'detalle_id': 'Detalles de la actividad', 'nivel_exigencia' : 'Nivel de exigencia'
         }
