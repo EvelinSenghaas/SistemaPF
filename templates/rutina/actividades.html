@@ -26,14 +26,14 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-3">
-                    Nombre
+                    <b>Nombre</b>
                 </div>
                 <div class="col-7">
-                    Descripcion
+                    <b>Descripcion</b>
                 </div>
-                {% if perms.rutina.change_actividad and perms.rutina.delete_actividad%}
+                {% if perms.rutina.change_rutina and perms.rutina.delete_rutina%}
                 <div class="col-1">
-                    Acciones
+                    <b>Acciones</b>
                 </div>
         
                 {%endif%}

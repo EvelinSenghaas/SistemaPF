@@ -9,39 +9,58 @@
     {%block contenido%}
     <section class="container mt-2">
         <div class="list-group" >
+        
             <div class="list-group-item active">
                 <div class="row">
-                    <div class="col-md-11 col-sm-11"><a href="/home/administracion/"><img src="{% static 'img/back_blanco.png'%}"></a>Lista de Detalles</div>
-                    {% if perms.rutina.add_rutina%}
-                    <div class="col-0"><a class="btn btn-light" href="/rutinas/agregar_detalle" src="">
+                    <div class="col col-sm-11 col-md-11 col-lg-11">
+                        <a href="/home/administracion/"><h5><img src="{% static 'img/back_blanco.png'%}"></a>Lista de Detalles</h5></div>
+                    {% if perms.rutina.add_detalle%}
+                    <div class="col col-sm-1 col-md-1 col-lg-1">
+                        <a class="btn btn-light" href="/rutinas/agregar_detalle" src="">
                         <img src="{% static 'img/img_agregar_rutina.png'%}" alt=""></a>
                     </div>
                     {%endif%}
                 </div>
             </div>
-                {% if perms.rutina.view_detalle%}
-                {% for detalle in detalles %}
-                <div class="list-group-item ">
-                    <div class="row">
-                        <div class="col-md-3 col-sm-3">
-                           {{detalle.categoria}}
-                        </div>
-                        <div class="col-md-7 col-sm-7">
-                            {{detalle.musculo}}
-                        </div>
-                        {% if perms.rutina.change_detalle and perms.rutina.delete_detalle%}
-                        <div class="col-0">
-                            <a class="btn btn-outline-secondary" href="/rutinas/editar_detalle/{{detalle.id}}">Editar</a>
-                        </div>
-                        <div class="col-1">
-                                <a class="btn btn-outline-danger" href="/rutinas/eliminar_detalle/{{detalle.id}}">Borrar</a>
-                        </div>
-                        {%endif%}
-                    </div>
-                </div>      
-                {%endfor%}
-                {%endif%}
         </div>
+        <div class="card-header">
+            <div class="row">
+                <div class="col-4">
+                    <b>Categoría</b>
+                </div>
+                <div class="col-6">
+                    <b>Músculo</b>
+                </div>
+                {% if perms.rutina.change_detalle and perms.rutina.delete_detalle%}
+                <div class="col-1">
+                    <b>Acciones</b>
+                </div>
+        
+                {%endif%}
+            </div>
+        </div>   
+        {% if perms.rutina.view_detalle%}
+        {% for detalle in detalles %}
+        <div class="list-group-item">
+            <div class="row">
+                <div class="col-4">
+                    {{detalle.categoria}}
+                </div>
+                <div class="col-6">
+                    {{detalle.musculo}}
+                </div>
+                {% if perms.rutina.change_detalle and perms.rutina.delete_detalle%}
+                <div class="col col-sm-0 col-md-0 col-lg-0">
+                    <a  href="/rutinas/editar_detalle/{{detalle.id}}"><img src="{%static 'img/edit.png'%}"></a>
+    
+                    <a href="/rutinas/eliminar_detalle/{{detalle.id}}"><img src="{%static 'img/delete.png'%}" alt=""></a>
+                </div>
+                {%endif%}
+            </div>
+        </div>      
+        {%endfor%}
+        {%endif%}
+        
     </section>
     {%endblock contenido%}
     {%block pie%}
