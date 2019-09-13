@@ -29,10 +29,10 @@
                     <b>Nombre</b>
                 </div>
                 <div class="col-7">
-                    <b>Descripcion</b>
+                    <b>Descripción</b>
                 </div>
-                {% if perms.rutina.change_rutina and perms.rutina.delete_rutina%}
-                <div class="col-1">
+                {% if perms.rutina.change_actividad and perms.rutina.delete_actividad%}
+                <div class="col-0">
                     <b>Acciones</b>
                 </div>
         
@@ -50,7 +50,7 @@
                     {{actividad.descripcion}}
                 </div>
                 {% if perms.rutina.change_actividad and perms.rutina.delete_actividad%}
-                <div class="col col-sm-0 col-md-0 col-lg-0">
+                <div class="col-0">
                     <a  href="/rutinas/editar_actividad/{{actividad.id}}"><img src="{%static 'img/edit.png'%}"></a>
 
                     <a href="/rutinas/eliminar_actividad/{{actividad.id}}"><img src="{%static 'img/delete.png'%}" alt=""></a>
