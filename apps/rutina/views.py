@@ -16,7 +16,7 @@ class Rutinas (PermissionRequiredMixin,ListView):
     permission_required = ('rutina.view_rutina', 'rutina.add_rutina')
     template_name = 'rutina/administrarRutinas.html'
     context_object_name = 'rutinas'
-    queryset = Rutina.objects.filter(estado=True)
+    queryset = Rutina.objects.all()
     
 
 

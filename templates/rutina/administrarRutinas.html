@@ -33,7 +33,7 @@
                     <b>Descripcion</b>
                 </div>
                 {% if perms.rutina.change_rutina and perms.rutina.delete_rutina%}
-                <div class="col-1">
+                <div class="col-0">
                     <b>Acciones</b>
                 </div>
         
@@ -51,10 +51,16 @@
                     {{rutina.descripcion}}
                 </div>
                 {% if perms.rutina.change_rutina and perms.rutina.delete_rutina%}
-                <div class="col col-sm-0 col-md-0 col-lg-0">
+                <div class="col-0">
                     <a  href="/rutinas/editar_rutina/{{rutina.id}}"><img src="{%static 'img/edit.png'%}"></a>
     
-                    <a href="/rutinas/eliminar_rutina/{{rutina.id}}"><img src="{%static 'img/delete.png'%}" alt=""></a>
+                    
+                    {%if rutina.estado%}
+                    <a href="/rutinas/eliminar_rutina/{{rutina.id}}"><img src="{%static 'img/activo.png'%}" alt=""></a>
+                    {%else%}
+                    <a href="/rutinas/eliminar_rutina/{{rutina.id}}"><img src="{%static 'img/inactivo.png'%}" alt=""></a>
+                    {%endif%}
+                    
                 </div>
                 {%endif%}
             </div>
