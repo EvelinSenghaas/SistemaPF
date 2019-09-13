@@ -32,7 +32,7 @@
                     <b>Músculo</b>
                 </div>
                 {% if perms.rutina.change_detalle and perms.rutina.delete_detalle%}
-                <div class="col-1">
+                <div class="col-0">
                     <b>Acciones</b>
                 </div>
         
@@ -50,7 +50,7 @@
                     {{detalle.musculo}}
                 </div>
                 {% if perms.rutina.change_detalle and perms.rutina.delete_detalle%}
-                <div class="col col-sm-0 col-md-0 col-lg-0">
+                <div class="col-0">
                     <a  href="/rutinas/editar_detalle/{{detalle.id}}"><img src="{%static 'img/edit.png'%}"></a>
     
                     <a href="/rutinas/eliminar_detalle/{{detalle.id}}"><img src="{%static 'img/delete.png'%}" alt=""></a>
