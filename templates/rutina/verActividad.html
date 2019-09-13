@@ -6,8 +6,8 @@
 {%block imagen_principal%}{%endblock imagen_principal%}
 {%block contenido%}
 <body class="container mt-2">
-    <div class="card">
-        <div class="card-header"><a href="/rutinas/actividades/"><img src="{% static 'img/back_negro.png'%}"></a><strong>{{actividad.nombre}}</strong></div>
+    <div class="card active">
+        <div class="card-header alert-primary"><a href="/rutinas/actividades/"><h6><img src="{% static 'img/back_negro.png'%}"></a><strong>{{actividad.nombre}}</strong></h6></div>
             <div class="card-body card-block">
                     {% csrf_token %}
                     <div class="">
@@ -19,16 +19,24 @@
                     </div>
             </div>
         </div>
-    </div>
-    <div class="card">
-            <div class="card-header"><strong>Lista de detalles de {{actividad.nombre}}</strong></div>
+            <div class="card-header alert-primary"><strong>Lista de detalles de {{actividad.nombre}}</strong></div>
+            <div class="list-group-item ">
+                <div class="row alert-heading">
+                    <div class="col col-sm-4 col-md-4 lg-4">
+                        <b>Categoria</b>
+                    </div>
+                    <div class="col col-sm-6 col-md-6 lg-6">
+                        <b>Músculo</b>
+                    </div>
+                </div>
+            </div>
             {%for det in detalles%}
             <div class="list-group-item ">
                     <div class="row">
-                        <div class="col-md-3 col-sm-3">
+                        <div class="col col-sm-4 col-md-4 lg-4">
                             {{det.categoria}}
                         </div>
-                        <div class="col-md-7 col-sm-7">
+                        <div class="col col-sm-6 col-md-6 lg-6">
                             {{det.musculo}}
                         </div>
                     </div>

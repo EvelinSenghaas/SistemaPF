@@ -38,7 +38,7 @@ class ActividadForm (forms.ModelForm):
                     }
                 )
         }
-    
+        
 class RutinaForm (forms.ModelForm):
     class Meta:
         model = Rutina
