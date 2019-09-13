@@ -9,56 +9,63 @@
     {%block contenido%}
     <section class="container mt-2">
         <div class="list-group" >
+        
             <div class="list-group-item active">
                 <div class="row">
-                    <div class="col-md-11 col-sm-11"><a href="/home/administracion/"><h5><img src="{% static 'img/back.png'%}"></a>Lista de Actividades</h5></div>
+                    <div class="col col-sm-11 col-md-11 col-lg-11">
+                        <a href="/home/administracion/"><h5><img src="{% static 'img/back_blanco.png'%}"></a>Lista de Actividades</h5></div>
                     {% if perms.rutina.add_actividad%}
-                    <div class="col-0"><a class="btn btn-light" href="/rutinas/agregar_actividad" src="">
+                    <div class="col col-sm-1 col-md-1 col-lg-1">
+                        <a class="btn btn-light" href="/rutinas/agregar_actividad" src="">
                         <img src="{% static 'img/img_agregar_rutina.png'%}" alt=""></a>
                     </div>
                     {%endif%}
                 </div>
             </div>
-            <div class="card-header">
-                    <div class="row">
-                        <div class="col-md-3 col-sm-3">
-                            Nombre
-                        </div>
-                        <div class="col-md-7 col-sm-7">
-                            Descripcion
-                        </div>
-                        {% if perms.rutina.change_actividad and perms.rutina.delete_actividad%}
-                        <div class="col-2">
-                            Acciones
-                        </div>
-
-                        {%endif%}
-                    </div>
-            </div>   
-                {% if perms.rutina.view_actividad%}
-                {% for actividad in actividades %}
-                <div class="list-group-item ">
-                    <div class="row">
-                        <div class="col-md-3 col-sm-3">
-                            <a href="/rutinas/ver_actividad/{{actividad.id}}">{{actividad.nombre}}</a>
-                        </div>
-                        <div class="col-md-7 col-sm-7">
-                            {{actividad.descripcion}}
-                        </div>
-                        {% if perms.rutina.change_actividad and perms.rutina.delete_actividad%}
-                        <div class="col-0">
-                            <a class="btn btn-outline-secondary" href="/rutinas/editar_actividad/{{actividad.id}}">Editar</a>
-                        </div>
-                        <div class="col-1">
-                                <a class="btn btn-outline-danger" href="/rutinas/eliminar_actividad/{{actividad.id}}">Borrar</a>
-                        </div>
-                        {%endif%}
-                    </div>
-                </div>      
-                {%endfor%}
-                {%endif%}
         </div>
+        <div class="card-header">
+            <div class="row">
+                <div class="col-3">
+                    Nombre
+                </div>
+                <div class="col-7">
+                    Descripcion
+                </div>
+                {% if perms.rutina.change_actividad and perms.rutina.delete_actividad%}
+                <div class="col-1">
+                    Acciones
+                </div>
+        
+                {%endif%}
+            </div>
+        </div>   
+        {% if perms.rutina.view_actividad%}
+        {% for actividad in actividades %}
+        <div class="list-group-item">
+            <div class="row">
+                <div class="col-3">
+                    <a href="/rutinas/ver_actividad/{{actividad.id}}">{{actividad.nombre}}</a>
+                </div>
+                <div class="col-7">
+                    {{actividad.descripcion}}
+                </div>
+                {% if perms.rutina.change_actividad and perms.rutina.delete_actividad%}
+                <div class="col col-sm-0 col-md-0 col-lg-0">
+                    <a  href="/rutinas/editar_actividad/{{actividad.id}}"><img src="{%static 'img/edit.png'%}"></a>
+
+                    <a href="/rutinas/eliminar_actividad/{{actividad.id}}"><img src="{%static 'img/delete.png'%}" alt=""></a>
+                </div>
+                {%endif%}
+            </div>
+        </div>      
+        {%endfor%}
+        {%endif%}
+        
     </section>
+
+
+
+    
 {%endblock contenido%}
 
 {%block pie%}
