@@ -75,7 +75,7 @@ class AlumnoForm(forms.ModelForm):
 class FichaForm(forms.ModelForm):
     class Meta:
         model = FichaAlumno
-        fields = ['peso', 'grupo_sanguineo', 'enfermedades']
+        fields = ['peso', 'grupo_sanguineo']
         labels = {
             'peso' : 'Peso', 'grupo_sanguineo': 'Grupo sanguíneo', 'enfermedades': 'Enfermedades',
             }

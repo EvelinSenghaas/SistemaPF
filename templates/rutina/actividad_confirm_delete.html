@@ -1,25 +1,21 @@
 {%extends 'home/home.html'%}
 {%load staticfiles%}
 
-{%block titulo%}Modificar {{object}}{%endblock titulo%}
+{%block titulo%}Eliminar {{object}}{%endblock titulo%}
 {%block imagen_principal%}
 {%endblock imagen_principal%}
 
 {%block contenido%}
 <body class="container mt-2">
         <div class="card">
-            <div class="alert alert-danger"><strong>Confirmar modificacion de una actividad</strong></div>
+            <div class="alert alert-danger"><strong>Confirmar eliminación de <strong>{{object}}</strong></strong></div>
                 <div class="card-body card-block">
                     <form method="POST">
                         {% csrf_token %}
                         <div class="">
                             <div class="form-group">
                                 <div class="row form-group">
-                                    <p>Usted esta queriendo modificar el estado de la actividad <strong>{{object}}</strong>. Si cambia su estado, pasará a estar inactivo.</p>
-                                    </p>
-                                </div>
-                                <div class="row form-group">
-                                    <p>¿Seguro que desea modificar el estado de <strong>{{object}}</strong>?</p>
+                                    <p>¿Seguro que desea eliminar <strong>{{object}}</strong>?</p>
                                 </div>
                                 <button type="submit" class="btn btn-danger" display="block">Confirmar</button>
                             </div>

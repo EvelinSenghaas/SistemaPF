@@ -34,7 +34,7 @@ class Profesor(models.Model):
     nombre = models.CharField(max_length = 60, blank = False, null = True)
     apellido = models.CharField(max_length = 60, blank = False, null = True)
     fecha_nac = models.DateField(blank = False, null = True)
-    email = models.EmailField(max_length = 70, blank = False, null = True)
+    email = models.EmailField(max_length = 70, blank = False, null = False)
     sexo = models.CharField(max_length = 1, blank = False, null = True)
     estado = models.BooleanField(default=True)
     class Meta:
@@ -67,9 +67,8 @@ class Alumno(models.Model):
 
 class FichaAlumno (models.Model):
     id = models.AutoField(primary_key=True, null=False)
-    peso = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    peso = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=False)
     grupo_sanguineo = models.CharField(max_length = 2, blank = False, null = False)
-    enfermedades = models.TextField(blank = False, null = True)
     alumno_id = models.OneToOneField(Alumno, on_delete=models.CASCADE)
     
     class Meta:

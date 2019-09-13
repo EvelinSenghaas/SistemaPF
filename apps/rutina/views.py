@@ -95,7 +95,27 @@ def agregarActividad(request):
         actividadForm = ActividadForm()
         return render(request, 'rutina/agregarActividad.html',{'actividadForm':actividadForm,'detalle':detalle})
     return redirect('/rutinas/actividades/')  
+
+
+def editarActividad(request, pk):
+    actividad = Actividad.objects.get(id = pk)
+    detalle = Detalle.objects.filter(estado=True)
+    if request.method == 'GET':
+        actividadForm = ActividadForm(instance = actividad)
         
+    else:
+        actividadForm = ActividadForm(request.POST, instance = actividad)
+        peticion = request.POST.copy()
+        det = peticion.pop('detalle')
+        if actividadForm.is_valid():
+            actividad = actividadForm.save(commit=False)
+            actividad.save()
+            for a in det:
+                actividad.detalle_id.add(a)     
+            actividad.save()
+        return redirect('/rutinas/actividades/') 
+    return render(request, 'rutina/agregarActividad.html',{'actividadForm':actividadForm,'detalle':detalle})
+            
 
 #ESTO NO SE USA    
 class AgregarRutina(PermissionRequiredMixin, CreateView):
@@ -134,15 +154,15 @@ class EditarRutina(PermissionRequiredMixin,UpdateView):
     model = Rutina
     template_name = 'rutina/agregarRutina.html'
     form_class = RutinaForm
-    succes_url = reverse_lazy('/rutinas')
+    succes_url = reverse_lazy('/rutinas/administrar_rutinas')
     
 
 class EditarActividad(PermissionRequiredMixin,UpdateView):
     permission_required = 'rutina.change_actividad'
     model = Actividad
     template_name = 'rutina/agregarActividad.html'
-    actividadForm = ActividadForm
-    succes_url = reverse_lazy('/rutinas')
+    form_class = ActividadForm
+    succes_url = reverse_lazy('/rutinas/actividades/')
     
 class EditarDetalle(PermissionRequiredMixin,UpdateView):
     permission_required = 'rutina.change_detalle'
@@ -161,22 +181,25 @@ class EliminarRutina(DeleteView):
         return redirect('/rutinas/administrar_rutinas')
     
 class EliminarActividad(DeleteView):
-    
     model = Actividad
     def post(self,request, pk, *args, **kwargs):
         object = Actividad.objects.get(id = pk)
-        object.estado = not(object.estado)
-        object.save()
+        if (Rutina.objects.filter(actividad_id=object.id).exists()):
+            mensaje = "Usted no puede borrar " + object.nombre + " porque ya pertenece a una rutina"
+            return render(request, 'rutina/errorEliminacion.html',{'object':object, 'mensaje':mensaje})
+        else:
+            Actividad.objects.get(id = object.id).delete()
         return redirect('/rutinas/actividades')
     
 class EliminarDetalle(DeleteView):
-    
     model = Detalle
-
     def post(self,request, pk, *args, **kwargs):
         object = Detalle.objects.get(id = pk)
-        object.estado = not(object.estado)
-        object.save()
+        if (Actividad.objects.filter(detalle_id=object.id).exists()):
+            mensaje = "Usted no puede borrar " + object.musculo + " porque ya pertenece a una actividad"
+            return render(request, 'rutina/errorEliminacion.html',{'object':object, 'mensaje':mensaje})
+        else:
+            Detalle.objects.get(id = object.id).delete()
         return redirect('/rutinas/administrar_detalles')
     
     
