@@ -27,7 +27,7 @@ class NewUserForm(UserCreationForm):
                 attrs = { 'class':'form-control', 'placeholder': 'Ingrese su correo electrónico'}
                 ),
             'password1' : forms.PasswordInput(
-                attrs = { 'class':'form-control', 'placeholder': 'Ingrese su contraseña'}
+                attrs = { 'class':'form-control', 'id':'exampleInputPassword1', 'placeholder': 'Ingrese su contraseña'}
                 ),
             'password2' : forms.PasswordInput(
                 attrs = { 'class':'form-control', 'placeholder': 'Repita su contraseña'}
@@ -50,6 +50,8 @@ class NewUserForm(UserCreationForm):
         if commit:
             user.save()
         return user
+    
+    
 
 #Esto CREO que no se usa    
 class LoginForm(AuthenticationForm):
