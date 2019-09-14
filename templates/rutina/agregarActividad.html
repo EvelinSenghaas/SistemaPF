@@ -12,7 +12,6 @@
                 <div class="card-body card-block">
                     <form method="POST">
                         {% csrf_token %}
-                        <div class="">
                             <div class="form-group">
                                 <div class="row form-group">
                                     <div class="col col-md-3">{{form.nombre.label}}</div>
@@ -26,32 +25,28 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                    <div class="row form-group">
-                                        <div class="col col-md-3">Selecciona los detalles</div>
-                                        <div class="col-12 col-md-9">
-                                            <select name="detalle_id" class="selectpicker" multiple data-live-search="true">
-                                            <option>
-                                                {%for det in form.detalle_id%}
-                                                    {{det}}
-                                                {%endfor%}
-                                            </option>
-                                            </select>
+                                <div class="row form-group">
+                                    <div class="col col-md-3">Selecciona los detalles</div>
+                                    <div class="col-12 col-md-9">
+                                        <select name="detalle_id" class="selectpicker" multiple data-live-search="true">
+                                        <option>
+                                            {%for det in form.detalle_id%}
+                                                {{det}}
+                                            {%endfor%}
+                                        </option>
+                                        </select>
                                             
-                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            
+                            </div>                           
                             
                             <div class="float-right"><a href="/rutinas/actividades/">
                                 <button type="button" class="btn btn-outline-danger">Cancelar</button></a>
                                 <button type="submit" class="btn btn-primary">Agregar</button>
                             </div>
-                        </div>
                     </form>
-                </div>
-            </div>
-        </div>
+                </div>  
+            </div>      
         <!--SCRIPTS-->
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
