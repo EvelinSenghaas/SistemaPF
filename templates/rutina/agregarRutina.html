@@ -39,7 +39,7 @@
                                     <div class="col-12 col-md-9">{{form.descripcion}}</div>
                                 </div>
                             </div>
-                            <!-- Actividades -->
+                            <!-- Actividades
                             <div class="form-group">
                                 <div class="row form-group">
                                     <div class="col col-md-3">{{rutinaForm.actividad_id.label}}</div>
@@ -51,7 +51,39 @@
                                     <div class="col col-md-3">{{form.actividad_id.label}}</div>
                                     <div class="col-12 col-md-9">{{form.actividad_id}}</div>
                                 </div>
+                            </div> -->
+                            {%if rutinaForm%}
+                            <div class="form-group">
+                                <div class="row form-group">
+                                    <div class="col col-md-3">{{rutinaForm.actividad_id.label}}</div>
+                                    <div class="col-12 col-md-9">
+                                        <select name="actividad_id" class="selectpicker" multiple data-live-search="true">
+                                            <option>
+                                                {%for act in rutinaForm.actividad_id%}
+                                                    {{act}}
+                                                {%endfor%}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
+                            {%endif%}
+                            {%if form%}
+                            <div class="form-group">
+                                <div class="row form-group">
+                                    <div class="col col-md-3">{{form.actividad_id.label}}</div>
+                                    <div class="col-12 col-md-9">
+                                        <select name="actividad_id" class="selectpicker" multiple data-live-search="true">
+                                            <option>
+                                                {%for act in form.actividad_id%}
+                                                    {{act}}
+                                                {%endfor%}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            {%endif%}
                             <div class="float-right"><a href="/rutinas/administrar_rutinas/">
                                 <button type="button" class="btn btn-outline-danger">Cancelar</button></a>
                                 <button type="submit" class="btn btn-primary">Agregar</button>

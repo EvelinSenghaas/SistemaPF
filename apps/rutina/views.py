@@ -137,9 +137,15 @@ def agregarRutina(request, pk):
     profesor = Profesor.objects.get(user_id=user.id)
     if request.method == 'POST':
         rutinaForm = RutinaForm(request.POST)
+        peticion = request.POST.copy()
+        actividades = peticion.pop('actividad_id')
+        print(request.POST)
         if rutinaForm.is_valid():
             rutina = rutinaForm.save(commit=False)
             rutina.profesor_id=profesor
+            rutina.save()
+            for act in actividades:
+                rutina.actividad_id.add(act)
             rutina.save()
             return redirect ('/rutinas/administrar_rutinas/')
     else:
