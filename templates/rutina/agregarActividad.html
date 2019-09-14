@@ -29,11 +29,20 @@
                                     <div class="row form-group">
                                         <div class="col col-md-3">Selecciona los detalles</div>
                                         <div class="col-12 col-md-9">
-                                            {{form.detalle_id}}
+                                            <select name="detalle_id" class="selectpicker" multiple data-live-search="true">
+                                            <option>
+                                                {%for det in form.detalle_id%}
+                                                    {{det}}
+                                                {%endfor%}
+                                            </option>
+                                            </select>
+                                            
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            
+                            
                             <div class="float-right"><a href="/rutinas/actividades/">
                                 <button type="button" class="btn btn-outline-danger">Cancelar</button></a>
                                 <button type="submit" class="btn btn-primary">Agregar</button>
