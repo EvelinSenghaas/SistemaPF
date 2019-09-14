@@ -20,7 +20,16 @@ class Detalle(models.Model):
     def obtenerId(self):
         return self.id
     
-
+class Nivel(models.Model):
+    id = models.AutoField(primary_key = True)
+    nombre = models.CharField(max_length = 60, blank = False, null = False, unique=True)
+    class Meta:
+        verbose_name = 'Nivel'
+        verbose_name_plural = 'Niveles'
+        ordering = ['nombre']
+        
+    def __str__ (self):
+        return self.nombre
 
 class Actividad(models.Model):
     id = models.AutoField(primary_key = True)
@@ -32,14 +41,23 @@ class Actividad(models.Model):
         verbose_name = 'Actividad'
         verbose_name_plural = 'Actividades'
         ordering = ['nombre']
-        permissions = (
-            
-        )
     
     def __str__ (self):
         return self.nombre
     
-
+class Repeticion(models.Model):
+    id = models.AutoField(primary_key = True)
+    actividad_id = models.ForeignKey(Actividad, on_delete=models.CASCADE, verbose_name="Actividad")
+    nivel_id = models.ForeignKey(Nivel, on_delete=models.CASCADE, verbose_name="Nivel")
+    repeticionesMinimas = models.PositiveIntegerField(blank=False, null=False, verbose_name="Repeticiones Minimas")
+    class Meta:
+        verbose_name = 'Repeticion'
+        verbose_name_plural = 'Repeticiones'
+        ordering = ['id']
+        
+    def __str__ (self):
+        return self.actividad_id.nombre + ' ' + self.nivel_id.nombre
+    
 class Rutina(models.Model):
     id = models.AutoField(primary_key = True)
     nombre = models.CharField(max_length = 60, blank = False, null = False, unique=True)
