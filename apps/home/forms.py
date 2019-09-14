@@ -66,7 +66,7 @@ class LoginForm(AuthenticationForm):
 class AlumnoForm(forms.ModelForm):
     class Meta:
         model = Alumno
-        fields = ['nombre', 'apellido', 'fecha_nac', 'sexo', 'email']
+        fields = ['nombre', 'apellido', 'fecha_nac', 'email']
         
         labels = {
             'nombre' : 'Nombre', 'apellido': 'Apellido', 'fecha_nac': 'Fecha de nacimiento', 'sexo': 'Sexo', 'email': 'Correo electrónico',
@@ -77,7 +77,7 @@ class AlumnoForm(forms.ModelForm):
 class FichaForm(forms.ModelForm):
     class Meta:
         model = FichaAlumno
-        fields = ['peso', 'grupo_sanguineo']
+        fields = ['peso', 'sexo', 'altura', 'grupo_sanguineo', 'profesion']
         labels = {
             'peso' : 'Peso', 'grupo_sanguineo': 'Grupo sanguíneo', 'enfermedades': 'Enfermedades',
             }
