@@ -40,6 +40,20 @@
                                 </div>
                             </div>                           
                             
+                            <div class="form-group">
+                                <div class="row form-group">
+                                    <div class="col col-md-3">Repeticiones mínimas</div>
+                                    <div class="col col-md-9">
+                                        <div class="checkbox">
+                                            {%for n in nivel%}
+                                                {{form2.nivel_id}}{{form2.repeticionesMinimas}}
+                                            <br>
+                                            {%endfor%}
+                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="float-right"><a href="/rutinas/actividades/">
                                 <button type="button" class="btn btn-outline-danger">Cancelar</button></a>
                                 <button type="submit" class="btn btn-primary">Agregar</button>

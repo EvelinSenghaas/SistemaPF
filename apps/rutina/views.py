@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
-from .models import Rutina, Actividad, Detalle
+from .models import Rutina, Actividad, Detalle, Nivel, Repeticion
 from ..home.models import Alumno, FichaAlumno, Profesor
 from ..home.forms import AlumnoForm, FichaForm
-from .forms import DetalleForm, ActividadForm, RutinaForm
+from .forms import DetalleForm, ActividadForm, RutinaForm, NivelForm, RepeticionForm
 from django.views.generic import View, TemplateView, ListView, UpdateView, CreateView, DeleteView
 from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from apps.home.models import Profesor
 from django.contrib.auth.models import User
@@ -74,26 +75,62 @@ class AgregarDetalle(PermissionRequiredMixin, CreateView):
 class AgregarActividad(PermissionRequiredMixin, CreateView):
     permission_required = ('rutina.add_actividad' or 'ruitna.change_actividad')
     model = Actividad
+    nivel = Nivel.objects.all()
     template_name = 'rutina/agregarActividad.html'
     form_class = ActividadForm
+    second_form_class = RepeticionForm
     succes_name = reverse_lazy('/rutinas/actividades/')
     
+    def get_context_data(self, **kwargs):
+        context = super(AgregarActividad, self).get_context_data(**kwargs)
+        if 'form' not in context:
+            context['form'] = self.form_class(self.request.GET)
+        if 'form2' not in context:
+            context['form2'] = self.second_form_class(self.request.GET)
+        return context
+    
+    def post (self, request, *args, **kwargs):
+        self.object = self.get_obgect
+        form = self.form_class(request.POST)
+        form2 = self.second_form_class(request.POST)
+        if form.is_valid() and form2.is_valid():
+            repeticion = form2.save(commit = False)
+            repeticion.actividad_id = form.save()
+            repeticion.save()
+            return HttpResponseRedirect(self.get_success_url)()
+        else:
+            return self.render_to_response(self.get_context_data(form=form, form2=form2))    
+    
+    
 def agregarActividad(request):
-    detalle = Detalle.objects.filter(estado=True)
+    nivel = Nivel.objects.all() 
     if request.method == 'POST':
-        actividadForm = ActividadForm(request.POST)
+        form = ActividadForm(request.POST)
+        form2 = RepeticionForm(request.POST)
         peticion = request.POST.copy()
-        det = peticion.pop('detalle')
-        if actividadForm.is_valid():
-            actividad = actividadForm.save(commit=False)
-            actividad.save()
-            for a in det:
-                actividad.detalle_id.add(a)     
-            actividad.save()
+        nivel_id = peticion.pop('nivel_id')
+        rep_min = peticion.pop('repeticionesMinimas')
+        print (' ')
+        print(len(nivel_id))
+        print('  ')
+        if form.is_valid() and form2.is_valid():
+            actividad = form.save()
+            repeticion = form2.save(commit=False)
+            acti = Actividad.objects.get(id=actividad.id)  
+            i=0
+            while i < len(nivel_id):
+                """repeticion.actividad_id = actividad
+                repeticion.nivel_id = Nivel.objects.get(id = nivel_id[i])
+                repeticion.repeticionesMinimas = rep_min[i]
+                repeticion.save()"""
+                r = Repeticion.objects.create(actividad_id = actividad, nivel_id = Nivel.objects.get(id = nivel_id[i]), repeticionesMinimas = rep_min[i])
+                r.save()
+                i+=1
             return redirect('/rutinas/actividades/')     
     else:
-        actividadForm = ActividadForm()
-        return render(request, 'rutina/agregarActividad.html',{'actividadForm':actividadForm,'detalle':detalle})
+        form = ActividadForm()
+        form2 = RepeticionForm()
+        return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel})
     return redirect('/rutinas/actividades/')  
 
 
