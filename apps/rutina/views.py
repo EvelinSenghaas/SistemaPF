@@ -110,19 +110,12 @@ def agregarActividad(request):
         peticion = request.POST.copy()
         nivel_id = peticion.pop('nivel_id')
         rep_min = peticion.pop('repeticionesMinimas')
-        print (' ')
-        print(len(nivel_id))
-        print('  ')
         if form.is_valid() and form2.is_valid():
             actividad = form.save()
             repeticion = form2.save(commit=False)
             acti = Actividad.objects.get(id=actividad.id)  
             i=0
             while i < len(nivel_id):
-                """repeticion.actividad_id = actividad
-                repeticion.nivel_id = Nivel.objects.get(id = nivel_id[i])
-                repeticion.repeticionesMinimas = rep_min[i]
-                repeticion.save()"""
                 r = Repeticion.objects.create(actividad_id = actividad, nivel_id = Nivel.objects.get(id = nivel_id[i]), repeticionesMinimas = rep_min[i])
                 r.save()
                 i+=1
@@ -136,22 +129,28 @@ def agregarActividad(request):
 
 def editarActividad(request, pk):
     actividad = Actividad.objects.get(id = pk)
-    detalle = Detalle.objects.filter(estado=True)
+    repeticiones = Repeticion.objects.filter(actividad_id=pk)
+    nivel = Nivel.objects.all() 
+    
     if request.method == 'GET':
-        actividadForm = ActividadForm(instance = actividad)
-        
+        form = ActividadForm(instance = actividad)
+        for r in repeticiones:
+            form2 = RepeticionForm(instance = r)
     else:
-        actividadForm = ActividadForm(request.POST, instance = actividad)
+        form = ActividadForm(request.POST, instance = actividad)
+        form2 = RepeticionForm(request.POST)
         peticion = request.POST.copy()
-        det = peticion.pop('detalle')
-        if actividadForm.is_valid():
-            actividad = actividadForm.save(commit=False)
-            actividad.save()
-            for a in det:
-                actividad.detalle_id.add(a)     
-            actividad.save()
+        nivel_id = peticion.pop('nivel_id')
+        rep_min = peticion.pop('repeticionesMinimas')
+        if form.is_valid() and form2.is_valid():
+            actividad = form.save()
+        i=0
+        while i < len(nivel_id):
+            Repeticion.objects.filter(actividad_id = actividad.id, nivel_id = nivel[i]).update(nivel_id = Nivel.objects.get(id = nivel_id[i]))
+            Repeticion.objects.filter(actividad_id = actividad.id, nivel_id = nivel[i]).update(repeticionesMinimas = rep_min[i])
+            i+=1
         return redirect('/rutinas/actividades/') 
-    return render(request, 'rutina/agregarActividad.html',{'actividadForm':actividadForm,'detalle':detalle})
+    return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel})
             
 
 #ESTO NO SE USA    
