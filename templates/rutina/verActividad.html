@@ -42,6 +42,30 @@
                     </div>
             </div>
             {%endfor%}
+
+            <div class="card-header alert-primary"><strong>Repeticiones por niveles de {{actividad.nombre}}</strong></div>
+            <div class="list-group-item ">
+                <div class="row alert-heading">
+                    <div class="col col-sm-4 col-md-4 lg-4">
+                        <b>Nivel</b>
+                    </div>
+                    <div class="col col-sm-6 col-md-6 lg-6">
+                        <b>Repeticiones</b>
+                    </div>
+                </div>
+            </div>
+            {% for key, value in repeticiones.items %}
+            <div class="list-group-item ">
+                    <div class="row">
+                        <div class="col col-sm-4 col-md-4 lg-4">
+                            {{key}}
+                        </div>
+                        <div class="col col-sm-6 col-md-6 lg-6 text-align: right">
+                            {{value}}
+                        </div>
+                    </div>
+            </div>
+            {%endfor%}
     </div>
     <!--SCRIPTS-->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

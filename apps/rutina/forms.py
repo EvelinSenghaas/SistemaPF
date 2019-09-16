@@ -78,6 +78,6 @@ class RepeticionForm (forms.ModelForm):
             'repeticionesMinimas' : forms.NumberInput(
                 attrs = { 'class':'form-control'}
                 ), 'nivel_id' : forms.Select(
-                attrs = { 'class':''}
-                )
+                attrs = { 'class':'form-class'}
+                ),
         }

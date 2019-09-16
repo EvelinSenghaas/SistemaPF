@@ -158,8 +158,8 @@ def editarActividad(request, pk):
             form2.save(commit=False)
         i=0
         while i < len(nivel_id):
-            Repeticion.objects.filter(actividad_id = actividad.id, nivel_id = nivel_id[i], repeticionesMinimas = repeticiones[i].repeticionesMinimas).update(nivel_id = Nivel.objects.get(id = nivel_id[i]))
-            Repeticion.objects.filter(actividad_id = actividad.id, nivel_id = nivel_id[i], repeticionesMinimas = rep_min[i]).update(repeticionesMinimas = rep_min[i])
+            Repeticion.objects.filter(actividad_id = actividad.id, nivel_id = nivel_id[i]).update(nivel_id = Nivel.objects.get(id = nivel_id[i]))
+            Repeticion.objects.filter(actividad_id = actividad.id, nivel_id = nivel_id[i]).update(repeticionesMinimas = rep_min[i])
             i+=1
         return redirect('/rutinas/actividades/') 
     return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel})
