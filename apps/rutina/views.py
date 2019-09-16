@@ -57,11 +57,18 @@ def verActividad(request, pk):
     actividad = Actividad.objects.get(id = pk)
     detalles = []
     det = Actividad.objects.values_list('detalle_id').filter(id=pk)
+    repe =  Repeticion.objects.values_list('nivel_id','repeticionesMinimas').filter(actividad_id = pk)
+    repeticiones ={}
+    
+    for r in repe:
+        nivel = Nivel.objects.get(id=r[0])
+        repeticiones.setdefault(nivel.nombre,r[1])  
+          
     for a in det:
         i=0
-        detalles += Detalle.objects.filter(id=a[i], estado=True)
+        detalles += Detalle.objects.filter(id=a[i])
         i+=1
-    return render (request, 'rutina/verActividad.html', { 'actividad': actividad, 'detalles':detalles})
+    return render (request, 'rutina/verActividad.html', { 'actividad': actividad, 'detalles':detalles,'repeticiones':repeticiones})
        
 
 #Agregar    
@@ -131,23 +138,28 @@ def editarActividad(request, pk):
     actividad = Actividad.objects.get(id = pk)
     repeticiones = Repeticion.objects.filter(actividad_id=pk)
     nivel = Nivel.objects.all() 
-    
+        
     if request.method == 'GET':
         form = ActividadForm(instance = actividad)
-        for r in repeticiones:
-            form2 = RepeticionForm(instance = r)
+        form2 = RepeticionForm()
     else:
         form = ActividadForm(request.POST, instance = actividad)
         form2 = RepeticionForm(request.POST)
+        
         peticion = request.POST.copy()
         nivel_id = peticion.pop('nivel_id')
         rep_min = peticion.pop('repeticionesMinimas')
+        
+        print(nivel_id)
+        
         if form.is_valid() and form2.is_valid():
             actividad = form.save()
+            form2.actividad_id = form
+            form2.save(commit=False)
         i=0
         while i < len(nivel_id):
-            Repeticion.objects.filter(actividad_id = actividad.id, nivel_id = nivel[i]).update(nivel_id = Nivel.objects.get(id = nivel_id[i]))
-            Repeticion.objects.filter(actividad_id = actividad.id, nivel_id = nivel[i]).update(repeticionesMinimas = rep_min[i])
+            Repeticion.objects.filter(actividad_id = actividad.id, nivel_id = nivel_id[i], repeticionesMinimas = repeticiones[i].repeticionesMinimas).update(nivel_id = Nivel.objects.get(id = nivel_id[i]))
+            Repeticion.objects.filter(actividad_id = actividad.id, nivel_id = nivel_id[i], repeticionesMinimas = rep_min[i]).update(repeticionesMinimas = rep_min[i])
             i+=1
         return redirect('/rutinas/actividades/') 
     return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel})
@@ -218,8 +230,12 @@ class EliminarRutina(DeleteView):
     model = Rutina
     def post(self,request, pk, *args, **kwargs):
         object = Rutina.objects.get(id = pk)
-        object.estado = not(object.estado)
-        object.save()
+        if (Alumno.objects.filter(rutina_id=object.id).exists()):
+            mensaje = "Usted no puede ocultar la rutina " + object.nombre + " debido a que la misma cuenta con alumnos inscriptos"
+            return render(request, 'rutina/errorEliminacion.html',{'object':object, 'mensaje':mensaje})
+        else:
+            object.estado = not(object.estado)
+            object.save()
         return redirect('/rutinas/administrar_rutinas')
     
 class EliminarActividad(DeleteView):
