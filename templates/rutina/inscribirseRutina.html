@@ -31,7 +31,7 @@
 <div class="container mt-2">
     
     <div class="card">
-            <div class="card-header alert-primary"><strong>Inscribirse a una rutina</strong></div>
+            <div class="card-header alert-primary"><strong>Inscribirse a {{rutina}}</strong></div>
         <div class="alert alert-light">
             <p>Por favor selecciona la forma en la que quieres realizar la rutina</p>
             
@@ -168,76 +168,97 @@
                 </div>
                 <input type="hidden" id="entrenamiento" name="entrenamiento" value="sistema">
             </form>
-        </div>
+        
 
         <div class="card" id="formProfesor" style="display:none;">
-            <form method="POST">
-                {% csrf_token %}
-                <div class="card-header">Datos personales p</div>
-                    <div class="card-body card-block">
-                        
-                            <div class="">
-                                <div class="form-group">
-                                    <div class="row form-group">
-                                        <div class="col col-md-3">{{alumno.nombre.label}}</div>
-                                        <div class="col-12 col-md-9">{{alumno.nombre}}</div>
-                                    </div>
+                <form method="POST">
+                        {% csrf_token %}
+                        <div class="card-header alert-primary"><strong>Ficha de inscripción</strong></div>
+                            <div class="card-body card-block">
+                                <div class="alert alert-light"> 
+                                    <p>Antes de inscribirse a una rutina, primero debes completar algunos de tus datos personales</p>
                                 </div>
-                                <div class="form-group">
-                                    <div class="row form-group">
-                                        <div class="col col-md-3">{{alumno.apellido.label}}</div>
-                                        <div class="col-12 col-md-9">{{alumno.apellido}}</div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row form-group">
-                                        <div class="col col-md-3">{{alumno.fecha_nac.label}}</div>
-                                        <div class="col-12 col-md-9">{{alumno.fecha_nac}}</div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row form-group">
-                                        <div class="col col-md-3">{{alumno.sexo.label}}</div>
-                                            <div class="col-12 col-md-9">{{alumno.sexo}}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row form-group">
-                                        <div class="col col-md-3">{{alumno.email.label}}</div>
-                                            <div class="col-12 col-md-9">{{alumno.email}}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row form-group">
-                                        <div class="col col-md-3">{{ficha.peso.label}}</div>
-                                            <div class="col-12 col-md-9">{{ficha.peso}}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row form-group">
-                                        <div class="col col-md-3">{{ficha.grupo_sanguineo.label}}</div>
-                                            <div class="col-12 col-md-9">{{ficha.grupo_sanguineo}}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row form-group">
-                                        <div class="col col-md-3">{{ficha.enfermedades.label}}</div>
-                                            <div class="col-12 col-md-9">{{ficha.enfermedades}}
+                                    <div class="">
+            
+                                        <div class="form-group">
+                                            <div class="row form-group">
+                                                <div class="col col-md-3">{{ficha.sexo.label}}</div>
+                                                <div class="col-12 col-md-9">
+                                                    <select class="browser-default custom-select" name="sexo">
+                                                        <option value="F">Femenino</option>
+                                                        <option value="M">Masculino</option>
+                                                    </select>
+                                                </div>
                                             </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row form-group">
+                                                <div class="col col-md-3">{{ficha.peso.label}}</div>
+                                                <div class="col-12 col-md-9">{{ficha.peso}}</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row form-group">
+                                                <div class="col col-md-3">{{ficha.altura.label}}</div>
+                                                <div class="col-12 col-md-9">{{ficha.altura}}</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row form-group">
+                                                <div class="col col-md-3">{{alumno.nombre.label}}</div>
+                                                <div class="col-12 col-md-9">{{alumno.nombre}}</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row form-group">
+                                                <div class="col col-md-3">{{alumno.apellido.label}}</div>
+                                                <div class="col-12 col-md-9">{{alumno.apellido}}</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row form-group">
+                                                <div class="col col-md-3">{{alumno.fecha_nac.label}}</div>
+                                                <div class="col-12 col-md-9">{{alumno.fecha_nac}}</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <div class="row form-group">
+                                                <div class="col col-md-3">{{alumno.email.label}}</div>
+                                                    <div class="col-12 col-md-9">{{alumno.email}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row form-group">
+                                                <div class="col col-md-3">{{ficha.grupo_sanguineo.label}}</div>
+                                                    <div class="col-12 col-md-9">
+                                                        <select class="browser-default custom-select" name="grupo_sanguineo">
+                                                            <option value="A">A</option>
+                                                            <option value="B">B</option>
+                                                            <option value="AB">AB</option>
+                                                            <option value="O">O</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row form-group">
+                                                <div class="col col-md-3">{{ficha.enfermedades.label}}</div>
+                                                    <div class="col-12 col-md-9">{{ficha.enfermedades}}
+                                                    </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                        <div class="col col-1"><a href="/rutinas"><button type="button" class="btn btn-outline-danger">Cancelar</button></a></div>
+                                        <div class="col col-0"><button type="submit" class="btn btn-primary">Inscribirse</button></div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                <div class="col col-1"><a href="/rutinas"><button type="button" class="btn btn-outline-danger">Cancelar</button></a></div>
-                                <div class="col col-0"><button type="submit" class="btn btn-primary">Inscribirse</button></div>
-                                </div>
                             </div>
+                            <input type="hidden" id="entrenamiento2" name="entrenamiento" value="sistema">
+                        </form>
                     </div>
-                    <input type="hidden" id="entrenamiento2" name="entrenamiento" value="profesor">
-                </form>
             </div>
 
 </div>

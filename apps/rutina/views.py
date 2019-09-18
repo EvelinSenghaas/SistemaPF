@@ -350,7 +350,7 @@ def inscribirseRutina(request, pk1, pk2):
             else:
                 fichaForm = FichaForm()
                 alumnoForm = AlumnoForm()
-    return render (request, 'rutina/inscribirseRutina.html', {'ficha':fichaForm, 'alumno':alumnoForm})
+    return render (request, 'rutina/inscribirseRutina.html', {'ficha':fichaForm, 'alumno':alumnoForm, 'rutina':rutina})
     return redirect ('/rutinas/')
     
 """  
