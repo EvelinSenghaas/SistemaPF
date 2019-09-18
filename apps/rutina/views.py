@@ -262,8 +262,9 @@ class EliminarDetalle(DeleteView):
     
 #Metodo para calcular el nivel a asignar al alumno
 def calcularNivel(altura, circu, peso, actividad, sexo):
+    
     if sexo == 'M':
-        contextura = (altura/circu)
+        contextura = (float(altura)/float(circu))
         if contextura > 10.4:
             nombreContextura = "pequeña"
         if 9.6 <= contextura <= 10.4:
@@ -279,8 +280,8 @@ def calcularNivel(altura, circu, peso, actividad, sexo):
         if contextura < 10.1:
             nombreContextura = "grande"
 
-    altura = altura/100
-    imc = peso / (altura*altura)
+    altura = float(altura)/100
+    imc = float(peso) / (altura*altura)
     if imc < 18.4:
         nombreImc = "delgado"
     if 18.4 <= imc <= 24.9:
@@ -337,12 +338,44 @@ def inscribirseRutina(request, pk1, pk2):
             if request.method == 'POST':
                 fichaForm = FichaForm(request.POST)
                 alumnoForm = AlumnoForm(request.POST)
+                peticion = request.POST.copy()
+                print(peticion)
+                entrenamiento = peticion.pop('entrenamiento')
+                entrenamiento = entrenamiento[0]
+                
+                altura = peticion.pop('altura')
+                altura = altura[0]
+                
+                peso = peticion.pop('peso')
+                peso = peso[0]
+                
+                actividad = peticion.pop('actividad')
+                actividad = actividad[0]
+                
+                sexo = peticion.pop('sexo')
+                sexo = sexo[0]
+                
+                circu = peticion.pop('circu')
+                circu = circu[0]
+                
+                print(entrenamiento)
+                
                 if fichaForm.is_valid() and alumnoForm.is_valid():
+                    print('es valido')
                     alumno = alumnoForm.save(commit=False)
                     ficha = fichaForm.save(commit=False)
                     alumno.user = user
                     alumno.rutina_id = rutina
                     alumno.profesor_id = rutina.profesor_id
+                    if entrenamiento == 'profesor':
+                        print('eligio profesor')
+                        alumno.nivel_id = None
+                    else:
+                        print('eligio sistema')
+                        nivel = calcularNivel(altura, circu, peso, actividad, sexo)
+                        nivel = nivel.capitalize()
+                        print(nivel)
+                        alumno.nivel_id = Nivel.objects.get(nombre = nivel)
                     alumno.save()            
                     ficha.alumno_id = alumno
                     ficha.save()

@@ -55,7 +55,7 @@ class Alumno(models.Model):
     estado = models.BooleanField(default=True)
     rutina_id = models.ForeignKey('rutina.Rutina', related_name='rutina', on_delete=models.CASCADE, verbose_name="Rutina")
     profesor_id = models.ForeignKey(Profesor, on_delete=models.CASCADE, verbose_name="Profesor")
-    nivel_id = models.OneToOneField('rutina.Nivel', related_name='rutina', on_delete=models.CASCADE, verbose_name="Nivel")
+    nivel_id = models.OneToOneField('rutina.Nivel', related_name='rutina', on_delete=models.CASCADE, verbose_name="Nivel", null=True)
     
     class Meta:
         verbose_name = 'Alumno'

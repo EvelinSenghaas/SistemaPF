@@ -94,7 +94,7 @@ class FichaForm(forms.ModelForm):
         model = FichaAlumno
         fields = ['peso', 'sexo', 'altura', 'grupo_sanguineo', 'profesion']
         labels = {
-            'peso' : 'Peso', 'sexo': 'Sexo', 'altura': 'Altura', 'grupo_sanguineo': 'Grupo sanguíneo', 'profesion': '¿A qué te dedics?',
+            'peso' : 'Peso', 'sexo': 'Sexo', 'altura': 'Altura', 'grupo_sanguineo': 'Grupo sanguíneo', 'profesion': '¿A qué te dedicas?',
             }
         widgets = {
             'peso' : forms.NumberInput(
