@@ -64,10 +64,55 @@
     <div class="card" id="formSistema" style="display:none;">
         <form method="POST">
             {% csrf_token %}
-            <div class="card-header">Datos personales</div>
+            <div class="card-header alert-primary"><strong>Ficha de inscripción</strong></div>
                 <div class="card-body card-block">
-                    
+                    <div class="alert alert-light"> 
+                        <p>Antes de inscribirse a una rutina, primero debes completar algunos de tus datos personales</p>
+                    </div>
                         <div class="">
+
+                            <div class="form-group">
+                                <div class="row form-group">
+                                    <div class="col col-md-3">{{ficha.sexo.label}}</div>
+                                    <div class="col-12 col-md-9">
+                                        <select class="browser-default custom-select" name="sexo">
+                                            <option value="F">Femenino</option>
+                                            <option value="M">Masculino</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row form-group">
+                                    <div class="col col-md-3">{{ficha.peso.label}}</div>
+                                    <div class="col-12 col-md-9">{{ficha.peso}}</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row form-group">
+                                    <div class="col col-md-3">{{ficha.altura.label}}</div>
+                                    <div class="col-12 col-md-9">{{ficha.altura}}</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row form-group">
+                                    <div class="col col-md-3">Realiza actividad física</div>
+                                    <div class="col-12 col-md-9">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="actividad" id="exampleRadios1" value="mucho" checked>
+                                            <label class="form-check-label" for="exampleRadios1">Mucho <label style="color:rgb(130, 128, 128)">(Realiza actividad física más de 3 veces por semana)</label></label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="actividad" id="exampleRadios2" value="poco">
+                                            <label class="form-check-label" for="exampleRadios2">Poco <label style="color:rgb(130, 128, 128)">(Realiza actividad física 2 veces o menos por semana)</label></label></label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="actividad" id="exampleRadios3" value="nada">
+                                            <label class="form-check-label" for="exampleRadios2">Nada <label style="color:rgb(130, 128, 128)">(No realiza actividad física)</label></label></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <div class="row form-group">
                                     <div class="col col-md-3">{{alumno.nombre.label}}</div>
@@ -86,13 +131,7 @@
                                     <div class="col-12 col-md-9">{{alumno.fecha_nac}}</div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="row form-group">
-                                    <div class="col col-md-3">{{alumno.sexo.label}}</div>
-                                        <div class="col-12 col-md-9">{{alumno.sexo}}
-                                    </div>
-                                </div>
-                            </div>
+                            
                             <div class="form-group">
                                 <div class="row form-group">
                                     <div class="col col-md-3">{{alumno.email.label}}</div>
@@ -102,15 +141,15 @@
                             </div>
                             <div class="form-group">
                                 <div class="row form-group">
-                                    <div class="col col-md-3">{{ficha.peso.label}}</div>
-                                        <div class="col-12 col-md-9">{{ficha.peso}}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row form-group">
                                     <div class="col col-md-3">{{ficha.grupo_sanguineo.label}}</div>
-                                        <div class="col-12 col-md-9">{{ficha.grupo_sanguineo}}
+                                        <div class="col-12 col-md-9">
+                                            <select class="browser-default custom-select" name="grupo_sanguineo">
+                                                <option value="A">A</option>
+                                                <option value="B">B</option>
+                                                <option value="AB">AB</option>
+                                                <option value="O">O</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

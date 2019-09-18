@@ -69,8 +69,23 @@ class AlumnoForm(forms.ModelForm):
         fields = ['nombre', 'apellido', 'fecha_nac', 'email']
         
         labels = {
-            'nombre' : 'Nombre', 'apellido': 'Apellido', 'fecha_nac': 'Fecha de nacimiento', 'sexo': 'Sexo', 'email': 'Correo electrónico',
+            'nombre' : 'Nombre', 'apellido': 'Apellido', 'fecha_nac': 'Fecha de nacimiento', 'email': 'Correo electrónico',
             }
+        widgets = {
+            'nombre' : forms.TextInput(
+                attrs = { 'class':'form-control', 'placeholder': 'Ingrese su nombre'}
+                ), 
+            'apellido' : forms.TextInput(
+                attrs = { 'class':'form-control', 'placeholder': 'Ingrese su apellido'}
+                ),
+            'fecha_nac' : forms.DateTimeInput(
+                attrs = { 'class':'form-control', 'placeholder': 'Fecha de nacimiento (dd/mm/aaaa)'}
+                ),
+            'email' : forms.EmailInput(
+                attrs = { 'class':'form-control', 'placeholder': 'Ingrese su correo electrónico'}
+                )
+        }
+        
         
         
         
@@ -79,9 +94,19 @@ class FichaForm(forms.ModelForm):
         model = FichaAlumno
         fields = ['peso', 'sexo', 'altura', 'grupo_sanguineo', 'profesion']
         labels = {
-            'peso' : 'Peso', 'grupo_sanguineo': 'Grupo sanguíneo', 'enfermedades': 'Enfermedades',
+            'peso' : 'Peso', 'sexo': 'Sexo', 'altura': 'Altura', 'grupo_sanguineo': 'Grupo sanguíneo', 'profesion': '¿A qué te dedics?',
             }
-
+        widgets = {
+            'peso' : forms.NumberInput(
+                attrs = { 'class':'form-control', 'placeholder': 'Ingrese su peso'}
+                ), 
+            'altura' : forms.NumberInput(
+                attrs = { 'class':'form-control', 'placeholder': 'Ingrese su altura'}
+                ),
+            'profesion' : forms.TextInput(
+                attrs = { 'class':'form-control', 'placeholder': 'Ingrese su profesion'}
+                )
+        }
     
     
         

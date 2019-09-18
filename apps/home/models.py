@@ -51,7 +51,7 @@ class Alumno(models.Model):
     nombre = models.CharField(max_length = 60, blank = False, null = True)
     apellido = models.CharField(max_length = 60, blank = False, null = True)
     fecha_nac = models.DateField(blank = False, null = True)
-    email = models.EmailField(max_length = 70, blank = False, null = True)
+    email = models.EmailField(max_length = 70, blank = False, null = False)
     estado = models.BooleanField(default=True)
     rutina_id = models.ForeignKey('rutina.Rutina', related_name='rutina', on_delete=models.CASCADE, verbose_name="Rutina")
     profesor_id = models.ForeignKey(Profesor, on_delete=models.CASCADE, verbose_name="Profesor")
