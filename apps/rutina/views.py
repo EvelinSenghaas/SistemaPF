@@ -260,6 +260,57 @@ class EliminarDetalle(DeleteView):
             Detalle.objects.get(id = object.id).delete()
         return redirect('/rutinas/administrar_detalles')
     
+#Metodo para calcular el nivel a asignar al alumno
+def calcularNivel(altura, circu, peso, actividad, sexo):
+    if sexo == 'M':
+        contextura = (altura/circu)
+        if contextura > 10.4:
+            nombreContextura = "pequeña"
+        if 9.6 <= contextura <= 10.4:
+            nombreContextura = "mediana"
+        if contextura < 9.6:
+            nombreContextura = "grande"
+    else:
+        contextura = (altura/circu)
+        if contextura > 11:
+            nombreContextura = "pequeña"
+        if 10.1 <= contextura <= 11:
+            nombreContextura = "mediana"
+        if contextura < 10.1:
+            nombreContextura = "grande"
+
+    altura = altura/100
+    imc = peso / (altura*altura)
+    if imc < 18.4:
+        nombreImc = "delgado"
+    if 18.4 <= imc <= 24.9:
+        nombreImc = "normal"
+    if imc > 24.9:
+        nombreImc = "gordo"
+
+
+    if actividad == "mucho":
+        if (nombreImc == "delgado") or (nombreImc == "normal"):
+            nivel = "avanzado"
+        else:
+            if (nombreContextura == "grande"):
+                nivel = "intermedio"
+            if (nombreContextura == "pequeña") or (nombreContextura == "mediana"):
+                nivel = "principiante"
+        return nivel
+    if actividad == "poco":
+        if (nombreImc == "delgado") or (nombreImc == "normal"):
+            nivel = "intermedio"
+        if (nombreImc == "gordo"):
+            nivel = "principiante"
+        return nivel
+    if actividad == "nada":
+        if (nombreImc == "delgado"):
+            nivel = "intermedio"
+        else:
+            nivel = "principiante"
+        return nivel
+    
     
 def inscribirseRutina(request, pk1, pk2):
     #Identificamos al user que se quiere inscribir (pk es de usuario)
