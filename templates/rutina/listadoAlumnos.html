@@ -1,0 +1,23 @@
+{% extends 'home/home.html'%}
+{% load staticfiles%}
+
+{%block titulo%}Mis alumnos{%endblock titulo%}
+
+{%block imagen_principal%}
+{%endblock imagen_principal%}
+
+    {%block contenido%}
+    {%if mensaje%}
+    <div class="alert alert-warning" role="alert">
+        <h4 class="alert-heading"><i class="fa fa-warning"></i> ¡Error!</h4>
+        
+        <h5>{{mensaje}}</h5>
+        <hr>
+        <strong><h6><a class="mb-0" href="/home/">Volver</a></h6></strong>
+    </div>
+    {%else%}
+    
+    {%endif%}
+
+    {%endblock contenido%}
+    {%block pie%}{%endblock pie%}

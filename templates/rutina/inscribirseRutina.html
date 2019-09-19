@@ -11,10 +11,14 @@
         if(num == 1){
             document.getElementById("formSistema").style.display='block';
             document.getElementById("formProfesor").style.display='none';
+            /*document.getElementById("entrenamiento").style.display='block';
+            document.getElementById("entrenamiento2").style.display='none';*/
         }
         if(num == 0){
             document.getElementById("formProfesor").style.display='block';
             document.getElementById("formSistema").style.display='none';
+            /*document.getElementById("entrenamiento2").style.display='block';
+            document.getElementById("entrenamiento").style.display='none';*/
         }
         /*if(document.getElementById("elGranMenu").style.display == "none" || document.getElementById("elGranMenu").style.display == "" ){
             document.getElementById("elGranMenu").style.display='block';
@@ -178,8 +182,9 @@
                             <div class="col col-0"><button type="submit" class="btn btn-primary">Inscribirse</button></div>
                             </div>
                         </div>
+                        <input type="hidden" name="entrenamiento" value="sistema">
                 </div>
-                <input type="hidden" id="entrenamiento" name="entrenamiento" value="sistema">
+                
             </form>
         
 
@@ -275,8 +280,9 @@
                                         <div class="col col-0"><button type="submit" class="btn btn-primary">Inscribirse</button></div>
                                         </div>
                                     </div>
+                                    <input type="hidden" name="entrenamiento" value="profesor">
                             </div>
-                            <input type="hidden" id="entrenamiento2" name="entrenamiento" value="sistema">
+                            
                         </form>
                     </div>
             </div>

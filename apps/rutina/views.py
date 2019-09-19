@@ -272,7 +272,7 @@ def calcularNivel(altura, circu, peso, actividad, sexo):
         if contextura < 9.6:
             nombreContextura = "grande"
     else:
-        contextura = (altura/circu)
+        contextura = (float(altura)/float(circu))
         if contextura > 11:
             nombreContextura = "pequeña"
         if 10.1 <= contextura <= 11:
@@ -349,29 +349,26 @@ def inscribirseRutina(request, pk1, pk2):
                 peso = peticion.pop('peso')
                 peso = peso[0]
                 
-                actividad = peticion.pop('actividad')
-                actividad = actividad[0]
+                if entrenamiento == "sistema":
+                    actividad = peticion.pop('actividad')
+                    actividad = actividad[0]
+                    circu = peticion.pop('circu')
+                    circu = circu[0]
                 
                 sexo = peticion.pop('sexo')
                 sexo = sexo[0]
                 
-                circu = peticion.pop('circu')
-                circu = circu[0]
                 
-                print(entrenamiento)
                 
                 if fichaForm.is_valid() and alumnoForm.is_valid():
-                    print('es valido')
                     alumno = alumnoForm.save(commit=False)
                     ficha = fichaForm.save(commit=False)
                     alumno.user = user
                     alumno.rutina_id = rutina
                     alumno.profesor_id = rutina.profesor_id
                     if entrenamiento == 'profesor':
-                        print('eligio profesor')
                         alumno.nivel_id = None
                     else:
-                        print('eligio sistema')
                         nivel = calcularNivel(altura, circu, peso, actividad, sexo)
                         nivel = nivel.capitalize()
                         print(nivel)

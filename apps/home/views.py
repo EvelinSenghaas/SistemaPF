@@ -13,6 +13,7 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from .models import Profesor, Alumno, FichaAlumno
 
 # Create your views here.
 class Home(TemplateView):
@@ -24,6 +25,22 @@ class Administrar(PermissionRequiredMixin,TemplateView):
     
 class PaginaInicial(TemplateView):
     template_name = "home/paginaInicial.html"
+    
+def listadoAlumnos(request, pk):
+    user = User.objects.get(id=pk)
+    if (Profesor.objects.filter(user_id=user.id).exists()):
+        profesor = Profesor.objects.get(user_id=pk)
+    else:
+        return redirect('/home')
+    
+    if (Alumno.objects.filter(profesor_id=profesor.id).exists()):
+        alumnos = Alumno.objects.filter(profesor_id=profesor.id)
+        mensaje = None
+    else:
+        mensaje = "Usted no tiene alumnos a cargo"
+        
+    return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos})
+    
 
 
 def registro(request):               

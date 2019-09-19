@@ -48,9 +48,11 @@
           <li class="nav-item">
             <a class="nav-link" href="/rutinas">Rutinas</a>
           </li>
+          {%if perms.home.view_alumno%}
           <li class="nav-item">
-            <a class="nav-link" href="">vacio</a>
+            <a class="nav-link" href="/home/listado_alumnos/{{user.id}}">Mis alumnos</a>
           </li>
+          {%endif%}
           {% if perms.rutina.edit_actividad or perms.rutina.delete_actividad or perms.rutina.edit_rutina or perms.rutina.delete_rutina%}
           <li class="nav-item">
               <a class="nav-link" href="/home/administracion">Administrar</a>
