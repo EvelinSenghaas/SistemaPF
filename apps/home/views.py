@@ -136,8 +136,6 @@ def listadoAlumnos(request, pk):
         rutinas = Rutina.objects.filter(estado=True)
         return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas})         
         
-        
-    
 
 
 def registro(request):               

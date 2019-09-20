@@ -16,6 +16,9 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+
+    
+    
     
     <title>Mis alumnos</title>
   </head>
@@ -69,7 +72,7 @@
             <strong><h6><a class="mb-0" href="/home/">Volver</a></h6></strong>
         </div>
         {%else%}
-        <div class="list-group" >
+        <div class="card" >
             <div class="list-group-item active">
                 <div class="row">
                     <div class="col col-sm-11 col-md-11 col-lg-11">
@@ -79,7 +82,7 @@
             <!-- Filtrado -->
             <form method="POST"> {% csrf_token %}
               <div class="alert alert-light" role="alert">
-                <div class="row mt-1">
+                <div class="row mt-0">
                   <div class="col col-sm-0 col-m-0 col-lg-0">Filtar:</div>
                   <!-- Rutinas -->
                   <div class="col col-sm-2 col-m-2 col-lg-2">
@@ -115,8 +118,8 @@
               </div>
             </form>
             <!-- DataTable -->
-        <div class="mt-2">
-          <table class="table table-hover" id="mydatatable">
+        <div class="">
+          <table class="table dataTable" id="mydatatable">
             <thead class="card-header">
               <tr>
                 <th>Nombre y Apellido</th>
