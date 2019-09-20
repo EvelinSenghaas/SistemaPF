@@ -368,11 +368,12 @@ def inscribirseRutina(request, pk1, pk2):
                     alumno.profesor_id = rutina.profesor_id
                     if entrenamiento == 'profesor':
                         alumno.nivel_id = None
+                        alumno.entrenamiento_sistema = False
                     else:
                         nivel = calcularNivel(altura, circu, peso, actividad, sexo)
                         nivel = nivel.capitalize()
-                        print(nivel)
                         alumno.nivel_id = Nivel.objects.get(nombre = nivel)
+                        alumno.entrenamiento_sistema = True
                     alumno.save()            
                     ficha.alumno_id = alumno
                     ficha.save()

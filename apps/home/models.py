@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.apps import apps
+import datetime
+
 
 
 
@@ -53,6 +55,7 @@ class Alumno(models.Model):
     fecha_nac = models.DateField(blank = False, null = True)
     email = models.EmailField(max_length = 70, blank = False, null = False)
     estado = models.BooleanField(default=True)
+    entrenamiento_sistema = models.BooleanField(default=None, null=True)
     rutina_id = models.ForeignKey('rutina.Rutina', related_name='rutina', on_delete=models.CASCADE, verbose_name="Rutina")
     profesor_id = models.ForeignKey(Profesor, on_delete=models.CASCADE, verbose_name="Profesor")
     nivel_id = models.OneToOneField('rutina.Nivel', related_name='rutina', on_delete=models.CASCADE, verbose_name="Nivel", null=True)
@@ -64,6 +67,9 @@ class Alumno(models.Model):
     
     def __str__(self):
         return self.nombre
+    
+    def edad(self):
+        return int((datetime.now().date() - self.fecha_nac).days / 365.25)
 
 class FichaAlumno (models.Model):
     id = models.AutoField(primary_key=True, null=False)

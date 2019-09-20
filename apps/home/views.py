@@ -14,6 +14,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from .models import Profesor, Alumno, FichaAlumno
+from ..rutina.models import Rutina, Nivel
 
 # Create your views here.
 class Home(TemplateView):
@@ -28,18 +29,114 @@ class PaginaInicial(TemplateView):
     
 def listadoAlumnos(request, pk):
     user = User.objects.get(id=pk)
+    rutinas = Rutina.objects.filter(estado=True)
     if (Profesor.objects.filter(user_id=user.id).exists()):
         profesor = Profesor.objects.get(user_id=pk)
     else:
         return redirect('/home')
     
-    if (Alumno.objects.filter(profesor_id=profesor.id).exists()):
-        alumnos = Alumno.objects.filter(profesor_id=profesor.id)
-        mensaje = None
-    else:
-        mensaje = "Usted no tiene alumnos a cargo"
+    if request.method == 'GET':  
+        if (Alumno.objects.filter(profesor_id=profesor.id).exists()):
+            alumnos = Alumno.objects.filter(profesor_id=profesor.id)
+            mensaje = None
+        else:
+            mensaje = "Usted no tiene alumnos a cargo"
+            
+        return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas})
+    
+    if request.method == 'POST':
+        peticion = request.POST.copy()
         
-    return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos})
+        
+        rutinas = peticion.pop('rutinas')
+        rutinas = rutinas[0]
+        
+        entrenamiento = peticion.pop('entrenamiento')
+        entrenamiento = entrenamiento[0]
+        
+        nivel = peticion.pop('nivel')
+        nivel = nivel[0]
+        
+        if (Profesor.objects.filter(user_id=user.id).exists()):
+            profesor = Profesor.objects.get(user_id=pk)
+        else:
+            return redirect('/home')
+        
+        if (Alumno.objects.filter(profesor_id=profesor.id).exists()):
+            if rutinas != "Rutinas" and entrenamiento != "Tipo entrenamiento" and nivel != "Nivel":
+                if entrenamiento == "profesor":
+                    ruti = Rutina.objects.get(nombre=rutinas)
+                    niv = Nivel.objects.get(nombre=nivel)
+                    alumnos = Alumno.objects.filter(profesor_id=profesor.id, rutina_id=ruti.id, entrenamiento_sistema=False, nivel_id=None)
+                    mensaje = None
+                else:
+                    ruti = Rutina.objects.get(nombre=rutinas)
+                    niv = Nivel.objects.get(nombre=nivel)
+                    alumnos = Alumno.objects.filter(profesor_id=profesor.id, rutina_id=ruti.id, entrenamiento_sistema=True, nivel_id=niv.id)
+                    mensaje = None
+                    
+                
+            if rutinas != "Rutinas" and entrenamiento != "Tipo entrenamiento" and nivel == "Nivel":
+                if entrenamiento == "profesor":
+                    ruti = Rutina.objects.get(nombre=rutinas)
+                    alumnos = Alumno.objects.filter(profesor_id=profesor.id, rutina_id=ruti.id, entrenamiento_sistema=False)
+                    mensaje = None
+                else:
+                    ruti = Rutina.objects.get(nombre=rutinas)
+                    alumnos = Alumno.objects.filter(profesor_id=profesor.id, rutina_id=ruti.id, entrenamiento_sistema=True)
+                    mensaje = None
+                    
+                
+            if rutinas != "Rutinas" and entrenamiento == "Tipo entrenamiento" and nivel == "Nivel":
+                ruti = Rutina.objects.get(nombre=rutinas)
+                alumnos = Alumno.objects.filter(profesor_id=profesor.id, rutina_id=ruti.id)
+                mensaje = None
+                
+                
+            if rutinas != "Rutinas" and entrenamiento == "Tipo entrenamiento" and nivel != "Nivel":
+                ruti = Rutina.objects.get(nombre=rutinas)
+                niv = Nivel.objects.get(nombre=nivel)
+                alumnos = Alumno.objects.filter(profesor_id=profesor.id, rutina_id=ruti.id, nivel_id=niv.id)
+                mensaje = None
+                
+            
+            if rutinas == "Rutinas" and entrenamiento == "Tipo entrenamiento" and nivel == "Nivel":
+                alumnos = Alumno.objects.filter(profesor_id=profesor.id)
+                mensaje = None
+                
+            
+            if rutinas == "Rutinas" and entrenamiento != "Tipo entrenamiento" and nivel == "Nivel":
+                if entrenamiento == "profesor":
+                    alumnos = Alumno.objects.filter(profesor_id=profesor.id, entrenamiento_sistema=False)
+                    mensaje = None
+                else:
+                    alumnos = Alumno.objects.filter(profesor_id=profesor.id, entrenamiento_sistema=True)
+                    mensaje = None
+                    
+                    
+            if rutinas == "Rutinas" and entrenamiento != "Tipo entrenamiento" and nivel != "Nivel":
+                if entrenamiento == "profesor":
+                    alumnos = Alumno.objects.filter(profesor_id=profesor.id, entrenamiento_sistema=False)
+                    mensaje = None
+                else:
+                    niv = Nivel.objects.get(nombre=nivel)
+                    alumnos = Alumno.objects.filter(profesor_id=profesor.id, entrenamiento_sistema=True, nivel_id=niv.id)
+                    mensaje = None
+                    
+            
+            
+            if rutinas == "Rutinas" and entrenamiento == "Tipo entrenamiento" and nivel != "Nivel":
+                niv = Nivel.objects.get(nombre=nivel)
+                alumnos = Alumno.objects.filter(profesor_id=profesor.id, nivel_id=niv.id) 
+                mensaje = None           
+                              
+        else:
+            mensaje = "Usted no tiene alumnos a cargo"
+            
+        rutinas = Rutina.objects.filter(estado=True)
+        return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas})         
+        
+        
     
 
 
