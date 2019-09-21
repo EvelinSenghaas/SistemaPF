@@ -41,6 +41,16 @@ class ListadoDetalles (PermissionRequiredMixin,ListView):
     queryset = Detalle.objects.filter(estado=True)
 
     
+
+def perfil(request, pk):
+    if (Alumno.objects.filter(user_id=pk).exists()):
+        alumno = Alumno.objects.get(user_id=pk)
+        mensaje = None
+    else:
+        mensaje = "El alumno no existe"
+    
+    return render (request, 'home/verPerfil.html', { 'alumno': alumno, 'mensaje':mensaje})
+    
     
 def verRutina(request, pk):
     rutina = Rutina.objects.get(id = pk)

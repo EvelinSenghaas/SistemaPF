@@ -16,6 +16,13 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from .models import Profesor, Alumno, FichaAlumno
 from ..rutina.models import Rutina, Nivel
 
+"""import os
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4, cm
+from django.http import HttpResponse"""
+
+
 # Create your views here.
 class Home(TemplateView):
     template_name = "home/home.html"
@@ -136,7 +143,49 @@ def listadoAlumnos(request, pk):
         rutinas = Rutina.objects.filter(estado=True)
         return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas})         
         
-
+"""def reporte (request, alumnos):
+     response = HttpResponse(content_type='application/pdf')
+     response['Content-Disposition'] = 'attachment: filename=Listado.pdf'
+     
+     buffer = BytesIO()
+     c = Canvas.Canvas(buffer, pagesize=A4)
+     
+     #header
+     c.setLineWidth(.3)
+     c.setFont('Helvetica', 22)
+     c.drawString(30,750,'FitRou')
+     c.setFont('Helvetica', 12)
+     c.drawString(30,735,'Listado de alumnos')
+     
+     c.setFont('Helvetica-Bold',12)
+     c.drawString(480,750,"21/09/2019")
+     c.line(460,747,560,747)
+     
+     estudiantes = [(alumno.nombre,alumno.fecha_nac, alumno.rutina_id, alumno.nivel_id) for alumno in alumnos]
+     
+     
+     #Table header
+     styles = getSampleStyleSheet()
+     styleBH = styles["Normal"]
+     styleBH.alignment = TA_CENTER
+     styleBH.fontSize = 10
+     
+     nombre = Paragraph('''Nombre''',styleBH)
+     fecha_nac = Paragraph(''''Fecha de nac.''',styleBH)
+     rutina = Paragraph('''Rutina''',styleBH)
+     nivel = Paragraph(''''Nivel''',styleBH)
+     
+     data = [[nombre,fecha_nac,rutina,nivel]]
+     
+     styles = getSampleStyleSheet()
+     styleN = styles["BodyText"]
+     styleN.alignment = TA_CENTER
+     styleN.fontSize = 7
+     
+     width, height = A4
+     high = 650
+     """
+     
 
 def registro(request):               
     if request.method == 'POST':

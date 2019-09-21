@@ -1,6 +1,6 @@
 from django.urls import path, re_path
 from django.contrib.auth.decorators import login_required
-from .views import Rutinas, ListadoDetalles, ListadoRutinas, ListadoActividades, EditarRutina, editarActividad, EditarDetalle, EliminarActividad, AgregarRutina, AgregarDetalle, agregarActividad, EliminarRutina, EliminarDetalle, verRutina, verActividad, agregarRutina, inscribirseRutina
+from .views import Rutinas, ListadoDetalles, ListadoRutinas, ListadoActividades, EditarRutina, editarActividad, EditarDetalle, EliminarActividad, AgregarRutina, AgregarDetalle, agregarActividad, EliminarRutina, EliminarDetalle, verRutina, verActividad, agregarRutina, inscribirseRutina, perfil
 
 urlpatterns = [
     path('',  login_required(ListadoRutinas.as_view()), name = 'rutinas'),
@@ -23,5 +23,8 @@ urlpatterns = [
     path('administrar_rutinas/', login_required(Rutinas.as_view()), name='administrar_rutinas/'),
     
     path('inscribir_rutina/<int:pk1>/<int:pk2>', login_required(inscribirseRutina), name='inscribir_rutina/'), 
+    
+    path('ver_perfil/<int:pk>', login_required(perfil), name='ver_perfil'),
+    
     
 ]
