@@ -14,7 +14,7 @@
 {%endblock imagen_principal%}
 {%block contenido%}
         <div class="container">
-                <div class="row profile">
+                <div class="row profile mt-1 ">
                     <div class="col-md-3">
                         <div class="profile-sidebar">
                             <!-- SIDEBAR USERPIC -->
@@ -36,11 +36,14 @@
                             <!-- SIDEBAR BUTTONS -->
                             <div class="profile-userbuttons">
                                 <button type="button" class="btn btn-success btn-sm">Mensaje</button>
+                                {%if user.id == alumno.user_id%}
+                                <button type="button" class="btn btn-light btn-sm">Editar perfil</button>
+                                {%endif%}
                             </div>
                             <!-- END SIDEBAR BUTTONS -->
                         </div>
                     </div>
-                    <div class="col-md-9 mt-5">
+                    <div class="col-sm-9 md-9 mt-9 lg-9">
                         <div class="profile-content">
                            <div class="float-right">
                                {%if alumno.nivel_id.nivel == 'Principiante'%}
@@ -216,16 +219,19 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                    {%if alumno.nivel_id != None%}
                                     <div class="card-body">
                                             <div class="form-group">
                                                 <div class="row form-group">
                                                     <div class="col col-md-3"><strong>Nivel</strong></div>
                                                     <div class="col-12 col-md-9">
+                                                        
                                                         <label style="color:rgb(130, 128, 128)">{{alumno.nivel_id}} </label>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    {%endif%}
 
                             </div>
                           </div>
