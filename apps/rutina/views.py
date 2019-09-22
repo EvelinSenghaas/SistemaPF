@@ -45,11 +45,12 @@ class ListadoDetalles (PermissionRequiredMixin,ListView):
 def perfil(request, pk):
     if (Alumno.objects.filter(user_id=pk).exists()):
         alumno = Alumno.objects.get(user_id=pk)
+        ficha = FichaAlumno.objects.get(alumno_id=alumno.id)
         mensaje = None
     else:
         mensaje = "El alumno no existe"
     
-    return render (request, 'home/verPerfil.html', { 'alumno': alumno, 'mensaje':mensaje})
+    return render (request, 'home/verPerfil.html', { 'alumno': alumno, 'mensaje':mensaje, 'ficha':ficha})
     
     
 def verRutina(request, pk):

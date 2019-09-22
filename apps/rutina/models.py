@@ -30,6 +30,9 @@ class Nivel(models.Model):
         
     def __str__ (self):
         return self.nombre
+    
+    def nivel(self):
+        return self.nombre
 
 class Actividad(models.Model):
     id = models.AutoField(primary_key = True)
