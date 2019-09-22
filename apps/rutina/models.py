@@ -76,3 +76,6 @@ class Rutina(models.Model):
     def __str__ (self):
         return self.nombre
     
+    def id(self):
+        return self.id
+    

@@ -139,7 +139,7 @@
               <tr>
                 <td><a href="/rutinas/ver_perfil/{{alumno.user_id}}">{{alumno.nombre}}, {{alumno.apellido}}</a></td>
                 <td>{{alumno.fecha_nac}}</td>
-                <td>{{alumno.rutina_id}}</td>
+                <td><a href="/rutinas/ver_rutina/{{alumno.rutina_id.id}}">{{alumno.rutina_id}}</a></td>
                 {%if alumno.nivel_id == None%}
                 <td>Profesor a cargo</td>
                 {%else%}
