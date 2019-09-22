@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.apps import apps
-import datetime
+from datetime import date
 
 
 
@@ -68,8 +68,13 @@ class Alumno(models.Model):
     def __str__(self):
         return self.nombre
     
-    def edad(self):
-        return int((datetime.now().date() - self.fecha_nac).days / 365.25)
+    def edad(self, fecha_nac):
+        diferencia_fechas = date.today() - fecha_nac
+        diferencia_fechas_dias = diferencia_fechas.days
+        edad_numerica = diferencia_fechas_dias / 365.2425
+        edad = int(edad_numerica)
+        return edad
+        
 
 class FichaAlumno (models.Model):
     id = models.AutoField(primary_key=True, null=False)
