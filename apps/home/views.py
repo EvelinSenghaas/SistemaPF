@@ -306,18 +306,26 @@ def agregarDisponibilidad(request, pk):
         hora_final = peticion.pop('horario_final')
         hora_final = hora_final[0]
         
+        print(hora_inicio + ' - ' + hora_final)
         disponibilidadForm = DisponibilidadForm(request.POST)
         if disponibilidadForm.is_valid():
-            print('valido')
-            i=0
-            while i < len(dias):
-                semana = Semana.objects.get(dia=dias[i])
-                disponibilidad = DisponibilidadProfesor.objects.create(horario_inicio=hora_inicio, semana_id=semana, profesor_id=profesor, horario_final=hora_final)
-                disponibilidad.save()
-                i+=1
-            return redirect('/home/administracion')
+            if (hora_inicio<hora_final):
+                i=0
+                while i < len(dias):
+                    semana = Semana.objects.get(dia=dias[i])
+                    disponibilidad = DisponibilidadProfesor.objects.create(horario_inicio=hora_inicio, semana_id=semana, profesor_id=profesor, horario_final=hora_final)
+                    disponibilidad.save()
+                    i+=1
+                mensaje = None
+                return redirect('/home/administracion')
+            else:
+                mensaje = "El horario final no puede ser menor al horario de inicio."
+                return render(request, 'rutina/agregarDisponibilidad.html',{'disponibilidadForm':disponibilidadForm, 'dias':dias, 'mensaje':mensaje})
+            
+            
     else:
         disponibilidadForm = DisponibilidadForm()
-        return render(request, 'rutina/agregarDisponibilidad.html',{'disponibilidadForm':disponibilidadForm, 'dias':dias})
+        mensaje = None
+        return render(request, 'rutina/agregarDisponibilidad.html',{'disponibilidadForm':disponibilidadForm, 'dias':dias, 'mensaje':mensaje})
     
     return redirect ('/home/administracion/')

@@ -8,11 +8,13 @@
 
 {%block contenido%}
 <body class="container mt-2">
+    {%if mensaje == None%}
     <div class="card">
         <div class="card-header alert-primary"><strong>Administracion de Disponibilidad</strong></div>
             <div class="card-body card-block">  
                 <form method="POST">
                     {% csrf_token %}
+                    
                     <div class="">
                         <div class="row form-group">
                             <div class="col col-md-3">Horario</div>
@@ -29,7 +31,7 @@
                         <div class="form-group">
                                 <div class="row form-group">
                                     <div class="col col-md-3">Dia</div>
-                                    <div class="col-12 col-md-9">
+                                    <div class="col-12 col-md-9" name="dias">
                                         <select name="dias" class="selectpicker" multiple data-live-search="true">
                                             <option>
                                                 {%for dia in dias%}
@@ -43,10 +45,16 @@
                         <div class="float-right"><a href="/rutinas/administrar_detalles/">
                             <button type="button" class="btn btn-outline-danger">Cancelar</button></a>
                             <button type="submit" class="btn btn-primary">Agregar</button>
-
-
                         </div>
                     </div>
+    {%else%}
+    <div class="alert alert-danger">
+        <h4 class="alert-heading"><i class="fa fa-warning"></i> ¡Error!</h4>
+        <h5>{{mensaje}}</h5>
+        <hr>
+        <strong><h6><a class="mb-0" href="/home/agregar_disponibilidad/{{user.id}}">Volver</a></h6></strong>
+    </div>
+    {%endif%}
                 </form>
             </div>
         </div> 
