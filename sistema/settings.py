@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'apps.rutina',
     'apps.home',
     'rolepermissions',
-    'reportlab'
 ]
 
 MIDDLEWARE = [

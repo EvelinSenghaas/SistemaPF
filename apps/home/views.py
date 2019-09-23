@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login as dj_login, logout, authenticate
@@ -11,16 +12,21 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from .models import Profesor, Alumno, FichaAlumno, Semana, DisponibilidadProfesor
 from ..rutina.models import Rutina, Nivel
+import time
 
-"""import os
 from io import BytesIO
+
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle, Image
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib import colors
 from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A4, cm
-from django.http import HttpResponse"""
+from reportlab.lib.pagesizes import letter, A4, mm
+from reportlab.platypus import Table
+from reportlab.lib.enums import TA_CENTER
 
 
 # Create your views here.
@@ -170,12 +176,13 @@ def listadoAlumnos(request, pk):
         rutinas = Rutina.objects.filter(estado=True)
         return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas})         
         
-"""def reporte (request, alumnos):
+def reporte (request, alumnos):
      response = HttpResponse(content_type='application/pdf')
-     response['Content-Disposition'] = 'attachment: filename=Listado.pdf'
+     response['Content-Disposition'] = 'attachment: filename=Listado_alumnos.pdf'
      
+     print(type(alumnos))
      buffer = BytesIO()
-     c = Canvas.Canvas(buffer, pagesize=A4)
+     c = canvas.Canvas(buffer, pagesize=A4)
      
      #header
      c.setLineWidth(.3)
@@ -184,11 +191,12 @@ def listadoAlumnos(request, pk):
      c.setFont('Helvetica', 12)
      c.drawString(30,735,'Listado de alumnos')
      
+     fecha = str(time.strftime("%d/%m/%y"))
      c.setFont('Helvetica-Bold',12)
-     c.drawString(480,750,"21/09/2019")
+     c.drawString(480,750,fecha)
      c.line(460,747,560,747)
      
-     estudiantes = [(alumno.nombre,alumno.fecha_nac, alumno.rutina_id, alumno.nivel_id) for alumno in alumnos]
+     """estudiantes = [(alumno.nombre,alumno.fecha_nac, alumno.rutina_id, alumno.nivel_id) for alumno in alumnos]"""
      
      
      #Table header
@@ -197,10 +205,10 @@ def listadoAlumnos(request, pk):
      styleBH.alignment = TA_CENTER
      styleBH.fontSize = 10
      
-     nombre = Paragraph('''Nombre''',styleBH)
-     fecha_nac = Paragraph(''''Fecha de nac.''',styleBH)
+     nombre = Paragraph('''Nombre y apellido''',styleBH)
+     fecha_nac = Paragraph('''Fecha de nac.''',styleBH)
      rutina = Paragraph('''Rutina''',styleBH)
-     nivel = Paragraph(''''Nivel''',styleBH)
+     nivel = Paragraph('''Nivel''',styleBH)
      
      data = [[nombre,fecha_nac,rutina,nivel]]
      
@@ -210,9 +218,70 @@ def listadoAlumnos(request, pk):
      styleN.fontSize = 7
      
      width, height = A4
-     high = 650
-     """
+     high = 660
+     for alumno in Alumno.objects.all():
+         this_student = [ alumno.nombre+ ', '+alumno.apellido,alumno.fecha_nac, alumno.rutina_id, alumno.nivel_id ]
+         data.append(this_student)
      
+     #table size
+     width, height = A4
+     table = Table(data, colWidths=[90 * mm, 40 * mm, 25 * mm, 25 * mm, 45 * mm, 45 * mm])
+     table.setStyle(TableStyle([
+         ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
+         ('BOX', (0,0), (-1,-1), 0.10, colors.black)]))
+     table.wrapOn(c, width, height)
+     table.drawOn(c, 30, high)
+     c.showPage()
+     
+     c.save()
+     
+     pdf = buffer.getvalue()
+     buffer.close()
+     response.write(pdf)
+     return response
+     
+
+
+"""def generar_pdf(request):
+    print (request.POST)
+    response = HttpResponse(content_type='application/pdf')
+    pdf_name = "alumnos.pdf"  # llamado alumnos
+    # la linea 26 es por si deseas descargar el pdf a tu computadora
+    response['Content-Disposition'] = 'attachment; filename=filename=Listado.pdf'
+    buff = BytesIO()
+    doc = SimpleDocTemplate(buff,
+                            pagesize=letter,
+                            rightMargin=10,
+                            leftMargin=25,
+                            topMargin=60,
+                            bottomMargin=18,
+                            )
+    listaAlumnos = []
+    styles = getSampleStyleSheet()
+    header = Paragraph("Listado de Alumnos", styles['Heading1'])
+    listaAlumnos.append(header)
+    headings = ('Nombre', 'Edad', 'Rutina', 'Nivel')
+    allAlumnos = [(alumno.nombre, alumno.fecha_nac, alumno.rutina_id, alumno.nivel_id) for alumno in Alumno.objects.all()]
+    print (allAlumnos)
+
+    t = Table([headings] + allAlumnos)
+    t.setStyle(TableStyle(
+        [
+            ('GRID', (0, 0), (3, -1), 1, colors.dodgerblue),
+            ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+            ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue)
+        ]
+    ))
+    listaAlumnos.append(t)
+    doc.build(listaAlumnos)
+    response.write(buff.getvalue())
+    buff.close()
+    return response     
+
+"""
+
+
+
 
 def registro(request):               
     if request.method == 'POST':
