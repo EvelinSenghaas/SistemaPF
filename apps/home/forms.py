@@ -1,5 +1,5 @@
 from django import forms
-from .models import Usuario, Profesor, Alumno, FichaAlumno
+from .models import Usuario, Profesor, Alumno, FichaAlumno, DisponibilidadProfesor
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User, Permission
 
@@ -107,6 +107,20 @@ class FichaForm(forms.ModelForm):
                 attrs = { 'class':'form-control', 'placeholder': 'Ingrese su profesion'}
                 )
         }
+        
+class DisponibilidadForm(forms.ModelForm):
+    class Meta:
+        model = DisponibilidadProfesor
+        fields = ['horario', 'semana_id']
+        labels = {
+            'horario' : 'Horario', 'semana_id': 'Dia',}
+        widgets = {
+            'horario' : forms.TimeInput(
+                attrs = { 'class':'form-control'}
+                ), 
+            'semana_id' : forms.Select(
+                attrs = { 'class':'form-control'}
+                )}
     
     
         

@@ -47,6 +47,39 @@ class Profesor(models.Model):
     def __str__(self):
         return self.nombre
     
+
+        
+        
+class Semana(models.Model):
+    id = models.AutoField(primary_key = True, null=False)
+    dia = models.CharField(max_length = 10, blank = False, null = False)
+    
+    class Meta:
+        verbose_name = 'Semana'
+        verbose_name_plural = 'Semana'
+        ordering = ['dia']
+        
+    def __str__(self):
+        return self.dia
+
+
+class DisponibilidadProfesor(models.Model):
+    id = models.AutoField(primary_key = True, null=False)
+    horario = models.TimeField(blank = False, null = True)
+    semana_id = models.ForeignKey(Semana, on_delete=models.CASCADE, verbose_name="Dia")
+    profesor_id = models.ForeignKey(Profesor, on_delete=models.CASCADE, verbose_name="Profesor")
+    
+    
+    class Meta:
+        verbose_name = 'Disponibilidad Profesor'
+        verbose_name_plural = 'Disponibilidad Profesor'
+        ordering = ['horario']
+        
+    def __str__(self):
+        return self.semena_id + " " +self.horario
+    
+
+    
 class Alumno(models.Model):
     id = models.AutoField(primary_key = True, null=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE)

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login as dj_login, logout, authenticate
 from django.contrib import messages
-from .forms import NewUserForm, UsuarioForm, LoginForm
+from .forms import NewUserForm, UsuarioForm, LoginForm, DisponibilidadForm
 from django.views.generic import TemplateView
 from apps.rutina.views import ListadoRutinas
 from django.contrib.auth.models import User, Permission
@@ -285,3 +285,23 @@ class Login(FormView):
 def logoutUsuario(request):
     logout(request)
     return HttpResponseRedirect('/accounts/login/')
+
+
+def agregarDisponibilidad(request, pk):
+    if (not (Profesor.objects.filter(user_id=pk).exists())):
+        return redirect ('home/administracion')
+    else:
+        profesor = Profesor.objects.get(user_id=pk)
+    
+    if request.method == 'POST':
+        disponibilidadForm = DisponibilidadForm(request.POST)
+        if disponibilidadForm.is_valid():
+            disponibilidad = disponibilidadForm.save(commit=False)
+            disponibilidad.profesor_id = profesor
+            disponibilidad.save()
+            return redirect('home/administracion')
+    else:
+        disponibilidadForm = DisponibilidadForm()
+        return render(request, 'rutina/agregarDisponibilidad.html',{'disponibilidadForm':disponibilidadForm})
+    
+    return redirect ('/home/administracion/')

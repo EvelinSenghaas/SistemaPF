@@ -50,6 +50,7 @@ def perfil(request, pk):
         mensaje = None
     else:
         mensaje = "El alumno no existe"
+        return redirect('/home/')
     
     return render (request, 'home/verPerfil.html', { 'alumno': alumno, 'mensaje':mensaje, 'ficha':ficha, 'edad':edad})
     
