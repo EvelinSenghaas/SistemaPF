@@ -13,7 +13,7 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from .models import Profesor, Alumno, FichaAlumno
+from .models import Profesor, Alumno, FichaAlumno, Semana, DisponibilidadProfesor
 from ..rutina.models import Rutina, Nivel
 
 """import os
@@ -289,19 +289,31 @@ def logoutUsuario(request):
 
 def agregarDisponibilidad(request, pk):
     if (not (Profesor.objects.filter(user_id=pk).exists())):
-        return redirect ('home/administracion')
+        return redirect ('/home/administracion')
     else:
         profesor = Profesor.objects.get(user_id=pk)
+        dias = Semana.objects.all()
+    
     
     if request.method == 'POST':
+        peticion = request.POST.copy()
+        print(peticion)
+        dias = peticion.pop('dias')
+        hora = peticion.pop('horario')
+        hora = hora[0]
+        
         disponibilidadForm = DisponibilidadForm(request.POST)
         if disponibilidadForm.is_valid():
-            disponibilidad = disponibilidadForm.save(commit=False)
-            disponibilidad.profesor_id = profesor
-            disponibilidad.save()
-            return redirect('home/administracion')
+            print('valido')
+            i=0
+            while i < len(dias):
+                semana = Semana.objects.get(dia=dias[i])
+                disponibilidad = DisponibilidadProfesor.objects.create(horario=hora, semana_id=semana, profesor_id=profesor)
+                disponibilidad.save()
+                i+=1
+            return redirect('/home/administracion')
     else:
         disponibilidadForm = DisponibilidadForm()
-        return render(request, 'rutina/agregarDisponibilidad.html',{'disponibilidadForm':disponibilidadForm})
+        return render(request, 'rutina/agregarDisponibilidad.html',{'disponibilidadForm':disponibilidadForm, 'dias':dias})
     
     return redirect ('/home/administracion/')

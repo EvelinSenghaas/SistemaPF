@@ -111,14 +111,11 @@ class FichaForm(forms.ModelForm):
 class DisponibilidadForm(forms.ModelForm):
     class Meta:
         model = DisponibilidadProfesor
-        fields = ['horario', 'semana_id']
+        fields = ['horario']
         labels = {
-            'horario' : 'Horario', 'semana_id': 'Dia',}
+            'horario' : 'Horario',}
         widgets = {
             'horario' : forms.TimeInput(
-                attrs = { 'class':'form-control'}
-                ), 
-            'semana_id' : forms.Select(
                 attrs = { 'class':'form-control'}
                 )}
     

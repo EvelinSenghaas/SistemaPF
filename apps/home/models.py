@@ -76,8 +76,8 @@ class DisponibilidadProfesor(models.Model):
         ordering = ['horario']
         
     def __str__(self):
-        return self.semena_id + " " +self.horario
-    
+
+        return str(self.horario) 
 
     
 class Alumno(models.Model):
