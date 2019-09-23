@@ -111,12 +111,15 @@ class FichaForm(forms.ModelForm):
 class DisponibilidadForm(forms.ModelForm):
     class Meta:
         model = DisponibilidadProfesor
-        fields = ['horario']
+        fields = ['horario_inicio', 'horario_final']
         labels = {
-            'horario' : 'Horario',}
+            'horario_inicio' : 'Horario de inicio',}
         widgets = {
-            'horario' : forms.TimeInput(
-                attrs = { 'class':'form-control'}
+            'horario_inicio' : forms.TimeInput(
+                attrs = { 'class':'form-control', 'placeholder':'Formato (hh:mm)'}
+                ),
+            'horario_final' : forms.TimeInput(
+                attrs = { 'class':'form-control', 'placeholder':'Formato (hh:mm)'}
                 )}
     
     

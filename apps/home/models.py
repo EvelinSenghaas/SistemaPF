@@ -65,7 +65,8 @@ class Semana(models.Model):
 
 class DisponibilidadProfesor(models.Model):
     id = models.AutoField(primary_key = True, null=False)
-    horario = models.TimeField(blank = False, null = True)
+    horario_inicio = models.TimeField(blank = False, null = True)
+    horario_final = models.TimeField(blank = False, null = True)
     semana_id = models.ForeignKey(Semana, on_delete=models.CASCADE, verbose_name="Dia")
     profesor_id = models.ForeignKey(Profesor, on_delete=models.CASCADE, verbose_name="Profesor")
     
@@ -73,11 +74,11 @@ class DisponibilidadProfesor(models.Model):
     class Meta:
         verbose_name = 'Disponibilidad Profesor'
         verbose_name_plural = 'Disponibilidad Profesor'
-        ordering = ['horario']
+        ordering = ['horario_inicio']
         
     def __str__(self):
 
-        return str(self.horario) 
+        return str(self.semana_id) + ' (' + str(self.horario_inicio) + ' - ' + str(self.horario_final)+')'
 
     
 class Alumno(models.Model):

@@ -55,6 +55,7 @@ def listadoAlumnos(request, pk):
     
     if request.method == 'POST':
         peticion = request.POST.copy()
+        print(peticion)
         
         
         rutinas = peticion.pop('rutinas')
@@ -299,8 +300,11 @@ def agregarDisponibilidad(request, pk):
         peticion = request.POST.copy()
         print(peticion)
         dias = peticion.pop('dias')
-        hora = peticion.pop('horario')
-        hora = hora[0]
+        hora_inicio = peticion.pop('horario_inicio')
+        hora_inicio = hora_inicio[0]
+        
+        hora_final = peticion.pop('horario_final')
+        hora_final = hora_final[0]
         
         disponibilidadForm = DisponibilidadForm(request.POST)
         if disponibilidadForm.is_valid():
@@ -308,7 +312,7 @@ def agregarDisponibilidad(request, pk):
             i=0
             while i < len(dias):
                 semana = Semana.objects.get(dia=dias[i])
-                disponibilidad = DisponibilidadProfesor.objects.create(horario=hora, semana_id=semana, profesor_id=profesor)
+                disponibilidad = DisponibilidadProfesor.objects.create(horario_inicio=hora_inicio, semana_id=semana, profesor_id=profesor, horario_final=hora_final)
                 disponibilidad.save()
                 i+=1
             return redirect('/home/administracion')
