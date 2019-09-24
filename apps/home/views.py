@@ -40,110 +40,6 @@ class Administrar(PermissionRequiredMixin,TemplateView):
 class PaginaInicial(TemplateView):
     template_name = "home/paginaInicial.html"
     
-def filtrar(rutinas, entrenamiento, nivel, profesor):
-    alumnos=[]    
-    if rutinas != "Rutinas" and entrenamiento != "Tipo entrenamiento" and nivel != "Nivel":
-        print('entro')
-        if entrenamiento == "profesor":
-            ruti = Rutina.objects.get(nombre=rutinas)
-            niv = Nivel.objects.get(nombre=nivel)
-            alumnos = Alumno.objects.filter(profesor_id=profesor.id, rutina_id=ruti.id, entrenamiento_sistema=False, nivel_id=None)
-            for alumno in alumnos:
-                alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
-            mensaje = None
-        else:
-            ruti = Rutina.objects.get(nombre=rutinas)
-            niv = Nivel.objects.get(nombre=nivel)
-            alumnos = Alumno.objects.filter(profesor_id=profesor.id, rutina_id=ruti.id, entrenamiento_sistema=True, nivel_id=niv.id)
-            for alumno in alumnos:
-                alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
-            mensaje = None
-                    
-                
-    if rutinas != "Rutinas" and entrenamiento != "Tipo entrenamiento" and nivel == "Nivel":
-        if entrenamiento == "profesor":
-            ruti = Rutina.objects.get(nombre=rutinas)
-            alumnos = Alumno.objects.filter(profesor_id=profesor.id, rutina_id=ruti.id, entrenamiento_sistema=False)
-            for alumno in alumnos:
-                alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
-            mensaje = None
-        else:
-            ruti = Rutina.objects.get(nombre=rutinas)
-            alumnos = Alumno.objects.filter(profesor_id=profesor.id, rutina_id=ruti.id, entrenamiento_sistema=True)
-            for alumno in alumnos:
-                alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
-            mensaje = None
-                    
-                
-    if rutinas != "Rutinas" and entrenamiento == "Tipo entrenamiento" and nivel == "Nivel":
-        print('entro')
-        ruti = Rutina.objects.get(nombre=rutinas)
-        alumnos = Alumno.objects.filter(profesor_id=profesor.id, rutina_id=ruti.id)
-        for alumno in alumnos:
-            alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
-        mensaje = None
-                
-                
-    if rutinas != "Rutinas" and entrenamiento == "Tipo entrenamiento" and nivel != "Nivel":
-        print('entro')
-        ruti = Rutina.objects.get(nombre=rutinas)
-        niv = Nivel.objects.get(nombre=nivel)
-        alumnos = Alumno.objects.filter(profesor_id=profesor.id, rutina_id=ruti.id, nivel_id=niv.id)
-        for alumno in alumnos:
-            alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
-        mensaje = None
-                
-            
-    if rutinas == "Rutinas" and entrenamiento == "Tipo entrenamiento" and nivel == "Nivel":
-        print('entro')
-        alumnos = Alumno.objects.filter(profesor_id=profesor.id)
-        for alumno in alumnos:
-            alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
-        mensaje = None
-                
-            
-    if rutinas == "Rutinas" and entrenamiento != "Tipo entrenamiento" and nivel == "Nivel":
-        print('entro')
-        if entrenamiento == "profesor":
-            alumnos = Alumno.objects.filter(profesor_id=profesor.id, entrenamiento_sistema=False)
-            for alumno in alumnos:
-                alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
-            mensaje = None
-        else:
-            alumnos = Alumno.objects.filter(profesor_id=profesor.id, entrenamiento_sistema=True)
-            for alumno in alumnos:
-                alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
-            mensaje = None
-                    
-                    
-    if rutinas == "Rutinas" and entrenamiento != "Tipo entrenamiento" and nivel != "Nivel":
-        print('entro')
-        if entrenamiento == "profesor":
-            alumnos = Alumno.objects.filter(profesor_id=profesor.id, entrenamiento_sistema=False)
-            for alumno in alumnos:
-                alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
-            mensaje = None
-        else:
-            niv = Nivel.objects.get(nombre=nivel)
-            alumnos = Alumno.objects.filter(profesor_id=profesor.id, entrenamiento_sistema=True, nivel_id=niv.id)
-            for alumno in alumnos:
-                alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
-            mensaje = None                    
-            
-            
-    if rutinas == "Rutinas" and entrenamiento == "Tipo entrenamiento" and nivel != "Nivel":
-        print('entro')
-        niv = Nivel.objects.get(nombre=nivel)
-        alumnos = Alumno.objects.filter(profesor_id=profesor.id, nivel_id=niv.id) 
-        for alumno in alumnos:
-            alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
-        mensaje = None     
-            
-    return alumnos
-
-
-      
-    
 def listadoAlumnos(request, pk):
     user = User.objects.get(id=pk)
     rutinas = Rutina.objects.filter(estado=True)
@@ -183,9 +79,97 @@ def listadoAlumnos(request, pk):
             return redirect('/home')
         
         if (Alumno.objects.filter(profesor_id=profesor.id).exists()):
-            alumnos = filtrar(rutinas, entrenamiento, nivel, profesor)
-            mensaje = None    
-                         
+            if rutinas != "Rutinas" and entrenamiento != "Tipo entrenamiento" and nivel != "Nivel":
+                if entrenamiento == "profesor":
+                    ruti = Rutina.objects.get(nombre=rutinas)
+                    niv = Nivel.objects.get(nombre=nivel)
+                    alumnos = Alumno.objects.filter(profesor_id=profesor.id, rutina_id=ruti.id, entrenamiento_sistema=False, nivel_id=None)
+                    for alumno in alumnos:
+                        alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
+                    mensaje = None
+                else:
+                    ruti = Rutina.objects.get(nombre=rutinas)
+                    niv = Nivel.objects.get(nombre=nivel)
+                    alumnos = Alumno.objects.filter(profesor_id=profesor.id, rutina_id=ruti.id, entrenamiento_sistema=True, nivel_id=niv.id)
+                    for alumno in alumnos:
+                        alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
+                    mensaje = None
+                    
+                
+            if rutinas != "Rutinas" and entrenamiento != "Tipo entrenamiento" and nivel == "Nivel":
+                if entrenamiento == "profesor":
+                    ruti = Rutina.objects.get(nombre=rutinas)
+                    alumnos = Alumno.objects.filter(profesor_id=profesor.id, rutina_id=ruti.id, entrenamiento_sistema=False)
+                    for alumno in alumnos:
+                        alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
+                    mensaje = None
+                else:
+                    ruti = Rutina.objects.get(nombre=rutinas)
+                    alumnos = Alumno.objects.filter(profesor_id=profesor.id, rutina_id=ruti.id, entrenamiento_sistema=True)
+                    for alumno in alumnos:
+                        alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
+                    mensaje = None
+                    
+                
+            if rutinas != "Rutinas" and entrenamiento == "Tipo entrenamiento" and nivel == "Nivel":
+                ruti = Rutina.objects.get(nombre=rutinas)
+                alumnos = Alumno.objects.filter(profesor_id=profesor.id, rutina_id=ruti.id)
+                for alumno in alumnos:
+                    alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
+                mensaje = None
+                
+                
+            if rutinas != "Rutinas" and entrenamiento == "Tipo entrenamiento" and nivel != "Nivel":
+                ruti = Rutina.objects.get(nombre=rutinas)
+                niv = Nivel.objects.get(nombre=nivel)
+                alumnos = Alumno.objects.filter(profesor_id=profesor.id, rutina_id=ruti.id, nivel_id=niv.id)
+                for alumno in alumnos:
+                    alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
+                mensaje = None
+                
+            
+            if rutinas == "Rutinas" and entrenamiento == "Tipo entrenamiento" and nivel == "Nivel":
+                alumnos = Alumno.objects.filter(profesor_id=profesor.id)
+                for alumno in alumnos:
+                    alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
+                mensaje = None
+                
+            
+            if rutinas == "Rutinas" and entrenamiento != "Tipo entrenamiento" and nivel == "Nivel":
+                if entrenamiento == "profesor":
+                    alumnos = Alumno.objects.filter(profesor_id=profesor.id, entrenamiento_sistema=False)
+                    for alumno in alumnos:
+                        alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
+                    mensaje = None
+                else:
+                    alumnos = Alumno.objects.filter(profesor_id=profesor.id, entrenamiento_sistema=True)
+                    for alumno in alumnos:
+                        alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
+                    mensaje = None
+                    
+                    
+            if rutinas == "Rutinas" and entrenamiento != "Tipo entrenamiento" and nivel != "Nivel":
+                if entrenamiento == "profesor":
+                    alumnos = Alumno.objects.filter(profesor_id=profesor.id, entrenamiento_sistema=False)
+                    for alumno in alumnos:
+                        alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
+                    mensaje = None
+                else:
+                    niv = Nivel.objects.get(nombre=nivel)
+                    alumnos = Alumno.objects.filter(profesor_id=profesor.id, entrenamiento_sistema=True, nivel_id=niv.id)
+                    for alumno in alumnos:
+                        alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
+                    mensaje = None
+                    
+            
+            
+            if rutinas == "Rutinas" and entrenamiento == "Tipo entrenamiento" and nivel != "Nivel":
+                niv = Nivel.objects.get(nombre=nivel)
+                alumnos = Alumno.objects.filter(profesor_id=profesor.id, nivel_id=niv.id) 
+                for alumno in alumnos:
+                    alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
+                mensaje = None           
+                              
         else:
             mensaje = "Usted no tiene alumnos a cargo"
             
