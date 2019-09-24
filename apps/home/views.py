@@ -180,7 +180,7 @@ def reporte (request, alumnos):
      response = HttpResponse(content_type='application/pdf')
      response['Content-Disposition'] = 'attachment: filename=Listado_alumnos.pdf'
      
-     print(type(alumnos))
+     print(request.GET)
      buffer = BytesIO()
      c = canvas.Canvas(buffer, pagesize=A4)
      
