@@ -229,10 +229,12 @@ def listadoAlumnos(request, pk):
         return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas})
     
     if request.method == 'POST':
+        rutinas = Rutina.objects.filter(estado=True)
         peticion = request.POST.copy()
         
         ruti = peticion.pop('rutinas')
         ruti = ruti[0]
+        
         
         entrenamiento = peticion.pop('entrenamiento')
         entrenamiento = entrenamiento[0]
@@ -266,9 +268,9 @@ def listadoAlumnos(request, pk):
                             
             else:
                 mensaje = "Usted no tiene alumnos a cargo"
-            
+
              
-    return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas})         
+    return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas, 'ruti':ruti})         
         
      
 
