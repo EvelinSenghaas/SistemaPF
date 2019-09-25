@@ -42,8 +42,7 @@ class PaginaInicial(TemplateView):
     
     
 #Esta funcion se usa para filtrar la tabla de alumnos    
-def filtrar(rutinas, entrenamiento, nivel, profesor):
-    alumnos=[]    
+def filtrar(rutinas, entrenamiento, nivel, profesor): 
     if rutinas != "Rutinas" and entrenamiento != "Tipo entrenamiento" and nivel != "Nivel":
         print('entro')
         if entrenamiento == "profesor":
@@ -143,59 +142,11 @@ def filtrar(rutinas, entrenamiento, nivel, profesor):
             
     return alumnos
 
-     
-    
-def listadoAlumnos(request, pk):
-    user = User.objects.get(id=pk)
-    rutinas = Rutina.objects.filter(estado=True)
-    if (Profesor.objects.filter(user_id=user.id).exists()):
-        profesor = Profesor.objects.get(user_id=pk)
-    else:
-        return redirect('/home')
-    
-    if request.method == 'GET':  
-        if (Alumno.objects.filter(profesor_id=profesor.id).exists()):
-            alumnos = Alumno.objects.filter(profesor_id=profesor.id)
-            for alumno in alumnos:
-                alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
-            mensaje = None
-        else:
-            mensaje = "Usted no tiene alumnos a cargo"
-            
-        return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas})
-    
-    if request.method == 'POST':
-        peticion = request.POST.copy()
-        
-        rutinas = peticion.pop('rutinas')
-        rutinas = rutinas[0]
-        
-        entrenamiento = peticion.pop('entrenamiento')
-        entrenamiento = entrenamiento[0]
-        
-        nivel = peticion.pop('nivel')
-        nivel = nivel[0]
-        
-        if (Profesor.objects.filter(user_id=user.id).exists()):
-            profesor = Profesor.objects.get(user_id=pk)
-        else:
-            return redirect('/home')
-        
-        if (Alumno.objects.filter(profesor_id=profesor.id).exists()):
-            alumnos = filtrar(rutinas, entrenamiento, nivel, profesor)
-            mensaje = None    
-                         
-        else:
-            mensaje = "Usted no tiene alumnos a cargo"
-            
-        rutinas = Rutina.objects.filter(estado=True)
-        return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas})         
-        
-def reporte (request, alumnos):
+
+def reporte (alumnos):
      response = HttpResponse(content_type='application/pdf')
      response['Content-Disposition'] = 'attachment: filename=Listado_alumnos.pdf'
      
-     print(request.GET)
      buffer = BytesIO()
      c = canvas.Canvas(buffer, pagesize=A4)
      
@@ -234,7 +185,7 @@ def reporte (request, alumnos):
      
      width, height = A4
      high = 660
-     for alumno in Alumno.objects.all():
+     for alumno in alumnos:
          this_student = [ alumno.nombre+ ', '+alumno.apellido,alumno.fecha_nac, alumno.rutina_id, alumno.nivel_id ]
          data.append(this_student)
      
@@ -254,6 +205,71 @@ def reporte (request, alumnos):
      buffer.close()
      response.write(pdf)
      return response
+
+     
+    
+def listadoAlumnos(request, pk):
+    user = User.objects.get(id=pk)
+    rutinas = Rutina.objects.filter(estado=True)
+    print(rutinas)
+    if (Profesor.objects.filter(user_id=user.id).exists()):
+        profesor = Profesor.objects.get(user_id=pk)
+    else:
+        return redirect('/home')
+    
+    if request.method == 'GET':  
+        if (Alumno.objects.filter(profesor_id=profesor.id).exists()):
+            alumnos = Alumno.objects.filter(profesor_id=profesor.id)
+            for alumno in alumnos:
+                alumno.fecha_nac = alumno.edad(alumno.fecha_nac)
+            mensaje = None
+        else:
+            mensaje = "Usted no tiene alumnos a cargo"
+            
+        return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas})
+    
+    if request.method == 'POST':
+        peticion = request.POST.copy()
+        
+        ruti = peticion.pop('rutinas')
+        ruti = ruti[0]
+        
+        entrenamiento = peticion.pop('entrenamiento')
+        entrenamiento = entrenamiento[0]
+        
+        nivel = peticion.pop('nivel')
+        nivel = nivel[0]
+        
+        tipoPost = peticion.pop('tipoPost')
+        tipoPost = tipoPost[0]
+        
+        
+        if (Profesor.objects.filter(user_id=user.id).exists()):
+            profesor = Profesor.objects.get(user_id=pk)
+        else:
+            return redirect('/home')
+        
+
+        
+        alumnos = filtrar(ruti, entrenamiento, nivel, profesor)
+        
+
+        if (tipoPost == "filtro"):
+            if (Alumno.objects.filter(profesor_id=profesor.id).exists()):
+                mensaje = None
+            else:
+                mensaje = "Usted no tiene alumnos a cargo"
+        else:
+            if (Alumno.objects.filter(profesor_id=profesor.id).exists()):
+                return reporte (alumnos)
+                mensaje = None    
+                            
+            else:
+                mensaje = "Usted no tiene alumnos a cargo"
+            
+             
+    return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas})         
+        
      
 
 

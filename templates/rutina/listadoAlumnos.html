@@ -22,6 +22,25 @@
     
     <title>Mis alumnos</title>
   </head>
+<script type="text/javascript">
+    
+    function accion(num){
+        //alert(document.getElementById("elGranMenu").style.display )
+        if(num == 1){
+            document.getElementById("tipoPost").value="filtro";
+
+            
+
+        }
+        if(num == 0){
+          document.getElementById("tipoPost").value="reporte";
+
+        }
+    
+    }
+    
+</script>
+
 <body>
   <!-- Navigation -->
   <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -78,14 +97,12 @@
                     <div class="col col-sm-11 col-md-11 col-lg-11">
                         <a href="/home/"><h5><img src="{% static 'img/back_blanco.png'%}"></a>Lista de alumnos</h5>
                       </div>
-                      <div class="col col-sm-1 col-md-1 col-lg-1">
-                          <a class="btn btn-light" href="/home/generar_pdf/{{alumnos}}" src="">
-                          <img src="{% static 'img/pdf.png'%}" alt=""></a>
-                      </div>
+                      <form method="POST"> {% csrf_token %}
+                      
                 </div>
             </div>
             <!-- Filtrado -->
-            <form method="POST"> {% csrf_token %}
+            
               <div class="alert alert-light" role="alert">
                 <div class="row mt-0">
                   <div class="col col-sm-0 col-m-0 col-lg-0">Filtar:</div>
@@ -116,8 +133,13 @@
                         </select>
                   </div>
                   <!-- Boton -->
-                  <div class="col col-sm-1 col-m-1 col-lg-1">
-                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                  <div class="col col-sm-2 col-m-2 col-lg-2">
+                    <input type="hidden" name ="tipoPost" id="tipoPost">
+                    <button type="submit" onclick="accion(1)" class="btn btn-primary">Filtrar</button>
+                    <button type="submit" class="btn btn-outline-danger" onclick="accion(0)" href="/home/generar_pdf/{{alumnos}}" src="">
+                      <img src="{% static 'img/pdf3.png'%}" alt="">
+                    </button>
+
                   </div>
                 </div>
               </div>
