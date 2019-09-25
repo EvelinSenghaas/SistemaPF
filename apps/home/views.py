@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login as dj_login, logout, authenticate
 from django.contrib import messages
 from .forms import NewUserForm, UsuarioForm, LoginForm, DisponibilidadForm
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView, UpdateView, CreateView, DeleteView
 from apps.rutina.views import ListadoRutinas
 from django.contrib.auth.models import User, Permission
 from django.views.generic.edit import FormView
@@ -16,6 +16,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from .models import Profesor, Alumno, FichaAlumno, Semana, DisponibilidadProfesor
 from ..rutina.models import Rutina, Nivel
+
 import time
 
 from io import BytesIO
@@ -39,6 +40,19 @@ class Administrar(PermissionRequiredMixin,TemplateView):
     
 class PaginaInicial(TemplateView):
     template_name = "home/paginaInicial.html"
+    
+    
+def listadoDisponibilidad (request,pk):
+    user = User.objects.get(id = pk)
+    profesor = Profesor.objects.get(user_id=user.id)
+    
+    if request.method == 'GET':
+        disponibilidad = DisponibilidadProfesor.objects.filter(estado=True, profesor_id=profesor.id)
+        print(disponibilidad)
+        return render(request, 'rutina/administrarDisponibilidad.html', {'disponibilidad':disponibilidad})
+    else:
+        return redirect ('/home/administrar_disponibilidad/')
+    
     
     
 #Esta funcion se usa para filtrar la tabla de alumnos    
@@ -272,7 +286,22 @@ def listadoAlumnos(request, pk):
              
     return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas, 'ruti':ruti})         
         
-     
+
+
+"""class EliminarDisponibilidad(DeleteView):
+    model = DisponibilidadProfesor
+    def post(self,request, pk, *args, **kwargs):
+        object = DisponibilidadProfesor.objects.get(id = pk)
+        #Si un chico usa esa hora no se puede
+        if (Rutina.objects.filter(actividad_id=object.id).exists()):
+            mensaje = "Usted no puede borrar " + object.nombre + " porque ya pertenece a una rutina"
+            return render(request, 'rutina/errorEliminacion.html',{'object':object, 'mensaje':mensaje})
+        else:
+            DisponibilidadProfesor.objects.get(id = object.id).delete()
+        return redirect('/rutinas/actividades')"""   
+    
+    
+      
 
 
 """def generar_pdf(request):

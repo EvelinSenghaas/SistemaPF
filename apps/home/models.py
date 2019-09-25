@@ -67,6 +67,7 @@ class DisponibilidadProfesor(models.Model):
     id = models.AutoField(primary_key = True, null=False)
     horario_inicio = models.TimeField(blank = False, null = True)
     horario_final = models.TimeField(blank = False, null = True)
+    estado = models.BooleanField(default=True)
     semana_id = models.ForeignKey(Semana, on_delete=models.CASCADE, verbose_name="Dia")
     profesor_id = models.ForeignKey(Profesor, on_delete=models.CASCADE, verbose_name="Profesor")
     
