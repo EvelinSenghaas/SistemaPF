@@ -224,7 +224,7 @@ def reporte (alumnos):
     
 def listadoAlumnos(request, pk):
     user = User.objects.get(id=pk)
-    rutinas = Rutina.objects.filter(estado=True)
+    rutinas = list(Rutina.objects.filter(estado=True))
     print(rutinas)
     if (Profesor.objects.filter(user_id=user.id).exists()):
         profesor = Profesor.objects.get(user_id=pk)
@@ -283,6 +283,9 @@ def listadoAlumnos(request, pk):
             else:
                 mensaje = "Usted no tiene alumnos a cargo"
 
+        if (ruti != "Rutinas"):
+            rutinas = Rutina.objects.exclude(nombre=ruti) 
+            
              
     return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas, 'ruti':ruti})         
         

@@ -113,6 +113,9 @@
                           {%for rutina in rutinas%}
                           <option value="{{rutina.nombre}}">{{rutina.nombre}}</option>
                           {%endfor%}
+                          {%if ruti != None and ruti != "Rutinas"%}
+                          <option value="{{ruti}}" selected>{{ruti}}</option>
+                          {%endif%}
                       </select> 
                   </div>
                   <!-- Entrenamiento -->
