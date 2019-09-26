@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from apps.home.models import Profesor
 from django.contrib.auth.models import User
 import operator
+from django.contrib.auth.models import Group
 
 # Create your views here.
     
@@ -386,8 +387,10 @@ def inscribirseRutina(request, pk1, pk2):
                         nivel = calcularNivel(altura, circu, peso, actividad, sexo)
                         nivel = nivel.capitalize()
                         alumno.nivel_id = Nivel.objects.get(nombre = nivel)
-                        alumno.entrenamiento_sistema = True
-                    alumno.save()            
+                        alumno.entrenamiento_sistema = True                   
+                    alumno.save()   
+                    grupo = Group.objects.get(name='Alumno') 
+                    grupo.user_set.add(user)        
                     ficha.alumno_id = alumno
                     ficha.save()
                     return render (request, 'rutina/inscripcionExitosa.html', {'alumno':Alumno.objects.get(user_id=user.id), 'rutina':rutina})
