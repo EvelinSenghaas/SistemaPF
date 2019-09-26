@@ -286,8 +286,16 @@ def listadoAlumnos(request, pk):
         if (ruti != "Rutinas"):
             rutinas = Rutina.objects.exclude(nombre=ruti) 
             
+        if entrenamiento != "Tipo entrenamiento":
+            entrenamientoSeleccionado = entrenamiento
+        else:
+            entrenamientoSeleccionado = None
+        
+        if nivel != "Nivel":
+            pass
+            
              
-    return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas, 'ruti':ruti})         
+    return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas, 'ruti':ruti, 'entrenamientoSeleccionado':entrenamientoSeleccionado})         
         
 
 
