@@ -390,7 +390,7 @@ def inscribirseRutina(request, pk1, pk2):
                     alumno.save()            
                     ficha.alumno_id = alumno
                     ficha.save()
-                    return redirect ('/rutinas/')
+                    return render (request, 'rutina/inscripcionExitosa.html', {'alumno':Alumno.objects.get(user_id=user.id), 'rutina':rutina})
             else:
                 fichaForm = FichaForm()
                 alumnoForm = AlumnoForm()

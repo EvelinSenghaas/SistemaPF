@@ -27,4 +27,7 @@ urlpatterns = [
     path('ver_perfil/<int:pk>', login_required(perfil), name='ver_perfil'),
     
     
+    
+    
+    
 ]

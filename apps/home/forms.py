@@ -98,10 +98,10 @@ class FichaForm(forms.ModelForm):
             }
         widgets = {
             'peso' : forms.NumberInput(
-                attrs = { 'class':'form-control', 'placeholder': 'Ingrese su peso'}
+                attrs = { 'class':'form-control', 'placeholder': 'Ingrese su peso (en kg)'}
                 ), 
             'altura' : forms.NumberInput(
-                attrs = { 'class':'form-control', 'placeholder': 'Ingrese su altura'}
+                attrs = { 'class':'form-control', 'placeholder': 'Ingrese su altura (en metros)'}
                 ),
             'profesion' : forms.TextInput(
                 attrs = { 'class':'form-control', 'placeholder': 'Ingrese su profesion'}
