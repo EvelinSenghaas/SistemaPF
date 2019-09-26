@@ -186,7 +186,7 @@ def reporte (alumnos):
      styleBH.fontSize = 10
      
      nombre = Paragraph('''Nombre y apellido''',styleBH)
-     fecha_nac = Paragraph('''Fecha de nac.''',styleBH)
+     fecha_nac = Paragraph('''Edad''',styleBH)
      rutina = Paragraph('''Rutina''',styleBH)
      nivel = Paragraph('''Nivel''',styleBH)
      
