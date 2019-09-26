@@ -147,10 +147,39 @@
                   <!-- Nivel -->
                   <div class="col col-sm-2 col-m-2 col-lg-2">
                       <select class="custom-select" name="nivel">
+                          
+                          {%if nivelSeleccionado != None%}
+                          {%if nivelSeleccionado == "Nivel"%}
+                            <option selected>Nivel</option>
+                            <option value="Principiante">Principiate</option>
+                            <option value="Intermedio">Intermedio</option>
+                            <option value="Avanzado">Avanzado</option>
+                          {%endif%}
+                          {%if nivelSeleccionado == "Principiante"%}
+                            <option value="Nivel">Nivel</option>
+                            <option value="Principiante" selected>Principiate</option>
+                            <option value="Intermedio">Intermedio</option>
+                            <option value="Avanzado">Avanzado</option>
+                          {%endif%}
+                          {%if nivelSeleccionado == "Intermedio"%}
+                          <option value="Nivel">Nivel</option>
+                          <option value="Principiante" >Principiate</option>
+                          <option value="Intermedio" selected>Intermedio</option>
+                          <option value="Avanzado">Avanzado</option>
+                          {%endif%}
+                          {%if nivelSeleccionado == "Avanzado"%}
+                            <option value="Nivel">Nivel</option>
+                            <option value="Principiante" >Principiate</option>
+                            <option value="Intermedio">Intermedio</option>
+                            <option value="Avanzado"selected>Avanzado</option>
+                          {%endif%}
+                          {%else%}
                           <option selected>Nivel</option>
                           <option value="Principiante">Principiate</option>
                           <option value="Intermedio">Intermedio</option>
                           <option value="Avanzado">Avanzado</option>
+                          {%endif%}
+
                         </select>
                   </div>
                   <!-- Boton -->

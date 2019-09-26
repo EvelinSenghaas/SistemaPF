@@ -292,10 +292,12 @@ def listadoAlumnos(request, pk):
             entrenamientoSeleccionado = None
         
         if nivel != "Nivel":
-            pass
+            nivelSeleccionado = nivel
+        else:
+            nivelSeleccionado = None
             
              
-    return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas, 'ruti':ruti, 'entrenamientoSeleccionado':entrenamientoSeleccionado})         
+    return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas, 'ruti':ruti, 'entrenamientoSeleccionado':entrenamientoSeleccionado, 'nivelSeleccionado':nivelSeleccionado})         
         
 
 
