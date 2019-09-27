@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Rutina, Actividad, Detalle, Nivel, Repeticion
-from ..home.models import Alumno, FichaAlumno, Profesor
+from ..home.models import Alumno, FichaAlumno, Profesor, Semana, DisponibilidadProfesor
 from ..home.forms import AlumnoForm, FichaForm
 from .forms import DetalleForm, ActividadForm, RutinaForm, NivelForm, RepeticionForm
 from django.views.generic import View, TemplateView, ListView, UpdateView, CreateView, DeleteView
@@ -11,6 +11,9 @@ from apps.home.models import Profesor
 from django.contrib.auth.models import User
 import operator
 from django.contrib.auth.models import Group
+from django.http import HttpResponse
+from django.core import serializers
+
 
 # Create your views here.
     
@@ -326,12 +329,32 @@ def calcularNivel(altura, circu, peso, actividad, sexo):
             nivel = "principiante"
         return nivel
     
+
+#No se usa
+def BusquedaDisponibilidad(TemplateView):
     
+    def get(self, request, *args, **kwargs):
+        id_dia = request.GET['dia']
+        disponibilidad = DisponibilidadProfesor.objects.filter(semana_id=id_dia)
+        data = serializers.serialize('json',disponibilidad,
+                                     fields=('id', 'horario_inicio','horario_final', 'semana_id'))
+        return HttpResponse(data, content_type='application/json')
+    
+        
 def inscribirseRutina(request, pk1, pk2):
     #Identificamos al user que se quiere inscribir (pk es de usuario)
     user = User.objects.get(id = pk1)
     #Identificamos la rutina a la que se quiere inscribir
-    rutina = Rutina.objects.get(id = pk2)    
+    rutina = Rutina.objects.get(id = pk2) 
+    
+    dias = DisponibilidadProfesor.objects.filter(profesor_id=rutina.profesor_id)
+    """dias = []
+    for i in Semana.objects.all():
+        if DisponibilidadProfesor.objects.filter(semana_id=i, ocupado=False).exists():
+            dias.append(i)"""
+            
+    
+       
     if (user.is_staff):
         mensaje = "Usted pertenece al staff, por lo que no puede inscribirse a una rutina"
         return render (request, 'rutina/errorInscribirseRutina.html', { 'rutina': rutina, 'mensaje':mensaje})
@@ -397,7 +420,7 @@ def inscribirseRutina(request, pk1, pk2):
             else:
                 fichaForm = FichaForm()
                 alumnoForm = AlumnoForm()
-    return render (request, 'rutina/inscribirseRutina.html', {'ficha':fichaForm, 'alumno':alumnoForm, 'rutina':rutina})
+    return render (request, 'rutina/inscribirseRutina.html', {'ficha':fichaForm, 'alumno':alumnoForm, 'rutina':rutina, 'dias':dias})
     return redirect ('/rutinas/')
     
 """  

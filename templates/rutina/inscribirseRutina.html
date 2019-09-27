@@ -163,13 +163,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="row form-group">
-                                    <div class="col col-md-3">{{ficha.enfermedades.label}}</div>
-                                        <div class="col-12 col-md-9">{{ficha.enfermedades}}
-                                        </div>
-                                </div>
-                            </div>
                             <div class="row">
                             <div class="col col-1"><a href="/rutinas"><button type="button" class="btn btn-outline-danger">Cancelar</button></a></div>
                             <div class="col col-0"><button type="submit" class="btn btn-primary">Inscribirse</button></div>
@@ -261,18 +254,37 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <div class="row form-group">
-                                                <div class="col col-md-3">{{ficha.enfermedades.label}}</div>
-                                                    <div class="col-12 col-md-9">{{ficha.enfermedades}}
-                                                    </div>
+                                        
+                                    </div>
+                                    <!-- Datos de los horarios -->
+                                    <div class="card active">
+                                        <div class="card-header alert-primary"><strong>Horarios</strong></div>
+                                            <div class="card-body card-block">
+                                                <div class="alert alert-light"> 
+                                                    <p>Ya casi terminamos, sólo falta que selecciones los días y horarios en los que queres entrenar.</p>
+                                                </div>
+                                                <div class="">
+                                                    <div class="form-group">
+                                                        <div class="row form-group">
+                                                            <div class="col col-md-3">Días disponibles</div>
+                                                            <div class="col-12 col-md-9">
+                                                                <select name="detalle_id" class="selectpicker" multiple data-live-search="true">
+                                                                    {%for dia in dias%}
+                                                                    <option>
+                                                                        {{dia}}
+                                                                    </option>
+                                                                    {%endfor%}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div> 
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col col-1"><a href="/rutinas"><button type="button" class="btn btn-outline-danger">Cancelar</button></a></div>
+                                                    <div class="col col-0"><button type="submit" class="btn btn-primary">Inscribirse</button></div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                        <div class="col col-1"><a href="/rutinas"><button type="button" class="btn btn-outline-danger">Cancelar</button></a></div>
-                                        <div class="col col-0"><button type="submit" class="btn btn-primary">Inscribirse</button></div>
-                                        </div>
-                                    </div>
                                     <input type="hidden" name="entrenamiento" value="profesor">
                             </div>
                             
@@ -281,8 +293,13 @@
             </div>
 
 </div>
-
-
+<!--SCRIPTS-->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 
 {%endblock contenido%}
 {%block pie%}{%endblock pie%}
