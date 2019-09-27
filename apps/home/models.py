@@ -63,24 +63,6 @@ class Semana(models.Model):
         return self.dia
 
 
-class DisponibilidadProfesor(models.Model):
-    id = models.AutoField(primary_key = True, null=False)
-    horario_inicio = models.TimeField(blank = False, null = True)
-    horario_final = models.TimeField(blank = False, null = True)
-    ocupado = models.BooleanField(default=False)
-    estado = models.BooleanField(default=True)
-    semana_id = models.ForeignKey(Semana, on_delete=models.CASCADE, verbose_name="Dia")
-    profesor_id = models.ForeignKey(Profesor, on_delete=models.CASCADE, verbose_name="Profesor")
-    
-    
-    class Meta:
-        verbose_name = 'Disponibilidad Profesor'
-        verbose_name_plural = 'Disponibilidad Profesor'
-        ordering = ['horario_inicio']
-        
-    def __str__(self):
-
-        return str(self.semana_id) + ' (' + str(self.horario_inicio) + ' - ' + str(self.horario_final)+')'
 
     
 class Alumno(models.Model):
@@ -110,6 +92,29 @@ class Alumno(models.Model):
         edad_numerica = diferencia_fechas_dias / 365.2425
         edad = int(edad_numerica)
         return edad
+    
+    
+class DisponibilidadProfesor(models.Model):
+    id = models.AutoField(primary_key = True, null=False)
+    horario_inicio = models.TimeField(blank = False, null = True)
+    horario_final = models.TimeField(blank = False, null = True)
+    ocupado = models.BooleanField(default=False)
+    estado = models.BooleanField(default=True)
+    semana_id = models.ForeignKey(Semana, on_delete=models.CASCADE, verbose_name="Dia")
+    profesor_id = models.ForeignKey(Profesor, on_delete=models.CASCADE, verbose_name="Profesor")
+    alumno_id = models.ForeignKey(Alumno, on_delete=models.CASCADE, verbose_name="Alumno", null=True, blank=True)
+    
+    
+    class Meta:
+        verbose_name = 'Disponibilidad Profesor'
+        verbose_name_plural = 'Disponibilidad Profesor'
+        ordering = ['horario_inicio']
+        
+    def __str__(self):
+
+        return str(self.semana_id) + ' (' + str(self.horario_inicio) + ' - ' + str(self.horario_final)+')'
+    
+    
         
 
 class FichaAlumno (models.Model):
