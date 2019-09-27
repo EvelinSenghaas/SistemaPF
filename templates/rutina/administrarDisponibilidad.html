@@ -51,7 +51,7 @@
                 </div>
                 {% if perms.home.change_disponibilidadprofesor and perms.home.delete_disponibilidadprofesor%}
                 <div class="col-0">
-                    <a  href=""><img src="{%static 'img/edit.png'%}"></a>
+                    <a  href="/home/editar_disponibilidad/{{disp.id}}"><img src="{%static 'img/edit.png'%}"></a>
 
                     <a href=""><img src="{%static 'img/delete.png'%}" alt=""></a>
                 </div>

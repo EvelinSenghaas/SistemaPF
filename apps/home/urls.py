@@ -1,6 +1,6 @@
 from django.urls import path, re_path
 from django.contrib.auth.decorators import login_required
-from .views import registro, Home, cargarDatosUsuario, Administrar, listadoAlumnos, agregarDisponibilidad, reporte, listadoDisponibilidad
+from .views import registro, Home, cargarDatosUsuario, Administrar, listadoAlumnos, agregarDisponibilidad, reporte, listadoDisponibilidad, editarDisponibilidad
 
 urlpatterns = [
     path('', login_required(Home.as_view()), name = 'index'),
@@ -10,5 +10,5 @@ urlpatterns = [
     path('agregar_disponibilidad/<int:pk>', login_required(agregarDisponibilidad), name='agregar_disponibilidad'),
     path('generar_pdf/<alumnos>', login_required(reporte), name='generar_pdf'),
     path('administrar_disponibilidad/<int:pk>', login_required(listadoDisponibilidad), name='administrar_disponibilidad'),
-    #path('registro',registro, name = 'registro')
+    path('editar_disponibilidad/<int:pk>', login_required(editarDisponibilidad), name='editar_disponibilidad'),
 ]

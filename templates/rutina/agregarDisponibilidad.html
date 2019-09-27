@@ -20,11 +20,11 @@
                             <div class="col col-md-3">Horario</div>
                             <div class="col-3 col-md-3">
                                 <label style="color:rgb(130, 128, 128)">Desde</label>
-                                {{disponibilidadForm.horario_inicio}}
+                                {{form.horario_inicio}}
                             </div>
                             <div class="col-3 col-md-3">
                                 <label style="color:rgb(130, 128, 128)">Hasta</label> 
-                                {{disponibilidadForm.horario_final}}
+                                {{form.horario_final}}
                                 <br>
                         </div>
                         </div>
@@ -37,12 +37,15 @@
                                                 {%for dia in dias%}
                                                 <option value="{{dia}}">{{dia}}</option>
                                                 {%endfor%}
+                                                {%if diaSelec != None%}
+                                                    <option value="{{diaSelec}}" selected>{{diaSelec}}</option>
+                                                {%endif%}
                                             </option>
                                         </select>
                                     </div>
                                 </div>
                         </div>
-                        <div class="float-right"><a href="/rutinas/administrar_detalles/">
+                        <div class="float-right"><a href="/home/administrar_disponibilidad/{{user.id}}">
                             <button type="button" class="btn btn-outline-danger">Cancelar</button></a>
                             <button type="submit" class="btn btn-primary">Agregar</button>
                         </div>

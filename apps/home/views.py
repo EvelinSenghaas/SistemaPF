@@ -18,6 +18,7 @@ from .models import Profesor, Alumno, FichaAlumno, Semana, DisponibilidadProfeso
 from ..rutina.models import Rutina, Nivel
 
 import time
+from datetime import datetime
 
 from io import BytesIO
 
@@ -40,6 +41,76 @@ class Administrar(PermissionRequiredMixin,TemplateView):
     
 class PaginaInicial(TemplateView):
     template_name = "home/paginaInicial.html"
+    
+    
+class EditarDisponibilidad(PermissionRequiredMixin,UpdateView):
+    permission_required = 'rutina.change_detalle'
+    model = DisponibilidadProfesor
+    template_name = 'rutina/agregarDisponibilidad.html'
+    form_class = DisponibilidadForm
+    succes_url = reverse_lazy('/rutinas/administracion')
+    
+    
+def editarDisponibilidad(request, pk):
+    disponibilidad = DisponibilidadProfesor.objects.get(id=pk)
+    profesor = DisponibilidadProfesor.objects.get(profesor_id=disponibilidad.profesor_id, id=pk)
+    dias = Semana.objects.all()
+    
+    if request.method == 'GET':
+        form = DisponibilidadForm(instance = disponibilidad) 
+        print()
+        dias = Semana.objects.exclude(dia=disponibilidad.semana_id) 
+        diaSelec = disponibilidad.semana_id
+        mensaje = None
+        return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'diaSelec':diaSelec, 'mensaje':mensaje})
+    else:
+        peticion = request.POST.copy()
+        print(peticion)
+        dias = peticion.pop('dias')
+        hora_inicio = peticion.pop('horario_inicio')
+        hora_inicio = hora_inicio[0]
+        hora_inici = datetime.strptime(hora_inicio, "%H:%M:%S").time()
+        diaSelec = disponibilidad.semana_id
+        
+        hora_final = peticion.pop('horario_final')
+        hora_final = hora_final[0]
+        hora_fina = datetime.strptime(hora_final, "%H:%M:%S").time()
+        
+        
+        print(hora_inici)
+        #print(disponibilidad.horario_inicio)
+        print(hora_fina)
+
+        form = DisponibilidadForm(request.POST, instance = disponibilidad)
+        if form.is_valid():
+            if diaSelec.dia in dias:
+                if (hora_inicio<hora_final):
+                    i=0
+                    while i < len(dias):
+                        
+                        semana = dias[i]
+                        str(semana)
+                        print(semana)
+                        
+                        
+                        DisponibilidadProfesor.objects.filter(id=disponibilidad.id, horario_inicio=disponibilidad.horario_inicio, horario_final=disponibilidad.horario_final, ocupado=False).update(semana_id=Semana.objects.get(dia=semana).id)
+                        
+                        DisponibilidadProfesor.objects.filter(id=disponibilidad.id, horario_inicio=disponibilidad.horario_inicio, horario_final=disponibilidad.horario_final, ocupado=False).update(horario_inicio=hora_inici)
+                        
+                        DisponibilidadProfesor.objects.filter(id=disponibilidad.id, horario_inicio=disponibilidad.horario_inicio, horario_final=disponibilidad.horario_final, ocupado=False).update(horario_final=hora_fina)
+                        i+=1
+                        
+                    mensaje = None
+                else:
+                    mensaje = "El horario final no puede ser menor al horario de inicio."
+                    return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'diaSelec':diaSelec, 'mensaje':mensaje})      
+            else:
+                print('culo')  
+    
+    return redirect('/home/administracion/')
+     
+           
+       
     
     
 def listadoDisponibilidad (request,pk):
@@ -451,8 +522,8 @@ def agregarDisponibilidad(request, pk):
         hora_final = hora_final[0]
         
         print(hora_inicio + ' - ' + hora_final)
-        disponibilidadForm = DisponibilidadForm(request.POST)
-        if disponibilidadForm.is_valid():
+        form = DisponibilidadForm(request.POST)
+        if form.is_valid():
             if (hora_inicio<hora_final):
                 i=0
                 while i < len(dias):
@@ -464,12 +535,12 @@ def agregarDisponibilidad(request, pk):
                 return redirect('/home/administracion')
             else:
                 mensaje = "El horario final no puede ser menor al horario de inicio."
-                return render(request, 'rutina/agregarDisponibilidad.html',{'disponibilidadForm':disponibilidadForm, 'dias':dias, 'mensaje':mensaje})
+                return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'mensaje':mensaje})
             
             
     else:
-        disponibilidadForm = DisponibilidadForm()
+        form = DisponibilidadForm()
         mensaje = None
-        return render(request, 'rutina/agregarDisponibilidad.html',{'disponibilidadForm':disponibilidadForm, 'dias':dias, 'mensaje':mensaje})
+        return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'mensaje':mensaje})
     
     return redirect ('/home/administracion/')
