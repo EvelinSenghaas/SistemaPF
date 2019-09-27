@@ -10,41 +10,45 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item active">Administracion</li>
         </ol>
+        
         <div class="row">
-                <div class="col-lg-4 col-sm-6 portfolio-item">
-                  <div class="card h-100">
-                    <a href="/rutinas/administrar_rutinas"><img class="card-img-top" src="{% static 'img/img_ver_rutinas.jpg'%}" alt="" ></a>
-                    <div class="card-body">
-                      <h4 class="card-title">
-                        <a href="/rutinas/administrar_rutinas">Administrar Rutinas</a>
-                      </h4>
-                      <p class="card-text">Ver mas información sobre las rutinas ofrecidas en el sistema</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-4 col-sm-6 portfolio-item">
-                  <div class="card h-100">
-                    <a href="{% url 'rutinas:actividades' %}"><img class="card-img-top" src="{% static 'img/img_ver_actividades.jpg'%}" alt=""></a>
-                    <div class="card-body">
-                      <h4 class="card-title">
-                        <a href="{% url 'rutinas:actividades' %}">Administrar Actividades</a>
-                      </h4>
-                      <p class="card-text">Ver información sobre las actividades que hay en el sistema</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-4 col-sm-6 portfolio-item">
-                  <div class="card h-100">
-                    <a href="/rutinas/administrar_detalles/"><img class="card-img-top" src="{% static 'img/img_ver_detalles.png'%}" alt=""></a>
-                    <div class="card-body">
-                      <h4 class="card-title">
-                        <a href="/rutinas/administrar_detalles/">Administrar Detalles</a>
-                      </h4>
-                      <p class="card-text">Consultar aquellos puntos en los que pueden haber mejoras</p>
-                    </div>
-                  </div>
+          {%if not user.is_staff%}
+          <div class="col-lg-4 col-sm-6 portfolio-item">
+            <div class="card h-100">
+              <a href="/rutinas/administrar_rutinas"><img class="card-img-top" src="{% static 'img/img_ver_rutinas.jpg'%}" alt="" ></a>
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a href="/rutinas/administrar_rutinas">Administrar Rutinas</a>
+                </h4>
+                <p class="card-text">Ver mas información sobre las rutinas ofrecidas en el sistema</p>
+              </div>
             </div>
+          </div>
+          {%endif%}
+          <div class="col-lg-4 col-sm-6 portfolio-item">
+            <div class="card h-100">
+              <a href="{% url 'rutinas:actividades' %}"><img class="card-img-top" src="{% static 'img/img_ver_actividades.jpg'%}" alt=""></a>
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a href="{% url 'rutinas:actividades' %}">Administrar Actividades</a>
+                </h4>
+                <p class="card-text">Ver información sobre las actividades que hay en el sistema</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-sm-6 portfolio-item">
+            <div class="card h-100">
+              <a href="/rutinas/administrar_detalles/"><img class="card-img-top" src="{% static 'img/img_ver_detalles.png'%}" alt=""></a>
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a href="/rutinas/administrar_detalles/">Administrar Detalles</a>
+                </h4>
+                <p class="card-text">Consultar aquellos puntos en los que pueden haber mejoras</p>
+              </div>
+            </div>
+          </div>
         </div>
+        {%if not user.is_staff%}
         <div class="row">
           <div class="col-lg-4 col-sm-6 portfolio-item">
             <div class="card h-100">
@@ -58,6 +62,7 @@
             </div>
           </div>
         </div>
+        {%endif%}
 </body>
 {%endblock contenido%}
 {%block pie%}
