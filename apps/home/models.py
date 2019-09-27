@@ -112,7 +112,7 @@ class DisponibilidadProfesor(models.Model):
         
     def __str__(self):
 
-        return str(self.semana_id) + ' (' + str(self.horario_inicio) + ' - ' + str(self.horario_final)+')'
+        return str(self.semana_id) + ' (' + str(self.horario_inicio) + ' - ' + str(self.horario_final)+'hs)'
     
     
         
