@@ -48,7 +48,9 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="">Clases</a>
+            {%if perms.rutina.view_actividad%}
+            <a class="nav-link" href="/rutinas/clases/{{user.id}}">Clases</a>
+            {%endif%}
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/rutinas">Rutinas</a>
