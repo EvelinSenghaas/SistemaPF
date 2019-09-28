@@ -43,6 +43,17 @@ class ListadoDetalles (PermissionRequiredMixin,ListView):
     template_name = 'rutina/administrarDetalles.html'
     context_object_name = 'detalles'
     queryset = Detalle.objects.filter(estado=True)
+    
+    
+    
+def verClase(request, pk):
+    user = User.objects.get(id=pk)
+    alumno = Alumno.objects.get(user_id=user.id)
+    
+    if request.method == 'GET':
+        disponibilidad = DisponibilidadProfesor.objects.filter(alumno_id=alumno.id)
+        
+    return render(request, 'rutina/clases.html', {'alumno':alumno, 'disponibilidad':disponibilidad})
 
     
 
