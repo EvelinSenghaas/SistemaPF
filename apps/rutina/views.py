@@ -507,6 +507,9 @@ def inscribirseRutina(request, pk1, pk2):
                     alumno.user = user
                     alumno.rutina_id = rutina
                     alumno.profesor_id = rutina.profesor_id
+                    alumno.nombre = user.first_name
+                    alumno.apellido = user.last_name
+                    alumno.email = user.email
                     if entrenamiento == 'profesor':
                         alumno.nivel_id = None
                         alumno.entrenamiento_sistema = False

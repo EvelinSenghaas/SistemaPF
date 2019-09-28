@@ -73,18 +73,19 @@ class AlumnoForm(forms.ModelForm):
             }
         widgets = {
             'nombre' : forms.TextInput(
-                attrs = { 'class':'form-control', 'placeholder': 'Ingrese su nombre'}
+                attrs = { 'class':'form-control', 'placeholder': 'Ingrese su nombre', 'readonly':'readonly'}
                 ), 
             'apellido' : forms.TextInput(
-                attrs = { 'class':'form-control', 'placeholder': 'Ingrese su apellido'}
+                attrs = { 'class':'form-control', 'placeholder': 'Ingrese su apellido', 'readonly':'readonly'}
                 ),
             'fecha_nac' : forms.DateTimeInput(
                 attrs = { 'class':'form-control', 'placeholder': 'Fecha de nacimiento (dd/mm/aaaa)'}
                 ),
             'email' : forms.EmailInput(
-                attrs = { 'class':'form-control', 'placeholder': 'Ingrese su correo electrónico'}
+                attrs = { 'class':'form-control', 'placeholder': 'Ingrese su correo electrónico', 'readonly':'readonly'}
                 )
         }
+        exclude = ('nombre', 'apellido', 'email')
         
         
         
