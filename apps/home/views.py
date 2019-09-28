@@ -53,8 +53,9 @@ class EditarDisponibilidad(PermissionRequiredMixin,UpdateView):
     
 def editarDisponibilidad(request, pk):
     disponibilidad = DisponibilidadProfesor.objects.get(id=pk)
-    profesor = DisponibilidadProfesor.objects.get(profesor_id=disponibilidad.profesor_id, id=pk)
+    profesor = Profesor.objects.get(id=disponibilidad.profesor_id.id)
     dias = Semana.objects.all()
+    print(profesor)
     
     if request.method == 'GET':
         form = DisponibilidadForm(instance = disponibilidad) 
@@ -67,45 +68,68 @@ def editarDisponibilidad(request, pk):
         peticion = request.POST.copy()
         print(peticion)
         dias = peticion.pop('dias')
-        hora_inicio = peticion.pop('horario_inicio')
-        hora_inicio = hora_inicio[0]
-        hora_inici = datetime.strptime(hora_inicio, "%H:%M:%S").time()
+        inicio = peticion.pop('horario_inicio')
+        hora_inicio = datetime.strptime(inicio[0], "%H:%M:%S").time()
+        
         diaSelec = disponibilidad.semana_id
         
-        hora_final = peticion.pop('horario_final')
-        hora_final = hora_final[0]
-        hora_fina = datetime.strptime(hora_final, "%H:%M:%S").time()
+        final = peticion.pop('horario_final')
+        hora_final = datetime.strptime(final[0], "%H:%M:%S").time()
         
         
-        print(hora_inici)
+        print(hora_inicio)
         #print(disponibilidad.horario_inicio)
-        print(hora_fina)
+        print(hora_final)
 
         form = DisponibilidadForm(request.POST, instance = disponibilidad)
+        
         if form.is_valid():
+            form = form.save()
             if diaSelec.dia in dias:
                 if (hora_inicio<hora_final):
                     i=0
                     while i < len(dias):
                         
                         semana = dias[i]
-                        str(semana)
-                        print(semana)
-                        
-                        
-                        DisponibilidadProfesor.objects.filter(id=disponibilidad.id, horario_inicio=disponibilidad.horario_inicio, horario_final=disponibilidad.horario_final, ocupado=False).update(semana_id=Semana.objects.get(dia=semana).id)
-                        
-                        DisponibilidadProfesor.objects.filter(id=disponibilidad.id, horario_inicio=disponibilidad.horario_inicio, horario_final=disponibilidad.horario_final, ocupado=False).update(horario_inicio=hora_inici)
-                        
-                        DisponibilidadProfesor.objects.filter(id=disponibilidad.id, horario_inicio=disponibilidad.horario_inicio, horario_final=disponibilidad.horario_final, ocupado=False).update(horario_final=hora_fina)
-                        i+=1
+                        if (semana == diaSelec.dia):                    
+                            DisponibilidadProfesor.objects.filter(id=disponibilidad.id, horario_inicio=disponibilidad.horario_inicio, horario_final=disponibilidad.horario_final, ocupado=False).update(semana_id=Semana.objects.get(dia=semana).id)
+                            
+                            DisponibilidadProfesor.objects.filter(id=disponibilidad.id, horario_inicio=disponibilidad.horario_inicio, horario_final=disponibilidad.horario_final, ocupado=False).update(horario_inicio=hora_inicio)
+                            
+                            DisponibilidadProfesor.objects.filter(id=disponibilidad.id, horario_inicio=disponibilidad.horario_inicio, horario_final=disponibilidad.horario_final, ocupado=False).update(horario_final=hora_final)
+                            i+=1
+                        else:
+                            disp = DisponibilidadProfesor.objects.create(horario_inicio=hora_inicio, horario_final=hora_final, semana_id=Semana.objects.get(dia=semana), profesor_id=Profesor.objects.get(id=profesor.id))
+                            disp.save()
+                            i+=1
                         
                     mensaje = None
                 else:
                     mensaje = "El horario final no puede ser menor al horario de inicio."
-                    return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'diaSelec':diaSelec, 'mensaje':mensaje})      
+                    return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'diaSelec':diaSelec, 'mensaje':mensaje}) 
             else:
-                print('culo')  
+                if (hora_inicio<hora_final):
+                    i=0
+                    while i < len(dias):
+                        
+                        semana = dias[i]
+                        if (semana == diaSelec.dia):                    
+                            DisponibilidadProfesor.objects.filter(id=disponibilidad.id, horario_inicio=disponibilidad.horario_inicio, horario_final=disponibilidad.horario_final, ocupado=False).update(semana_id=Semana.objects.get(dia=semana).id)
+                            
+                            DisponibilidadProfesor.objects.filter(id=disponibilidad.id, horario_inicio=disponibilidad.horario_inicio, horario_final=disponibilidad.horario_final, ocupado=False).update(horario_inicio=hora_inicio)
+                            
+                            DisponibilidadProfesor.objects.filter(id=disponibilidad.id, horario_inicio=disponibilidad.horario_inicio, horario_final=disponibilidad.horario_final, ocupado=False).update(horario_final=hora_final)
+                            i+=1
+                        else:
+                            disp = DisponibilidadProfesor.objects.create(horario_inicio=hora_inicio, horario_final=hora_final, semana_id=Semana.objects.get(dia=semana), profesor_id=Profesor.objects.get(id=profesor.id))
+                            disp.save()
+                            i+=1
+                        
+                    mensaje = None
+                else:
+                    mensaje = "El horario final no puede ser menor al horario de inicio."
+                    return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'diaSelec':diaSelec, 'mensaje':mensaje})
+
     
     return redirect('/home/administracion/')
      
