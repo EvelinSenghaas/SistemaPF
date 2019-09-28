@@ -15,6 +15,12 @@ from django.http import HttpResponse
 from django.core import serializers
 
 
+from django.utils import timezone
+import time
+import calendar
+from datetime import datetime, date
+
+
 # Create your views here.
     
 class Rutinas (PermissionRequiredMixin,ListView):
@@ -44,16 +50,75 @@ class ListadoDetalles (PermissionRequiredMixin,ListView):
     context_object_name = 'detalles'
     queryset = Detalle.objects.filter(estado=True)
     
-    
+def traducirDia(dia):
+    if dia == "Sunday":
+        dia = "Domingo"
+    if dia == "Monday":
+        dia = "Lunes"    
+    if dia == "Tuesday":
+        dia = "Martes"
+    if dia == "Wednesday":
+        dia = "Miercoles"  
+    if dia == "Thursday":
+        dia = "Jueves"
+    if dia == "Friday":
+        dia = "Viernes"  
+    if dia == "Saturday":
+        dia = "Sabado"
+    return dia
     
 def verClase(request, pk):
     user = User.objects.get(id=pk)
-    alumno = Alumno.objects.get(user_id=user.id)
-    
-    if request.method == 'GET':
-        disponibilidad = DisponibilidadProfesor.objects.filter(alumno_id=alumno.id)
+    if (Alumno.objects.filter(user_id=user.id).exists()):
+        alumno = Alumno.objects.get(user_id=user.id)
+        profesor = alumno.profesor_id
         
-    return render(request, 'rutina/clases.html', {'alumno':alumno, 'disponibilidad':disponibilidad})
+        print(profesor)
+
+        
+        if request.method == 'GET':
+            disponibilidad = DisponibilidadProfesor.objects.filter(alumno_id=alumno.id)
+            
+            now = datetime.now()
+            dia = now.strftime("%A")
+            dia = traducirDia(dia)
+            
+            
+            diasAlumno=[]
+            for disp in disponibilidad:
+                diasAlumno.append(Semana.objects.get(dia=disp.semana_id))
+            
+            clase=None
+            for diaAlumno in diasAlumno:    
+                if dia == diaAlumno.dia:
+                    mensaje = None
+                    hora_inicio = DisponibilidadProfesor.objects.get(alumno_id=alumno.id, semana_id=diaAlumno).horario_inicio
+                    hora_final = DisponibilidadProfesor.objects.get(alumno_id=alumno.id, semana_id=diaAlumno).horario_final
+                    
+                    if now.time() < hora_inicio:
+                        clase = "Tienes una clase con " + str(alumno.profesor_id)  + " hoy desde las " + hora_inicio.strftime("%H:%M") + " hasta las " + hora_final.strftime("%H:%M") +"hs."
+                    
+                    if  hora_inicio <= now.time() <= hora_final:
+                        clase = "La clase con " + str(alumno.profesor_id)  + " esta en curso. "
+                    
+                    if now.time() > hora_final:
+                        clase = None
+                        mensaje = "Tu clase con " + str(alumno.profesor_id) + " ya ha terminado."
+                        break
+                    break
+                    
+                if dia != diaAlumno.dia:
+                    mensaje = "Hoy no es día de entrenamiento, debes esperar para tu siguiente clase "
+                    
+            return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje, 'disponibilidad':disponibilidad, 'clase':clase, 'profesor':profesor})
+        
+    if (Profesor.objects.filter(user_id=pk).exists()):
+        profesor = Profesor.objects.get(user_id=user.id)
+        alumnos = Alumno.objects.filter(profesor_id=profesor.id)
+        return render (request, 'rutina/clases.html', {'alumno':alumnos, 'profesor':profesor})
+        
+                
+        
 
     
 
