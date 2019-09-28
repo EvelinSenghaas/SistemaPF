@@ -168,10 +168,35 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                            <div class="col col-1"><a href="/rutinas"><button type="button" class="btn btn-outline-danger">Cancelar</button></a></div>
-                            <div class="col col-0"><button type="submit" class="btn btn-primary">Inscribirse</button></div>
-                            </div>
+                        </div>
+                            <!-- Datos de los horarios -->
+                            <div class="card active">
+                                    <div class="card-header alert-primary"><strong>Horarios</strong></div>
+                                        <div class="card-body card-block">
+                                            <div class="alert alert-light"> 
+                                                <p>Ya casi terminamos, sólo falta que selecciones los días y horarios en los que queres entrenar.</p>
+                                            </div>
+                                            <div class="">
+                                                <div class="form-group">
+                                                    <div class="row form-group">
+                                                        <div class="col col-md-3">Días disponibles</div>
+                                                        <div class="col-12 col-md-9">
+                                                            <select name="disponibilidad" class="selectpicker" multiple data-live-search="true">
+                                                                {%for disp in disponibilidad%}
+                                                                <option value="{{disp.id}}">
+                                                                    {{disp}}
+                                                                </option>
+                                                                {%endfor%}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                            <div class="row">
+                                                <div class="col col-1"><a href="/rutinas"><button type="button" class="btn btn-outline-danger">Cancelar</button></a></div>
+                                                <div class="col col-0"><button type="submit" class="btn btn-primary">Inscribirse</button></div>
+                                            </div>
+                                        </div>
                         </div>
                         <input type="hidden" name="entrenamiento" value="sistema">
                 </div>
