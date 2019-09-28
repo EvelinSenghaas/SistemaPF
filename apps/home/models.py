@@ -84,7 +84,7 @@ class Alumno(models.Model):
         ordering = ['nombre']
     
     def __str__(self):
-        return self.nombre
+        return self.nombre + ', ' + self.apellido
     
     def edad(self, fecha_nac):
         diferencia_fechas = date.today() - fecha_nac

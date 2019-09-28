@@ -114,8 +114,31 @@ def verClase(request, pk):
         
     if (Profesor.objects.filter(user_id=pk).exists()):
         profesor = Profesor.objects.get(user_id=user.id)
-        alumnos = Alumno.objects.filter(profesor_id=profesor.id)
-        return render (request, 'rutina/clases.html', {'alumno':alumnos, 'profesor':profesor})
+        if request.method == 'GET':
+            
+            #Obtenemos el dia actual
+            now = datetime.now()
+            dia = now.strftime("%A")
+            dia = traducirDia(dia)
+            dia = Semana.objects.get(dia=dia)
+            
+            if (DisponibilidadProfesor.objects.filter(profesor_id=profesor.id, semana_id=dia, ocupado=True).exists()):
+                alumnos = DisponibilidadProfesor.objects.filter(profesor_id=profesor.id, semana_id=dia, ocupado=True)
+                mensaje = None
+            else:
+                mensaje = "Por hoy no tenes más alumnos que atender."
+                alumnos = 'vacio'
+            
+            alumnosPendientes = [] 
+            if alumnos != 'vacio':                   
+                for alumno in alumnos:
+                    if now.time() < alumno.horario_inicio or alumno.horario_inicio <= now.time() <= alumno.horario_final:
+                        alumnosPendientes.append(alumno)
+                        mensaje = None
+                    else:
+                        mensaje = "Por hoy no tenes más alumnos que atender."
+                    
+        return render (request, 'rutina/clases.html', {'alumnos':alumnos, 'profesor':profesor, 'profesor':profesor, 'alumnosPendientes':alumnosPendientes, 'mensaje':mensaje})
         
                 
         
