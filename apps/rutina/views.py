@@ -73,8 +73,6 @@ def verClase(request, pk):
         alumno = Alumno.objects.get(user_id=user.id)
         profesor = alumno.profesor_id
         
-        print(profesor)
-
         
         if request.method == 'GET':
             disponibilidad = DisponibilidadProfesor.objects.filter(alumno_id=alumno.id)
