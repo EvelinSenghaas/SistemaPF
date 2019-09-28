@@ -76,7 +76,7 @@ class Alumno(models.Model):
     entrenamiento_sistema = models.BooleanField(default=None, null=True)
     rutina_id = models.ForeignKey('rutina.Rutina', related_name='rutina', on_delete=models.CASCADE, verbose_name="Rutina")
     profesor_id = models.ForeignKey(Profesor, on_delete=models.CASCADE, verbose_name="Profesor")
-    nivel_id = models.ForeignKey('rutina.Nivel', related_name='rutina', on_delete=models.CASCADE, verbose_name="Nivel", null=True)
+    nivel_id = models.ForeignKey('rutina.Nivel', related_name='rutina', on_delete=models.CASCADE, verbose_name="Nivel", null=True, blank=True)
     
     class Meta:
         verbose_name = 'Alumno'
@@ -102,7 +102,7 @@ class DisponibilidadProfesor(models.Model):
     estado = models.BooleanField(default=True)
     semana_id = models.ForeignKey(Semana, on_delete=models.CASCADE, verbose_name="Dia")
     profesor_id = models.ForeignKey(Profesor, on_delete=models.CASCADE, verbose_name="Profesor")
-    alumno_id = models.ForeignKey(Alumno, on_delete=models.CASCADE, verbose_name="Alumno", null=True, blank=True)
+    alumno_id = models.ForeignKey(Alumno, on_delete=models.SET_NULL, verbose_name="Alumno", null=True, blank=True)
     
     
     class Meta:

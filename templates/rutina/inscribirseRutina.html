@@ -268,10 +268,10 @@
                                                         <div class="row form-group">
                                                             <div class="col col-md-3">Días disponibles</div>
                                                             <div class="col-12 col-md-9">
-                                                                <select name="detalle_id" class="selectpicker" multiple data-live-search="true">
-                                                                    {%for dia in dias%}
-                                                                    <option>
-                                                                        {{dia}}
+                                                                <select name="disponibilidad" class="selectpicker" multiple data-live-search="true">
+                                                                    {%for disp in disponibilidad%}
+                                                                    <option value="{{disp.id}}">
+                                                                        {{disp}}
                                                                     </option>
                                                                     {%endfor%}
                                                                 </select>

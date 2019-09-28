@@ -348,7 +348,7 @@ def inscribirseRutina(request, pk1, pk2):
     #Identificamos la rutina a la que se quiere inscribir
     rutina = Rutina.objects.get(id = pk2) 
     
-    dias = DisponibilidadProfesor.objects.filter(profesor_id=rutina.profesor_id)
+    disponibilidad = DisponibilidadProfesor.objects.filter(profesor_id=rutina.profesor_id, ocupado=False)
     """dias = []
     for i in Semana.objects.all():
         if DisponibilidadProfesor.objects.filter(semana_id=i, ocupado=False).exists():
@@ -387,6 +387,10 @@ def inscribirseRutina(request, pk1, pk2):
                 peso = peticion.pop('peso')
                 peso = peso[0]
                 
+                disp = peticion.pop('disponibilidad')
+                
+                
+                
                 if entrenamiento == "sistema":
                     actividad = peticion.pop('actividad')
                     actividad = actividad[0]
@@ -407,12 +411,20 @@ def inscribirseRutina(request, pk1, pk2):
                     if entrenamiento == 'profesor':
                         alumno.nivel_id = None
                         alumno.entrenamiento_sistema = False
+                        
+                        
+                        
                     else:
                         nivel = calcularNivel(altura, circu, peso, actividad, sexo)
                         nivel = nivel.capitalize()
                         alumno.nivel_id = Nivel.objects.get(nombre = nivel)
                         alumno.entrenamiento_sistema = True                   
                     alumno.save()   
+                    
+                    if entrenamiento == 'profesor':
+                        for d in disp:
+                            DisponibilidadProfesor.objects.filter(id=int(d)).update(alumno_id=alumno, ocupado=True)
+                            
                     grupo = Group.objects.get(name='Alumno') 
                     grupo.user_set.add(user)        
                     ficha.alumno_id = alumno
@@ -421,7 +433,7 @@ def inscribirseRutina(request, pk1, pk2):
             else:
                 fichaForm = FichaForm()
                 alumnoForm = AlumnoForm()
-    return render (request, 'rutina/inscribirseRutina.html', {'ficha':fichaForm, 'alumno':alumnoForm, 'rutina':rutina, 'dias':dias})
+    return render (request, 'rutina/inscribirseRutina.html', {'ficha':fichaForm, 'alumno':alumnoForm, 'rutina':rutina, 'disponibilidad':disponibilidad})
     return redirect ('/rutinas/')
     
 """  
