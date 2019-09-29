@@ -229,11 +229,34 @@ def agregarActividad(request):
     if request.method == 'POST':
         form = ActividadForm(request.POST)
         form2 = RepeticionForm(request.POST)
+        
         peticion = request.POST.copy()
         nivel_id = peticion.pop('nivel_id')
+        
+        print(nivel_id)
+        
         rep_min = peticion.pop('repeticionesMinimas')
-        print(form.errors)
+        
+        print(rep_min)
+        
+        unico = []
+        repetido = []
+        
+        for x in nivel_id:
+            if x not in unico:
+                unico.append(x)
+            else:
+                if x not in repetido:
+                    repetido.append(x)
+             
+        print(unico)        
+        if len(unico) < 3:
+            error = form.errors
+            error2 = "No puede seleccionar dos niveles iguales."
+            return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error, 'error2':error2})
         if form.is_valid() and form2.is_valid():
+                       
+            print('sigue')
             actividad = form.save()
             repeticion = form2.save(commit=False)
             acti = Actividad.objects.get(id=actividad.id)  
