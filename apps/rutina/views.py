@@ -225,12 +225,14 @@ class AgregarActividad(PermissionRequiredMixin, CreateView):
     
 def agregarActividad(request):
     nivel = Nivel.objects.all() 
+    error = None
     if request.method == 'POST':
         form = ActividadForm(request.POST)
         form2 = RepeticionForm(request.POST)
         peticion = request.POST.copy()
         nivel_id = peticion.pop('nivel_id')
         rep_min = peticion.pop('repeticionesMinimas')
+        print(form.errors)
         if form.is_valid() and form2.is_valid():
             actividad = form.save()
             repeticion = form2.save(commit=False)
@@ -240,11 +242,13 @@ def agregarActividad(request):
                 r = Repeticion.objects.create(actividad_id = actividad, nivel_id = Nivel.objects.get(id = nivel_id[i]), repeticionesMinimas = rep_min[i])
                 r.save()
                 i+=1
-            return redirect('/rutinas/actividades/')     
+        else:
+            error = form.errors
+            return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error})     
     else:
         form = ActividadForm()
         form2 = RepeticionForm()
-        return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel})
+        return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error})
     return redirect('/rutinas/actividades/')  
 
 
