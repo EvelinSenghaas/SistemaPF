@@ -233,23 +233,18 @@ def agregarActividad(request):
         peticion = request.POST.copy()
         nivel_id = peticion.pop('nivel_id')
         
-        print(nivel_id)
         
         rep_min = peticion.pop('repeticionesMinimas')
         
         print(rep_min)
         
         unico = []
-        repetido = []
+
         
         for x in nivel_id:
             if x not in unico:
                 unico.append(x)
-            else:
-                if x not in repetido:
-                    repetido.append(x)
-             
-        print(unico)        
+                   
         if len(unico) < 3:
             error = form.errors
             error2 = "No puede seleccionar dos niveles iguales."
