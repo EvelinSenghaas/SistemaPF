@@ -82,9 +82,10 @@
                 <table class="table dataTable" id="mydatatable">
                   <thead class="card-header">
                     <tr>
-                      <th width="300">Dia</th>
+                      <th width="210">Dia</th>
 
                       <th width="auto">Horarios</th>
+                      <th width="auto">Estado</th>
 
                       <th>Acciones</th>
                     </tr>
@@ -92,9 +93,15 @@
                   <tbody>
                   {%for disp in disponibilidad%}
                     <tr>
-                      <td width="300">{{disp.semana_id}}</td>
+                      <td width="210">{{disp.semana_id}}</td>
 
                       <td width="auto"> De <b>{{disp.horario_inicio}}</b> a <b>{{disp.horario_final}}</b> </td>
+                      
+                      {%if disp.alumno_id != None%}
+                      <td width="auto">Ocupado por <b>{{disp.alumno_id}}</b></td>
+                      {%else%}
+                      <td> Libre</td>
+                      {%endif%}
 
                       {% if perms.home.change_disponibilidadprofesor and perms.home.delete_disponibilidadprofesor%}
                         <td>
