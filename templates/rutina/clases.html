@@ -7,6 +7,12 @@
 
 {%block contenido%}
 <body class="container mt-2">
+        <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/home/">Home</a>
+                </li>
+                <li class="breadcrumb-item active">Clases</li>
+            </ol>
         {%if user.id == alumno.user_id%}
         {%if mensaje != None%}
         <div class="alert alert-info" role="alert">
