@@ -276,24 +276,40 @@ def filtrar(rutinas, entrenamiento, nivel, profesor):
     return alumnos
 
 
-def reporte (alumnos):
+def reporte (request, alumnos):
      response = HttpResponse(content_type='application/pdf')
      response['Content-Disposition'] = 'attachment: filename=Listado_alumnos.pdf'
      
      buffer = BytesIO()
      c = canvas.Canvas(buffer, pagesize=A4)
      
+     peticion = request.POST.copy()
+     rutina = peticion.pop('rutinas')
+     entrenamiento = peticion.pop('entrenamiento')
+     nivel = peticion.pop('nivel')
+         
+                 
+
+     
+     
      #header
      c.setLineWidth(.3)
-     c.setFont('Helvetica', 22)
+     c.setFont('Times-Bold', 22)
      c.drawString(30,750,'FitRou')
-     c.setFont('Helvetica', 12)
-     c.drawString(30,735,'Listado de alumnos')
+     c.setFont('Times-Bold', 12)
      
-     fecha = str(time.strftime("%d/%m/%y"))
-     c.setFont('Helvetica-Bold',12)
-     c.drawString(480,750,fecha)
-     c.line(460,747,560,747)
+     c.drawString(30,730,'Listado de alumnos filtrado por ' + str(rutina[0])+', '+str(entrenamiento[0])+' y '+str(nivel[0])+':')
+     
+     fecha = str(time.strftime("Fecha: %d/%m/%y"))
+     c.setFont('Times-Roman',10)
+     c.drawString(475,750,fecha)
+     
+     profesor = alumnos[0].profesor_id
+     profe = str("Profesor: " + str(profesor))
+     c.setFont('Times-Roman',10)
+     c.drawString(475,735,profe)
+     
+     
      
      """estudiantes = [(alumno.nombre,alumno.fecha_nac, alumno.rutina_id, alumno.nivel_id) for alumno in alumnos]"""
      
@@ -304,12 +320,16 @@ def reporte (alumnos):
      styleBH.alignment = TA_CENTER
      styleBH.fontSize = 10
      
+     
+     
+     
      nombre = Paragraph('''Nombre y apellido''',styleBH)
      fecha_nac = Paragraph('''Edad''',styleBH)
      rutina = Paragraph('''Rutina''',styleBH)
+     entrenamiento = Paragraph('''Entrenamiento''',styleBH)
      nivel = Paragraph('''Nivel''',styleBH)
      
-     data = [[nombre,fecha_nac,rutina,nivel]]
+     data = [[nombre,fecha_nac,rutina,entrenamiento,nivel]]
      
      styles = getSampleStyleSheet()
      styleN = styles["BodyText"]
@@ -317,14 +337,20 @@ def reporte (alumnos):
      styleN.fontSize = 7
      
      width, height = A4
-     high = 660
+     high = 550
+     
      for alumno in alumnos:
-         this_student = [ alumno.nombre+ ', '+alumno.apellido,alumno.fecha_nac, alumno.rutina_id, alumno.nivel_id ]
+         if alumno.entrenamiento_sistema == True:
+             alumno.entrenamiento_sistema = "Sistema"
+         else:
+             alumno.entrenamiento_sistema = "Profesor"
+     for alumno in alumnos:
+         this_student = [ alumno.nombre+ ', '+alumno.apellido,alumno.fecha_nac, alumno.rutina_id, alumno.entrenamiento_sistema, alumno.nivel_id]
          data.append(this_student)
      
      #table size
      width, height = A4
-     table = Table(data, colWidths=[90 * mm, 40 * mm, 25 * mm, 25 * mm, 45 * mm, 45 * mm])
+     table = Table(data, colWidths=[65 * mm, 30 * mm, 30 * mm, 35 * mm, 25 * mm])
      table.setStyle(TableStyle([
          ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
          ('BOX', (0,0), (-1,-1), 0.10, colors.black)]))
@@ -396,7 +422,7 @@ def listadoAlumnos(request, pk):
                 mensaje = "Usted no tiene alumnos a cargo"
         else:
             if (Alumno.objects.filter(profesor_id=profesor.id).exists()):
-                return reporte (alumnos)
+                return reporte (request,alumnos)
                 mensaje = None    
                             
             else:
@@ -414,8 +440,7 @@ def listadoAlumnos(request, pk):
             nivelSeleccionado = nivel
         else:
             nivelSeleccionado = None
-            
-             
+                 
     return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas, 'ruti':ruti, 'entrenamientoSeleccionado':entrenamientoSeleccionado, 'nivelSeleccionado':nivelSeleccionado})         
         
 

@@ -188,9 +188,11 @@
                   <div class="col col-sm-2 col-m-2 col-lg-2">
                     <input type="hidden" name ="tipoPost" id="tipoPost">
                     <button type="submit" onclick="accion(1)" class="btn btn-primary">Filtrar</button>
+                    {%if alumnos != 'No hay coincidencias' %}
                     <button type="submit" class="btn btn-outline-danger" onclick="accion(0)" href="/home/generar_pdf/{{alumnos}}" src="">
                       <img src="{% static 'img/pdf3.png'%}" alt="">
                     </button>
+                    {%endif%}
 
                   </div>
                 </div>
