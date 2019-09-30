@@ -573,7 +573,7 @@ def inscribirseRutina(request, pk1, pk2):
                     
                     if entrenamiento == 'profesor':
                         for d in disp:
-                            DisponibilidadProfesor.objects.filter(id=int(d)).update(alumno_id=alumno, ocupado=True)
+                            DisponibilidadProfesor.objects.filter(id=int(d)).update(alumno_id=alumno, ocupado=False)
                             
                     grupo = Group.objects.get(name='Alumno') 
                     grupo.user_set.add(user)        
