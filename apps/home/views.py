@@ -158,7 +158,7 @@ class EliminarDisponibilidad(DeleteView):
         else:
             object.estado = not(object.estado)
             object.save()
-        return redirect('/home/administrar_disponibilidad')       
+        return redirect('/home/administracion')       
     
     
 def listadoDisponibilidad (request,pk):
@@ -347,6 +347,7 @@ def reporte (request, alumnos):
      for alumno in alumnos:
          this_student = [ alumno.nombre+ ', '+alumno.apellido,alumno.fecha_nac, alumno.rutina_id, alumno.entrenamiento_sistema, alumno.nivel_id]
          data.append(this_student)
+         
      
      #table size
      width, height = A4
@@ -613,7 +614,7 @@ def agregarDisponibilidad(request, pk):
                 disponibilidad = DisponibilidadProfesor.objects.filter(estado=True, profesor_id=profesor.id)
                 return render(request, 'rutina/administrarDisponibilidad.html', {'disponibilidad':disponibilidad})
             else:
-                mensaje = "El horario final no puede ser menor al horario de inicio."
+                mensaje = "El horario final no puede ser igual o menor al horario de inicio."
                 return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'mensaje':mensaje})
         else:
             error = form.errors

@@ -13,5 +13,5 @@ urlpatterns = [
     path('administrar_disponibilidad/<int:pk>', login_required(listadoDisponibilidad), name='administrar_disponibilidad'),
     path('editar_disponibilidad/<int:pk>', login_required(editarDisponibilidad), name='editar_disponibilidad'),
     
-    path('eliminar_disponibilidad/<int:pk>', login_required(EliminarDisponibilidad.as_view(success_url="/home/administrar_disponibilidad/"))),
+    path('eliminar_disponibilidad/<int:pk>', login_required(EliminarDisponibilidad.as_view(success_url="/home/administracion/"))),
 ]
