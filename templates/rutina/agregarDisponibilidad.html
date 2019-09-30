@@ -12,6 +12,12 @@
     <div class="card">
         <div class="card-header alert-primary"><strong>Administracion de Disponibilidad</strong></div>
             <div class="card-body card-block">  
+                    {%if error != None%}
+                    <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-heading">Error</h4>
+                            {{error}}
+                    </div>
+                    {%endif%}
                 <form method="POST">
                     {% csrf_token %}
                     

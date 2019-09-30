@@ -548,9 +548,11 @@ def agregarDisponibilidad(request, pk):
         hora_final = peticion.pop('horario_final')
         hora_final = hora_final[0]
         
+        
         print(hora_inicio + ' - ' + hora_final)
         form = DisponibilidadForm(request.POST)
         if form.is_valid():
+            error = None
             if (hora_inicio<hora_final):
                 i=0
                 while i < len(dias):
@@ -563,6 +565,10 @@ def agregarDisponibilidad(request, pk):
             else:
                 mensaje = "El horario final no puede ser menor al horario de inicio."
                 return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'mensaje':mensaje})
+        else:
+            error = form.errors
+            mensaje = None
+            return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'mensaje':mensaje, 'error':error})
             
             
     else:
