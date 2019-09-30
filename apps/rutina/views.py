@@ -338,7 +338,13 @@ def agregarRutina(request, pk):
     if request.method == 'POST':
         rutinaForm = RutinaForm(request.POST)
         peticion = request.POST.copy()
-        actividades = peticion.pop('actividad_id')
+        try:
+            actividades = peticion.pop('actividad_id')
+        except:
+            error = rutinaForm.errors
+            error = "\n Debe seleccionar las actividades"
+            return render(request, 'rutina/agregarRutina.html',{'rutinaForm':rutinaForm, 'error':error})
+        
         print(request.POST)
         if rutinaForm.is_valid():
             rutina = rutinaForm.save(commit=False)
@@ -348,6 +354,10 @@ def agregarRutina(request, pk):
                 rutina.actividad_id.add(act)
             rutina.save()
             return redirect ('/rutinas/administrar_rutinas/')
+        else:
+            print('entra al else')
+            error = rutinaForm.errors
+            return render(request, 'rutina/agregarRutina.html',{'rutinaForm':rutinaForm, 'error':error})
     else:
         rutinaForm = RutinaForm()
         return render(request, 'rutina/agregarRutina.html',{'rutinaForm':rutinaForm})
