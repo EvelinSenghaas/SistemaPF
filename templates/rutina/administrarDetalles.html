@@ -64,14 +64,17 @@
         </div>
       </nav>
     <section class="container mt-2">
-        <div class="card" >
+
             <div class="list-group-item active">
                 <div class="row">
                     <div class="col col-sm-11 col-md-11 col-lg-11">
-                        <a href="/home/administracion"><h5><img src="{% static 'img/back_blanco.png'%}"></a>Lista de detalles</h5>
-                        </div>
-                        <form method="POST"> {% csrf_token %}
-                                  
+                        <a href="/home/administracion/"><h5><img src="{% static 'img/back_blanco.png'%}"></a>Lista de detalles</h5></div>
+                    {% if perms.rutina.add_detalle and not user.is_staff%}
+                    <div class="col col-sm-1 col-md-1 col-lg-1">
+                        <a class="btn btn-light" href="/rutinas/agregar_detalle" src="">
+                        <img src="{% static 'img/img_agregar_rutina.png'%}" alt=""></a>
+                    </div>
+                    {%endif%}
                 </div>
             </div>
             <div class="mt-2">
