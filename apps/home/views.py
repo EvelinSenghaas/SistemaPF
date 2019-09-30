@@ -68,20 +68,27 @@ def editarDisponibilidad(request, pk):
         peticion = request.POST.copy()
         print(peticion)
         dias = peticion.pop('dias')
-        inicio = peticion.pop('horario_inicio')
-        hora_inicio = datetime.strptime(inicio[0], "%H:%M:%S").time()
-        
         diaSelec = disponibilidad.semana_id
         
-        final = peticion.pop('horario_final')
-        hora_final = datetime.strptime(final[0], "%H:%M:%S").time()
+        form = DisponibilidadForm(request.POST, instance = disponibilidad)
+        
+        try:
+            inicio = peticion.pop('horario_inicio')
+            hora_inicio = datetime.strptime(inicio[0], "%H:%M:%S").time()
+               
+            final = peticion.pop('horario_final')
+            hora_final = datetime.strptime(final[0], "%H:%M:%S").time()
+        except:
+            mensaje = "Por favor ingrese correctamente el horario en el formato especificado (HH:MM:SS)"
+            disp = disponibilidad.id
+            print(disp)
+            return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'diaSelec':diaSelec, 'mensaje':mensaje, 'disp':disp}) 
         
         
         print(hora_inicio)
         #print(disponibilidad.horario_inicio)
         print(hora_final)
 
-        form = DisponibilidadForm(request.POST, instance = disponibilidad)
         
         if form.is_valid():
             form = form.save()
@@ -129,6 +136,12 @@ def editarDisponibilidad(request, pk):
                 else:
                     mensaje = "El horario final no puede ser menor al horario de inicio."
                     return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'diaSelec':diaSelec, 'mensaje':mensaje})
+                
+        else:
+            error = form.errors
+            mensaje = None
+            return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'diaSelec':diaSelec, 'mensaje':mensaje}) 
+            
 
     
     return redirect('/home/administracion/')
