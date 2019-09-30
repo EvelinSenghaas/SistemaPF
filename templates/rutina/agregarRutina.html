@@ -10,7 +10,7 @@
         <div class="card">
             <div class="card-header alert-primary"><strong>Administracion de Rutina</strong></div>
                 <div class="card-body card-block">
-                        {%if error != None or error2 != None%}
+                        {%if error != None or error2 != None or form.errors%}
                         <div class="alert alert-danger" role="alert">
                             <h4 class="alert-heading">Error</h4>
                             {%if error != None%}
@@ -20,6 +20,9 @@
                             {%endif%}
                             {%if error2 != None%}
                                 <ul>{{error2}}</ul>
+                            {%endif%}
+                            {%if form.errors != None%}
+                                <ul>{{form.errors}}</ul>
                             {%endif%}
                         </div>
 
