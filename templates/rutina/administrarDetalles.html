@@ -1,14 +1,70 @@
-{% extends 'home/home.html'%}
+
 {% load staticfiles%}
 
-{%block titulo%}Detalles{%endblock titulo%}
 
-{%block imagen_principal%}
-{%endblock imagen_principal%}
 
-    {%block contenido%}
+<head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+        <!-- Bootstrap core CSS -->
+      <link href=" {% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    
+      <!-- Custom styles for this template -->
+      <link href="{% static 'css/modern-business.css' %}" rel="stylesheet">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    
+        <title>Detalles</title>
+</head>
+
+
+<body>
+    <!-- Navigation -->
+  <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="/home">FitRou</a>
+          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="/rutinas/clases/{{user.id}}">Clases</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/rutinas">Rutinas</a>
+              </li>
+              {%if perms.home.view_alumno%}
+              <li class="nav-item">
+                <a class="nav-link" href="/home/listado_alumnos/{{user.id}}">Mis alumnos</a>
+              </li>
+              {%endif%}
+              {% if perms.rutina.edit_actividad or perms.rutina.delete_actividad or perms.rutina.edit_rutina or perms.rutina.delete_rutina%}
+              <li class="nav-item">
+                  <a class="nav-link" href="/home/administracion">Administrar</a>
+              </li>
+              {%endif%}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{user.username}}</a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
+                  {%if perms.rutina.view_actividad%}
+                  <a class="dropdown-item" href="">Perfil</a>
+                  {%endif%}
+                  <a class="dropdown-item" href="{%url 'logout'%}">Salir</a>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
     <section class="container mt-2">
-        <div class="list-group" >
+        <!-- <div class="list-group" >
         
             <div class="list-group-item active">
                 <div class="row">
@@ -59,9 +115,69 @@
             </div>
         </div>      
         {%endfor%}
-        {%endif%}
+        {%endif%} -->
+        <div class="card" >
+            <div class="list-group-item active">
+                <div class="row">
+                    <div class="col col-sm-11 col-md-11 col-lg-11">
+                        <a href="/home/administracion"><h5><img src="{% static 'img/back_blanco.png'%}"></a>Lista de detalles</h5>
+                        </div>
+                        <form method="POST"> {% csrf_token %}
+                                  
+                </div>
+            </div>
+            <div class="mt-2">
+                <table class="table dataTable" id="mydatatable">
+                  <thead class="card-header">
+                    <tr>
+                      <th width="auto">Categoria</th>
+
+                      <th width="auto">Músculo</th>
+
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {%for detalle in detalles%}
+                    <tr>
+                      <td width="auto">{{detalle.categoria}}</td>
+
+                      <td width="auto">{{detalle.musculo}}</td>
+
+                      {% if perms.rutina.change_detalle and perms.rutina.delete_detalle%}
+                        <td>
+                            <a  href="/rutinas/editar_detalle/{{detalle.id}}"><img src="{%static 'img/edit.png'%}"></a>
+    
+                            <a href="/rutinas/eliminar_detalle/{{detalle.id}}"><img src="{%static 'img/delete.png'%}" alt=""></a>
+                        </td>
+                        {%endif%}
+                    </tr>
+                  {%endfor%}
+                  </tbody>
+                </table>
+            </div>
+        </div>
         
     </section>
-    {%endblock contenido%}
-    {%block pie%}
-    {%endblock pie%}
+ <!-- Bootstrap core JavaScript -->
+  <script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready( function () {
+            $('#mydatatable').DataTable();
+        } );
+        
+    </script>
+</body>
