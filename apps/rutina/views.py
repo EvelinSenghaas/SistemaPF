@@ -139,8 +139,6 @@ def verClase(request, pk):
         return render (request, 'rutina/clases.html', {'alumnos':alumnos, 'profesor':profesor, 'profesor':profesor, 'alumnosPendientes':alumnosPendientes, 'mensaje':mensaje})
         
                 
-        
-
     
 
 def perfil(request, pk):
