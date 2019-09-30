@@ -16,7 +16,12 @@
         <div class="card">
             <div class="card-header alert-primary"><strong>Registro</strong></div>
                 <div class="card-body card-block">
-                    
+                {%if error != None%}
+                <div class="alert alert-danger" role="alert">
+                    <h4 class="alert-heading">Error</h4>
+                        {{error.password_mismatch}}
+                </div>
+                {%endif%}
                         <div class="">
                             <div class="form-group">
                                 <div class="row form-group">

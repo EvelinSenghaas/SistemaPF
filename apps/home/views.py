@@ -467,6 +467,9 @@ def registro(request):
         else:
             for msg in form.error_messages:
                 messages.error(request, f"{msg}: {form.error_messages[msg]}")
+            error = form.error_messages
+                
+            return render(request, 'registro.html', context={'form': form, 'error':error})            
 
     form = NewUserForm
     return render(request, 'registro.html', context={'form': form})
