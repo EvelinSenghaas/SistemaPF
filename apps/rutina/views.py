@@ -421,6 +421,10 @@ class EliminarDetalle(DeleteView):
         else:
             Detalle.objects.get(id = object.id).delete()
         return redirect('/rutinas/administrar_detalles')
+ 
+
+    
+    
     
 #Metodo para calcular el nivel a asignar al alumno
 def calcularNivel(altura, circu, peso, actividad, sexo):

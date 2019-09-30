@@ -147,7 +147,18 @@ def editarDisponibilidad(request, pk):
     return redirect('/home/administracion/')
      
            
-       
+
+class EliminarDisponibilidad(DeleteView):
+    model = DisponibilidadProfesor
+    def post(self,request, pk, *args, **kwargs):
+        object = DisponibilidadProfesor.objects.get(id = pk)
+        if not (DisponibilidadProfesor.objects.filter(id=object.id, ocupado=False).exists()):
+            mensaje = "Usted no puede deshabilitar este horario debido a que el mismo se encuentra ocupado por el alumno/a " + str(object.alumno_id)
+            return render(request, 'rutina/errorEliminacion.html',{'object':object, 'mensaje':mensaje})
+        else:
+            object.estado = not(object.estado)
+            object.save()
+        return redirect('/home/administrar_disponibilidad')       
     
     
 def listadoDisponibilidad (request,pk):
