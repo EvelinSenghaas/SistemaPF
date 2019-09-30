@@ -561,7 +561,8 @@ def agregarDisponibilidad(request, pk):
                     disponibilidad.save()
                     i+=1
                 mensaje = None
-                return redirect('/home/administracion')
+                disponibilidad = DisponibilidadProfesor.objects.filter(estado=True, profesor_id=profesor.id)
+                return render(request, 'rutina/administrarDisponibilidad.html', {'disponibilidad':disponibilidad})
             else:
                 mensaje = "El horario final no puede ser menor al horario de inicio."
                 return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'mensaje':mensaje})
