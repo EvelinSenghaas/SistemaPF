@@ -247,6 +247,7 @@ def agregarActividad(request):
             error = form.errors
             error2 = "No puede seleccionar dos niveles iguales."
             return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error, 'error2':error2})
+        
         if form.is_valid() and form2.is_valid():
                        
             print('sigue')
@@ -286,15 +287,31 @@ def editarActividad(request, pk):
         
         print(nivel_id)
         
+        unico = []
+
+        
+        for x in nivel_id:
+            if x not in unico:
+                unico.append(x)
+                   
+        if len(unico) < 3:
+            error = form.errors
+            error2 = "No puede seleccionar dos niveles iguales."
+            return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error, 'error2':error2})
+        
+        
         if form.is_valid() and form2.is_valid():
             actividad = form.save()
             form2.actividad_id = form
             form2.save(commit=False)
-        i=0
-        while i < len(nivel_id):
-            Repeticion.objects.filter(actividad_id = actividad.id, nivel_id = nivel_id[i]).update(nivel_id = Nivel.objects.get(id = nivel_id[i]))
-            Repeticion.objects.filter(actividad_id = actividad.id, nivel_id = nivel_id[i]).update(repeticionesMinimas = rep_min[i])
-            i+=1
+            i=0
+            while i < len(nivel_id):
+                Repeticion.objects.filter(actividad_id = actividad.id, nivel_id = nivel_id[i]).update(nivel_id = Nivel.objects.get(id = nivel_id[i]))
+                Repeticion.objects.filter(actividad_id = actividad.id, nivel_id = nivel_id[i]).update(repeticionesMinimas = rep_min[i])
+                i+=1
+        else:
+            error = form.errors
+            return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error}) 
             
         return redirect('/rutinas/actividades/') 
     return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel})
