@@ -30,7 +30,6 @@ class Rutinas (PermissionRequiredMixin,ListView):
     queryset = Rutina.objects.all()
     
 
-
 #Listados
 class ListadoRutinas (PermissionRequiredMixin,ListView):
     permission_required = ('rutina.view_rutina')

@@ -66,6 +66,9 @@
                             <div class="col-4">
                                 <b>Horario</b>
                             </div>
+                            <div class="col-4">
+                                <b>Rutina</b>
+                            </div>
                         </div>
                     </div>   
                     {% for alumno in alumnos %}
@@ -76,6 +79,9 @@
                             </div>
                             <div class="col-4">
                                 De <b>{{alumno.horario_inicio}}</b> a <b>{{alumno.horario_final}}</b>hs
+                            </div>
+                            <div class="col-4">
+                                {{alumno.alumno_id.rutina_id}}
                             </div>
                         </div>
                     </div> 
@@ -106,6 +112,9 @@
                         <div class="col-4">
                             <b>Horario</b>
                         </div>
+                        <div class="col-4">
+                            <b>Rutina</b>
+                        </div>
                     </div>
                 </div>   
                 {% for alumno in alumnosPendientes %}
@@ -116,6 +125,9 @@
                         </div>
                         <div class="col-4">
                             De <b>{{alumno.horario_inicio}}</b> a <b>{{alumno.horario_final}}</b>hs
+                        </div>
+                        <div class="col-4">
+                            {{alumno.alumno_id.rutina_id}}
                         </div>
                     </div>
                 </div> 
