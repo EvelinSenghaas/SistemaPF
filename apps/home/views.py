@@ -168,8 +168,7 @@ class EliminarDisponibilidad(DeleteView):
             mensaje = "Usted no puede deshabilitar este horario debido a que el mismo se encuentra ocupado por el alumno/a " + str(object.alumno_id)
             return render(request, 'rutina/errorEliminacion.html',{'object':object, 'mensaje':mensaje})
         else:
-            object.estado = not(object.estado)
-            object.save()
+            DisponibilidadProfesor.objects.get(id = object.id).delete()
         return redirect('/home/administracion')       
     
     
