@@ -495,12 +495,7 @@ def inscribirseRutina(request, pk1, pk2):
     #Identificamos la rutina a la que se quiere inscribir
     rutina = Rutina.objects.get(id = pk2) 
     
-    disponibilidad = DisponibilidadProfesor.objects.filter(profesor_id=rutina.profesor_id, ocupado=False)
-    """dias = []
-    for i in Semana.objects.all():
-        if DisponibilidadProfesor.objects.filter(semana_id=i, ocupado=False).exists():
-            dias.append(i)"""
-            
+    disponibilidad = DisponibilidadProfesor.objects.filter(profesor_id=rutina.profesor_id, ocupado=False, alumno_id = None)
     
        
     if (user.is_staff):
@@ -573,7 +568,7 @@ def inscribirseRutina(request, pk1, pk2):
                     
                     if entrenamiento == 'profesor':
                         for d in disp:
-                            DisponibilidadProfesor.objects.filter(id=int(d)).update(alumno_id=alumno, ocupado=False)
+                            DisponibilidadProfesor.objects.filter(id=int(d)).update(alumno_id=alumno, ocupado=True)
                             
                     grupo = Group.objects.get(name='Alumno') 
                     grupo.user_set.add(user)        

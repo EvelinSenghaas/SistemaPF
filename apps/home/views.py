@@ -166,7 +166,7 @@ def listadoDisponibilidad (request,pk):
     profesor = Profesor.objects.get(user_id=user.id)
     
     if request.method == 'GET':
-        disponibilidad = DisponibilidadProfesor.objects.filter(estado=True, profesor_id=profesor.id)
+        disponibilidad = DisponibilidadProfesor.objects.filter(profesor_id=profesor.id)
         print(disponibilidad)
         return render(request, 'rutina/administrarDisponibilidad.html', {'disponibilidad':disponibilidad})
     else:
