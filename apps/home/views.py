@@ -67,10 +67,17 @@ def editarDisponibilidad(request, pk):
     else:
         peticion = request.POST.copy()
         print(peticion)
-        dias = peticion.pop('dias')
-        diaSelec = disponibilidad.semana_id
         
         form = DisponibilidadForm(request.POST, instance = disponibilidad)
+        try:
+            dias = peticion.pop('dias')
+        except:
+            mensaje = "No ha seleccionado los dias"
+            return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'mensaje':mensaje}) 
+            
+        diaSelec = disponibilidad.semana_id
+        
+        
         
         try:
             inicio = peticion.pop('horario_inicio')
@@ -88,7 +95,13 @@ def editarDisponibilidad(request, pk):
         print(hora_inicio)
         #print(disponibilidad.horario_inicio)
         print(hora_final)
-
+        
+        #Controlamos que no exista esa disponibilidad
+        for d in dias:
+            print(d)
+            if (DisponibilidadProfesor.objects.filter(semana_id=Semana.objects.get(dia=d).id, horario_inicio=hora_inicio, horario_final=hora_final).exists()):
+                mensaje = "La disponibilidad ingresada ya existe."
+                return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'diaSelec':diaSelec, 'mensaje':mensaje})
         
         if form.is_valid():
             form = form.save()
