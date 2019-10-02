@@ -401,42 +401,28 @@ class EliminarRutina(DeleteView):
             object.save()
         return redirect('/rutinas/administrar_rutinas')
     
-class EliminarActividad(DeleteView):
-    model = Actividad
-    def post(self,request, pk, *args, **kwargs):
-        object = Actividad.objects.get(id = pk)
-        if (Rutina.objects.filter(actividad_id=object.id).exists()):
-            mensaje = "Usted no puede borrar " + object.nombre + " porque ya pertenece a una rutina"
-            return render(request, 'rutina/errorEliminacion.html',{'object':object, 'mensaje':mensaje})
-        else:
-            Actividad.objects.get(id = object.id).delete()
-        return redirect('/rutinas/actividades')
+
    
    
-   
-    
-class EliminarDetalle(DeleteView):
-    model = Detalle
-    def post(self,request, pk, *args, **kwargs):
-        object = Detalle.objects.get(id = pk)
-        if (Actividad.objects.filter(detalle_id=object.id).exists()):
-            mensaje = "Usted no puede borrar " + object.musculo + " porque ya pertenece a una actividad"
-            return render(request, 'rutina/errorEliminacion.html',{'object':object, 'mensaje':mensaje})
-        else:
-            Detalle.objects.get(id = object.id).delete()
-        return redirect('/rutinas/administrar_detalles')
+def eliminarActividad(request, pk):
+    actividad = Actividad.objects.get(id=pk)
+    if (Rutina.objects.filter(actividad_id = actividad.id).exists()):
+        print(Rutina.objects.filter(actividad_id = actividad))
+        messages.error(request, 'La actividad no puede eliminarse debido a que forma parte de una rutina.')
+    else:
+        Actividad.objects.get(id = actividad.id).delete()
+        messages.success(request, 'Actividad eliminada con éxito.')
+        
+    return redirect('/rutinas/actividades')
     
     
 def eliminarDetalle(request, pk):
     detalle = Detalle.objects.get(id=pk)
     if (Actividad.objects.filter(detalle_id=detalle.id).exists()):
-            mensaje = "Usted no puede borrar " + detalle.musculo + " porque ya pertenece a una actividad"
             messages.error(request, 'El detalle no puede eliminarse porque ya forma parte de una actividad')
-            a = 1
-            messages.add_message(request, a, 'A serious error occurred.')
     else:
         Detalle.objects.get(id = detalle.id).delete()
-        messages.success(request, 'Detalle eliminado con éxito')
+        messages.success(request, 'Detalle eliminado con éxito.')
         
     return redirect('/rutinas/administrar_detalles')
  
