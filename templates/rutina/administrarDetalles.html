@@ -63,8 +63,20 @@
           </div>
         </div>
       </nav>
+
+
+
     <section class="container mt-2">
 
+
+            {% if messages %}
+              <ul class="alert alert-warning alert-dismissible">
+                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                  {% for message in messages %}
+                  <p {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                  {% endfor %}
+              </ul>    
+            {% endif %}
             <div class="list-group-item active">
                 <div class="row">
                     <div class="col col-sm-11 col-md-11 col-lg-11">
@@ -99,10 +111,35 @@
                         <td>
                             <a  href="/rutinas/editar_detalle/{{detalle.id}}"><img src="{%static 'img/edit.png'%}"></a>
     
-                            <a href="/rutinas/eliminar_detalle/{{detalle.id}}"><img src="{%static 'img/delete.png'%}" alt=""></a>
+                            <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg2{{detalle.id}}">
+                                <img src="{%static 'img/delete.png'%}" alt="">
+                            </a>
                         </td>
                         {%endif%}
                     </tr>
+                    <!-- Modal para eliminar -->
+                      <div class="modal fade bs-example-modal-lg2{{detalle.id}}" id="myModal2{{detalle.id}}" tabindex="-1" role="dialog" aria-hidden="true">
+                          <div class="modal-dialog modal-lg">
+                              <div class="modal-content">
+                                  <div class="modal-header">
+                                      <h4 class="modal-title" id="myModalLabel{{detalle.id}}">Confirmar eliminación</h4>
+                                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                                      
+                                  </div>
+                                  <div class="modal-body">
+                                      <h5>¿Seguro que desea eliminar <strong>{{detalle.musculo}}</strong>?</h5>
+                                      
+                                  </div>
+                                  <div class="modal-footer">
+                                      <a href="/rutinas/eliminar_detalle/{{detalle.id}}">
+                                        <button type="button" class="btn btn-danger" >Confirmar</button>
+                                      </a>
+                                      <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+                                    </div>
+                  
+                              </div>
+                          </div>
+                      </div>
                   {%endfor%}
                   </tbody>
                 </table>
@@ -125,11 +162,19 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <script type="text/javascript" src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    
     <script>
         $(document).ready( function () {
             $('#mydatatable').DataTable();
         } );
         
+    </script>
+    <script>
+        $(document).ready(function(){
+            $('#delete').click(function(){
+                $('#delModal').modal('show');
+            });
+        });
     </script>
     <br>
 </body>
