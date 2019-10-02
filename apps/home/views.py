@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, resolve_url
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login as dj_login, logout, authenticate
 from django.contrib import messages
@@ -16,6 +16,10 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from .models import Profesor, Alumno, FichaAlumno, Semana, DisponibilidadProfesor
 from ..rutina.models import Rutina, Nivel
+
+
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 
 import time
 from datetime import datetime
@@ -42,7 +46,7 @@ class Administrar(PermissionRequiredMixin,TemplateView):
 class PaginaInicial(TemplateView):
     template_name = "home/paginaInicial.html"
     
-    
+#No se usa    
 class EditarDisponibilidad(PermissionRequiredMixin,UpdateView):
     permission_required = 'rutina.change_detalle'
     model = DisponibilidadProfesor
@@ -123,6 +127,7 @@ def editarDisponibilidad(request, pk):
                             i+=1
                         
                     mensaje = None
+                    messages.success(request, "Disponibilidad modificada con éxito.")
                 else:
                     mensaje = "El horario final no puede ser menor al horario de inicio."
                     return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'diaSelec':diaSelec, 'mensaje':mensaje}) 
@@ -145,9 +150,11 @@ def editarDisponibilidad(request, pk):
                             i+=1
                         
                     mensaje = None
+                    messages.success(request, "Disponibilidad modificada con éxito.")
                 else:
                     mensaje = "El horario final no puede ser menor al horario de inicio."
                     return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'diaSelec':diaSelec, 'mensaje':mensaje})
+                
                 
         else:
             error = form.errors
@@ -156,10 +163,10 @@ def editarDisponibilidad(request, pk):
             
 
     
-    return redirect('/home/administracion/')
+    return redirect('/home/administrar_disponibilidad/2')
      
            
-
+#No se usa mas
 class EliminarDisponibilidad(DeleteView):
     model = DisponibilidadProfesor
     def post(self,request, pk, *args, **kwargs):
@@ -170,7 +177,19 @@ class EliminarDisponibilidad(DeleteView):
         else:
             DisponibilidadProfesor.objects.get(id = object.id).delete()
         return redirect('/home/administracion')       
-    
+
+
+def eliminarDisponibilidad(request, pk):
+    disp = DisponibilidadProfesor.objects.get(id = pk)  
+    if not (DisponibilidadProfesor.objects.filter(id=disp.id, ocupado=False).exists()):
+            messages.error(request, "Usted no puede deshabilitar este horario debido a que el mismo se encuentra ocupado por el alumno/a " + str(disp.alumno_id)+".")
+            
+    else:
+        DisponibilidadProfesor.objects.get(id = disp.id).delete()
+        messages.success(request, "Disponibilidad eliminada con éxito.")  
+    return redirect('/home/administrar_disponibilidad/2') 
+
+
     
 def listadoDisponibilidad (request,pk):
     user = User.objects.get(id = pk)
@@ -639,10 +658,12 @@ def agregarDisponibilidad(request, pk):
                     i+=1
                 mensaje = None
                 disponibilidad = DisponibilidadProfesor.objects.filter(estado=True, profesor_id=profesor.id)
+                messages.success(request, "Disponibilidad agregada con éxito.")
                 return render(request, 'rutina/administrarDisponibilidad.html', {'disponibilidad':disponibilidad})
             else:
                 mensaje = "El horario final no puede ser igual o menor al horario de inicio."
                 return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'mensaje':mensaje})
+            
         else:
             error = form.errors
             mensaje = None

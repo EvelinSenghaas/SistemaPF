@@ -1,6 +1,6 @@
 from django.urls import path, re_path
 from django.contrib.auth.decorators import login_required
-from .views import registro, Home, cargarDatosUsuario, Administrar, listadoAlumnos, agregarDisponibilidad, reporte, listadoDisponibilidad, editarDisponibilidad, EliminarDisponibilidad
+from .views import registro, Home, cargarDatosUsuario, Administrar, listadoAlumnos, agregarDisponibilidad, reporte, listadoDisponibilidad, editarDisponibilidad, eliminarDisponibilidad
 
 urlpatterns = [
     path('', login_required(Home.as_view()), name = 'index'),
@@ -13,5 +13,5 @@ urlpatterns = [
     path('administrar_disponibilidad/<int:pk>', login_required(listadoDisponibilidad), name='administrar_disponibilidad'),
     path('editar_disponibilidad/<int:pk>', login_required(editarDisponibilidad), name='editar_disponibilidad'),
     
-    path('eliminar_disponibilidad/<int:pk>', login_required(EliminarDisponibilidad.as_view(success_url="/home/administracion/"))),
+    path('eliminar_disponibilidad/<int:pk>', login_required(eliminarDisponibilidad)),
 ]

@@ -191,7 +191,7 @@ class AgregarDetalle(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
     model = Detalle
     form_class = DetalleForm
     template_name = 'rutina/agregarDetalle.html'
-    success_message = 'Detalle agregado con éxito'
+    success_message = 'Detalle agregado con éxito.'
     succes_name = reverse_lazy('/rutinas/administrar_detalles/')
     
 class AgregarActividad(PermissionRequiredMixin, CreateView):
@@ -378,18 +378,21 @@ class EditarRutina(PermissionRequiredMixin,UpdateView):
     succes_url = reverse_lazy('/rutinas/administrar_rutinas')
     
 
-class EditarActividad(PermissionRequiredMixin,UpdateView):
+class EditarActividad(PermissionRequiredMixin,SuccessMessageMixin, UpdateView):
     permission_required = 'rutina.change_actividad'
     model = Actividad
     template_name = 'rutina/agregarActividad.html'
     form_class = ActividadForm
+    success_message = 'La actividad se modificó con éxito.'
     succes_url = reverse_lazy('/rutinas/actividades/')
+  
     
-class EditarDetalle(PermissionRequiredMixin,UpdateView):
+class EditarDetalle(PermissionRequiredMixin,SuccessMessageMixin, UpdateView):
     permission_required = 'rutina.change_detalle'
     model = Detalle
     template_name = 'rutina/agregarDetalle.html'
     form_class = DetalleForm
+    success_message = 'El detalle se modificó con éxito.'
     succes_url = reverse_lazy('/rutinas/administrar_detalles')
     
 #Eliminar
