@@ -7,6 +7,8 @@
 
 {%block contenido%}
 <body class="container mt-2">
+    <!-- Si el usuario entrena con un profesor -->
+    {%if not alumno.entrenamiento_sistema%}
         <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                     <a href="/home/">Home</a>
@@ -154,6 +156,44 @@
                 <p class="mb-0"><strong><a href="/home/">Volver</a></strong></p>
             </div>
         {%endif%}
+    {%endif%}
+
+
+    <!-- ################################################################################################################################## -->
+
+    <!-- Si el usuario entrena con el sistema -->
+    {%if mensaje == None%}
+    <!-- Si es dia de entrenamiento -->
+    <div class="card active">
+            <div class="card-header alert alert-success"><a href="/home/"><h6><img src="{% static 'img/back_negro.png'%}"></a><strong>Actividades del día</strong></h6>
+            </div>
+            <div class="card-body card-block">
+                <div class="">
+                    <div class="form-group">
+                        <div class="row form-group">
+                                <label style="color:rgb(130, 128, 128)">
+                                    <h6><strong>¡{{alumno.nombre}}, es hora de entrenar!</strong></h6>
+                                    <p>Estas son las actividades que debes realizar hoy.</p>
+                                </label>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col col-md-10">
+                                <div class="card"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    {%else%}
+    <!-- Si no es dia de entrenamiento -->
+    <div class="alert alert-info" role="alert">
+            <h4 class="alert-heading">¡Te mereces un descanso!</h4>
+            <p>{{mensaje}}</p>
+            <hr>
+            <p class="mb-0"><strong><a href="/home/">Volver</a></strong></p>
+        </div>
+    {%endif%}
         
 </body>
 

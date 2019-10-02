@@ -71,60 +71,92 @@ def traducirDia(dia):
     
 def verClase(request, pk):
     user = User.objects.get(id=pk)
+    
+    #si entra un alumno
     if (Alumno.objects.filter(user_id=user.id).exists()):
         alumno = Alumno.objects.get(user_id=user.id)
         profesor = alumno.profesor_id
         
-        
-        if request.method == 'GET':
-            disponibilidad = DisponibilidadProfesor.objects.filter(alumno_id=alumno.id)
-            
-            now = datetime.now()
-            dia = now.strftime("%A")
-            dia = traducirDia(dia)
-            
-            
-            diasAlumno=[]
-            for disp in disponibilidad:
-                diasAlumno.append(Semana.objects.get(dia=disp.semana_id))
-            
-            diasAlumno = sorted(diasAlumno, key=lambda diasAlumno: diasAlumno.numero)
-            print(diasAlumno)
-            
-            clase=None
-            i=0
-            while i< len(diasAlumno):    
-                if dia == diasAlumno[i].dia:
-                    mensaje = None
-                    hora_inicio = DisponibilidadProfesor.objects.get(alumno_id=alumno.id, semana_id=diasAlumno[i]).horario_inicio
-                    hora_final = DisponibilidadProfesor.objects.get(alumno_id=alumno.id, semana_id=diasAlumno[i]).horario_final
-                    
-                    if now.time() < hora_inicio:
-                        clase = "Tienes una clase con " + str(alumno.profesor_id)  + " hoy desde las " + hora_inicio.strftime("%H:%M") + " hasta las " + hora_final.strftime("%H:%M") +"hs."
-                    
-                    if  hora_inicio <= now.time() <= hora_final:
-                        clase = "La clase con " + str(alumno.profesor_id)  + " esta en curso. "
-                    
-                    if now.time() > hora_final:
-                        clase = None
-                        mensaje = "Tu clase con " + str(alumno.profesor_id) + " ya ha terminado."
-                        break
-                    break
-                    
-                if dia != diasAlumno[i].dia:
-                    if i+1 == len(diasAlumno):
-                        mensaje = "Hoy no es día de entrenamiento, tu siguiente clase es el día " + str(diasAlumno[0])
-                    else:
-                        print(diasAlumno[i])
-                        print(diasAlumno[i+1])
-                        if DisponibilidadProfesor.objects.filter(alumno_id = alumno, semana_id = diasAlumno[i+1]):
-                            mensaje = "Hoy no es día de entrenamiento, debes esperar a tu próxima clase"
-                    break
+        #si entrena con un profesor
+        if not alumno.entrenamiento_sistema:
+            if request.method == 'GET':
+                disponibilidad = DisponibilidadProfesor.objects.filter(alumno_id=alumno.id)
                 
-                i+=1
+                now = datetime.now()
+                dia = now.strftime("%A")
+                dia = traducirDia(dia)
+                
+                
+                diasAlumno=[]
+                for disp in disponibilidad:
+                    diasAlumno.append(Semana.objects.get(dia=disp.semana_id))
+                
+                diasAlumno = sorted(diasAlumno, key=lambda diasAlumno: diasAlumno.numero)
+                print(diasAlumno)
+                
+                clase=None
+                i=0
+                while i< len(diasAlumno):    
+                    if dia == diasAlumno[i].dia:
+                        mensaje = None
+                        hora_inicio = DisponibilidadProfesor.objects.get(alumno_id=alumno.id, semana_id=diasAlumno[i]).horario_inicio
+                        hora_final = DisponibilidadProfesor.objects.get(alumno_id=alumno.id, semana_id=diasAlumno[i]).horario_final
+                        
+                        if now.time() < hora_inicio:
+                            clase = "Tienes una clase con " + str(alumno.profesor_id)  + " hoy desde las " + hora_inicio.strftime("%H:%M") + " hasta las " + hora_final.strftime("%H:%M") +"hs."
+                        
+                        if  hora_inicio <= now.time() <= hora_final:
+                            clase = "La clase con " + str(alumno.profesor_id)  + " esta en curso. "
+                        
+                        if now.time() > hora_final:
+                            clase = None
+                            mensaje = "Tu clase con " + str(alumno.profesor_id) + " ya ha terminado."
+                            break
+                        break
+                         
+                    else:
+                        mensaje = "Hoy no es día de entrenamiento, debes esperar a tu próxima clase"
                     
-            return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje, 'disponibilidad':disponibilidad, 'clase':clase, 'profesor':profesor})
+                    i+=1
+                        
+                return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje, 'disponibilidad':disponibilidad, 'clase':clase, 'profesor':profesor})
         
+        #Si entrena por el sistema    
+        else:
+            if request.method == 'GET':
+                
+                #Obtengo el dia de hoy
+                now = datetime.now()
+                dia = now.strftime("%A")
+                dia = traducirDia(dia)
+                print(dia)
+                
+                diasAlumno=[]
+                for d in alumno.semana_id.all():
+                    diasAlumno.append(Semana.objects.get(id=d.id))
+                
+                diasAlumno = sorted(diasAlumno, key=lambda diasAlumno: diasAlumno.numero)
+                print(diasAlumno)
+                
+                i=0
+                while i < len(diasAlumno):
+                    print(str(dia) +' ' + str(diasAlumno[i].dia))
+                    if str(dia) == str(diasAlumno[i].dia):
+                        mensaje = None
+                        return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje})  
+                    if str(dia) != str(diasAlumno[i].dia):
+                        mensaje = "Hoy no es tu día de entrenamiento, vuelve el "
+                        return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje})  
+                        break
+                    
+                    i+=1
+                        
+                        
+                return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje})        
+                        
+    
+    
+    #si entra un profesor    
     if (Profesor.objects.filter(user_id=pk).exists()):
         profesor = Profesor.objects.get(user_id=user.id)
         if request.method == 'GET':
