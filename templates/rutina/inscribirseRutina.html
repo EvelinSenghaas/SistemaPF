@@ -28,6 +28,12 @@
 <div class="container mt-2">
     
     <div class="card">
+            {%if error != None %}
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading">Error de inscripción</h4>
+                {{error}}                            
+            </div>
+            {%endif%}
             <div class="card-header alert-primary"><strong>Inscribirse a {{rutina}}</strong></div>
         <div class="alert alert-light">
             <p>Por favor selecciona la forma en la que quieres realizar la rutina</p>
@@ -181,10 +187,10 @@
                                                     <div class="row form-group">
                                                         <div class="col col-md-3">Días disponibles</div>
                                                         <div class="col-12 col-md-9">
-                                                            <select name="disponibilidad" class="selectpicker" multiple data-live-search="true">
-                                                                {%for disp in disponibilidad%}
-                                                                <option value="{{disp.id}}">
-                                                                    {{disp}}
+                                                            <select name="dias" class="selectpicker" multiple data-live-search="true">
+                                                                {%for d in alumno.semana_id%}
+                                                                <option value="{{dia.id}}">
+                                                                    {{d}}
                                                                 </option>
                                                                 {%endfor%}
                                                             </select>

@@ -158,15 +158,27 @@ def verClase(request, pk):
 
 def perfil(request, pk):
     if (Alumno.objects.filter(user_id=pk).exists()):
-        alumno = Alumno.objects.get(user_id=pk)
-        edad = alumno.edad(alumno.fecha_nac)
-        ficha = FichaAlumno.objects.get(alumno_id=alumno.id)
-        mensaje = None
+        if Alumno.objects.get(user_id = pk).entrenamiento_sistema:
+            print('entrena por sistema')
+            alumno = Alumno.objects.get(user_id=pk)
+            print(alumno)
+            edad = alumno.edad(alumno.fecha_nac)
+            ficha = FichaAlumno.objects.get(alumno_id=alumno.id)
+            mensaje = None
+            disponibilidad = alumno.semana_id.all()
+
+        else:
+            alumno = Alumno.objects.get(user_id=pk)
+            edad = alumno.edad(alumno.fecha_nac)
+            ficha = FichaAlumno.objects.get(alumno_id=alumno.id)
+            mensaje = None
+            disponibilidad = DisponibilidadProfesor.objects.filter(alumno_id = alumno.id)
+            
     else:
         mensaje = "El alumno no existe"
         return redirect('/home/')
     
-    return render (request, 'home/verPerfil.html', { 'alumno': alumno, 'mensaje':mensaje, 'ficha':ficha, 'edad':edad})
+    return render (request, 'home/verPerfil.html', { 'alumno': alumno, 'mensaje':mensaje, 'ficha':ficha, 'edad':edad, 'disponibilidad':disponibilidad})
     
     
 def verRutina(request, pk):
@@ -533,7 +545,7 @@ def inscribirseRutina(request, pk1, pk2):
     rutina = Rutina.objects.get(id = pk2) 
     
     disponibilidad = DisponibilidadProfesor.objects.filter(profesor_id=rutina.profesor_id, ocupado=False, alumno_id = None)
-    
+    dias = Semana.objects.all()
        
     if (user.is_staff):
         mensaje = "Usted pertenece al staff, por lo que no puede inscribirse a una rutina"
@@ -566,7 +578,22 @@ def inscribirseRutina(request, pk1, pk2):
                 peso = peticion.pop('peso')
                 peso = peso[0]
                 
-                disp = peticion.pop('disponibilidad')
+                if entrenamiento == "profesor":
+                    try:
+                        disp = peticion.pop('disponibilidad')
+                    except:
+                        
+                        error = "\n Debe seleccionar los dias y horarios en los que desea entrenar."
+                        print(error)
+                        return render (request, 'rutina/inscribirseRutina.html', {'ficha':fichaForm, 'alumno':alumnoForm, 'rutina':rutina, 'disponibilidad':disponibilidad, 'dias':dias, 'error':error})
+                else:
+    
+                    try:
+                        dias = peticion.pop('dias')
+                    except:
+                        
+                        error = "\n Debe seleccionar los dias y horarios en los que desea entrenar."
+                        return render (request, 'rutina/inscribirseRutina.html', {'ficha':fichaForm, 'alumno':alumnoForm, 'rutina':rutina, 'disponibilidad':disponibilidad, 'dias':dias, 'error':error})
                 
                 
                 
@@ -599,9 +626,14 @@ def inscribirseRutina(request, pk1, pk2):
                     else:
                         nivel = calcularNivel(altura, circu, peso, actividad, sexo)
                         nivel = nivel.capitalize()
+                        print(nivel)
                         alumno.nivel_id = Nivel.objects.get(nombre = nivel)
-                        alumno.entrenamiento_sistema = True                   
-                    alumno.save()   
+                        alumno.entrenamiento_sistema = True       
+                    
+                    alumno.save() 
+                    if entrenamiento == 'sistema':
+                        alumno.semana_id.set(dias)  
+                        
                     
                     if entrenamiento == 'profesor':
                         for d in disp:
@@ -615,7 +647,7 @@ def inscribirseRutina(request, pk1, pk2):
             else:
                 fichaForm = FichaForm()
                 alumnoForm = AlumnoForm()
-    return render (request, 'rutina/inscribirseRutina.html', {'ficha':fichaForm, 'alumno':alumnoForm, 'rutina':rutina, 'disponibilidad':disponibilidad})
+    return render (request, 'rutina/inscribirseRutina.html', {'ficha':fichaForm, 'alumno':alumnoForm, 'rutina':rutina, 'disponibilidad':disponibilidad, 'dias':dias})
     return redirect ('/rutinas/')
     
 """  

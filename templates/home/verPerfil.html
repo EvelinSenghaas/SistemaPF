@@ -226,6 +226,42 @@
                                         </div>
                                     {%endif%}
 
+                                    {%if alumno.entrenamiento_sistema != True%}
+                                    <div class="card-body">
+                                            <div class="form-group">
+                                                <div class="row form-group">
+                                                    <div class="col col-md-3"><strong>Horarios</strong></div>
+                                                    <div class="col col-auto">
+                                                        
+                                                        <label style="color:rgb(130, 128, 128)">
+                                                            <ul class="list-group">
+                                                                {%for disp in disponibilidad%}
+                                                                <li class="list-group-item">{{disp}}</li>
+                                                                {%endfor%}
+                                                            </ul></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {%endif%}
+                                    {% if alumno.entrenamiento_sistema == True%}
+                                    <div class="card-body">
+                                            <div class="form-group">
+                                                <div class="row form-group">
+                                                    <div class="col col-md-3"><strong>Dias de entrenamiento</strong></div>
+                                                    <div class="col col-auto">
+                                                        
+                                                        <label style="color:rgb(130, 128, 128)">
+                                                            <ul class="list-group">
+                                                                {%for dia in disponibilidad%}
+                                                                <li class="list-group-item">{{dia}}</li>
+                                                                {%endfor%}
+                                                            </ul></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {%endif%}
                             </div>
                           </div>
                         </div>
