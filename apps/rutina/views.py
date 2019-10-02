@@ -15,6 +15,7 @@ from django.http import HttpResponse
 from django.core import serializers
 
 from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 
 
 from django.utils import timezone
@@ -185,11 +186,12 @@ def verActividad(request, pk):
        
 
 #Agregar    
-class AgregarDetalle(PermissionRequiredMixin, CreateView):
+class AgregarDetalle(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
     permission_required = 'rutina.add_detalle'
     model = Detalle
     form_class = DetalleForm
     template_name = 'rutina/agregarDetalle.html'
+    success_message = 'Detalle agregado con éxito'
     succes_name = reverse_lazy('/rutinas/administrar_detalles/')
     
 class AgregarActividad(PermissionRequiredMixin, CreateView):
