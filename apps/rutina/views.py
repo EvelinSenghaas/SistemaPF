@@ -88,12 +88,16 @@ def verClase(request, pk):
             for disp in disponibilidad:
                 diasAlumno.append(Semana.objects.get(dia=disp.semana_id))
             
+            diasAlumno = sorted(diasAlumno, key=lambda diasAlumno: diasAlumno.numero)
+            print(diasAlumno)
+            
             clase=None
-            for diaAlumno in diasAlumno:    
-                if dia == diaAlumno.dia:
+            i=0
+            while i< len(diasAlumno):    
+                if dia == diasAlumno[i].dia:
                     mensaje = None
-                    hora_inicio = DisponibilidadProfesor.objects.get(alumno_id=alumno.id, semana_id=diaAlumno).horario_inicio
-                    hora_final = DisponibilidadProfesor.objects.get(alumno_id=alumno.id, semana_id=diaAlumno).horario_final
+                    hora_inicio = DisponibilidadProfesor.objects.get(alumno_id=alumno.id, semana_id=diasAlumno[i]).horario_inicio
+                    hora_final = DisponibilidadProfesor.objects.get(alumno_id=alumno.id, semana_id=diasAlumno[i]).horario_final
                     
                     if now.time() < hora_inicio:
                         clase = "Tienes una clase con " + str(alumno.profesor_id)  + " hoy desde las " + hora_inicio.strftime("%H:%M") + " hasta las " + hora_final.strftime("%H:%M") +"hs."
@@ -107,8 +111,17 @@ def verClase(request, pk):
                         break
                     break
                     
-                if dia != diaAlumno.dia:
-                    mensaje = "Hoy no es día de entrenamiento, debes esperar para tu siguiente clase "
+                if dia != diasAlumno[i].dia:
+                    if i+1 == len(diasAlumno):
+                        mensaje = "Hoy no es día de entrenamiento, tu siguiente clase es el día " + str(diasAlumno[0])
+                    else:
+                        print(diasAlumno[i])
+                        print(diasAlumno[i+1])
+                        if DisponibilidadProfesor.objects.filter(alumno_id = alumno, semana_id = diasAlumno[i+1]):
+                            mensaje = "Hoy no es día de entrenamiento, debes esperar a tu próxima clase"
+                    break
+                
+                i+=1
                     
             return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje, 'disponibilidad':disponibilidad, 'clase':clase, 'profesor':profesor})
         
@@ -347,7 +360,7 @@ def agregarRutina(request, pk):
             actividades = peticion.pop('actividad_id')
         except:
             error = rutinaForm.errors
-            error = "\n Debe seleccionar las actividades"
+            error = error + "\n Debe seleccionar las actividades"
             return render(request, 'rutina/agregarRutina.html',{'rutinaForm':rutinaForm, 'error':error})
         
         print(request.POST)

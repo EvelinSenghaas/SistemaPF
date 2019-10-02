@@ -53,14 +53,16 @@ class Profesor(models.Model):
 class Semana(models.Model):
     id = models.AutoField(primary_key = True, null=False)
     dia = models.CharField(max_length = 10, blank = False, null = False)
+    numero = models.IntegerField(primary_key = False, null=True, blank = True)
     
     class Meta:
         verbose_name = 'Semana'
         verbose_name_plural = 'Semana'
-        ordering = ['dia']
+        ordering = ['numero']
         
     def __str__(self):
         return self.dia
+
 
 
 
@@ -68,7 +70,7 @@ class Semana(models.Model):
 class Alumno(models.Model):
     id = models.AutoField(primary_key = True, null=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    nombre = models.CharField(max_length = 60, blank = False, null = True)
+    nombre = models.CharField(max_length = 60, blank = False, null = True, verbose_name="Nombre")
     apellido = models.CharField(max_length = 60, blank = False, null = True)
     fecha_nac = models.DateField(blank = False, null = True)
     email = models.EmailField(max_length = 70, blank = False, null = False)
@@ -77,6 +79,7 @@ class Alumno(models.Model):
     rutina_id = models.ForeignKey('rutina.Rutina', related_name='rutina', on_delete=models.CASCADE, verbose_name="Rutina")
     profesor_id = models.ForeignKey(Profesor, on_delete=models.CASCADE, verbose_name="Profesor")
     nivel_id = models.ForeignKey('rutina.Nivel', related_name='rutina', on_delete=models.CASCADE, verbose_name="Nivel", null=True, blank=True)
+    semana_id = models.ManyToManyField(Semana, verbose_name="Dias", null=True, blank=True)
     
     class Meta:
         verbose_name = 'Alumno'

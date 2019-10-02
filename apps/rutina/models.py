@@ -63,7 +63,7 @@ class Repeticion(models.Model):
     
 class Rutina(models.Model):
     id = models.AutoField(primary_key = True)
-    nombre = models.CharField(max_length = 60, blank = False, null = False, unique=True)
+    nombre = models.CharField(max_length = 60, blank = False, null = False, unique=True, verbose_name="Nombre")
     descripcion = models.TextField(blank = False, null = False)
     estado = models.BooleanField(default=True)
     actividad_id = models.ManyToManyField(Actividad, verbose_name="Actividad")
