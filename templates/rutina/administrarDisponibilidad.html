@@ -66,12 +66,22 @@
       </nav>
     <section class="container mt-2">
         {% if messages %}
-        <ul class="alert alert-warning alert-dismissible">
-            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        
             {% for message in messages %}
-            <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+            {% if message.tags == 'success'%}
+            <ul class="alert alert-success alert-dismissible">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+            </ul> 
+            {%endif%}
+            {% if message.tags == 'error'%}
+            <ul class="alert alert-danger alert-dismissible">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+            </ul> 
+            {%endif%}
             {% endfor %}
-        </ul>    
+           
       {% endif %}
         <div class="card" >
             <div class="list-group-item active">
@@ -178,6 +188,6 @@
               $('#delModal').modal('show');
           });
       });
-    </script>
+  </script>
     <br>
 </body>

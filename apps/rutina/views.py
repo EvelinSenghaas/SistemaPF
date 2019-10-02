@@ -358,6 +358,7 @@ def agregarRutina(request, pk):
             for act in actividades:
                 rutina.actividad_id.add(act)
             rutina.save()
+            messages.success(request, "La rutina se agregó correctamente.")
             return redirect ('/rutinas/administrar_rutinas/')
         else:
             print('entra al else')
@@ -370,11 +371,12 @@ def agregarRutina(request, pk):
     return redirect ('/rutinas/administrar_rutinas/')
  
 #Editar    
-class EditarRutina(PermissionRequiredMixin,UpdateView):
+class EditarRutina(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'rutina.change_rutina'
     model = Rutina
     template_name = 'rutina/agregarRutina.html'
     form_class = RutinaForm
+    success_message = 'La rutina se modificó correctamente.'
     succes_url = reverse_lazy('/rutinas/administrar_rutinas')
     
 
@@ -406,6 +408,16 @@ class EliminarRutina(DeleteView):
         else:
             object.estado = not(object.estado)
             object.save()
+        return redirect('/rutinas/administrar_rutinas')
+    
+def eliminarRutina(request, pk):
+    rutina = Rutina.objects.get(id = pk)
+    if (Alumno.objects.filter(rutina_id=rutina.id).exists()):
+            messages.error(request, "Usted no puede ocultar la rutina " + rutina.nombre + " debido a que la misma cuenta con alumnos inscriptos")
+    else:
+        messages.success(request, "El estado de la rutina se cambió correctamente.")
+        rutina.estado = not(rutina.estado)
+        rutina.save()
         return redirect('/rutinas/administrar_rutinas')
     
 

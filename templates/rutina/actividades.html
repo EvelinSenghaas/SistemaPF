@@ -26,13 +26,23 @@
     <section class="container mt-2">
 
             {% if messages %}
-            <ul class="alert alert-warning alert-dismissible">
-                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                {% for message in messages %}
-                <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
-                {% endfor %}
-            </ul>    
-          {% endif %}
+        
+            {% for message in messages %}
+            {% if message.tags == 'success'%}
+            <ul class="alert alert-success alert-dismissible">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+            </ul> 
+            {%endif%}
+            {% if message.tags == 'error'%}
+            <ul class="alert alert-danger alert-dismissible">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+            </ul> 
+            {%endif%}
+            {% endfor %}
+           
+      {% endif %}
         <div class="list-group" >
         
             <div class="list-group-item active">
@@ -82,6 +92,7 @@
 
                     <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg2{{actividad.id}}">
                             <img src="{%static 'img/delete.png'%}" alt="">
+                    </a>
                 </div>
                 {%endif%}
             </div>
