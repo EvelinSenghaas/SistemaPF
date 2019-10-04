@@ -424,6 +424,7 @@ def listadoAlumnos(request, pk):
         
         ruti = peticion.pop('rutinas')
         ruti = ruti[0]
+    
         
         
         entrenamiento = peticion.pop('entrenamiento')
