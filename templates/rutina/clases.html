@@ -156,12 +156,13 @@
                 <p class="mb-0"><strong><a href="/home/">Volver</a></strong></p>
             </div>
         {%endif%}
-    {%endif%}
+    
 
 
     <!-- ################################################################################################################################## -->
-
+    
     <!-- Si el usuario entrena con el sistema -->
+    {%else%}
     {%if mensaje == None%}
     <!-- Si es dia de entrenamiento -->
     <div class="card active">
@@ -193,6 +194,7 @@
             <hr>
             <p class="mb-0"><strong><a href="/home/">Volver</a></strong></p>
         </div>
+    {%endif%}
     {%endif%}
         
 </body>
