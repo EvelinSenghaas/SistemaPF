@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Rutina, Actividad, Detalle, Nivel, Repeticion
+from .models import Rutina, Actividad, Detalle, Nivel, Repeticion, EvaluacionNivel, Sesion
 from ..home.models import Alumno, FichaAlumno, Profesor, Semana, DisponibilidadProfesor
 from ..home.forms import AlumnoForm, FichaForm
 from .forms import DetalleForm, ActividadForm, RutinaForm, NivelForm, RepeticionForm
@@ -76,6 +76,8 @@ def verClase(request, pk):
     if (Alumno.objects.filter(user_id=user.id).exists()):
         alumno = Alumno.objects.get(user_id=user.id)
         profesor = alumno.profesor_id
+        rutina = alumno.rutina_id
+        print('rutina: ' +rutina.nombre)
         
         #si entrena con un profesor
         if not alumno.entrenamiento_sistema:
@@ -142,9 +144,43 @@ def verClase(request, pk):
                 while i < len(diasAlumno):
                     print(str(dia) +' ' + str(diasAlumno[i].dia))
                     if str(dia) == str(diasAlumno[i].dia):
+                        #Si entra aca es porque hoy SI es el dia de entrenamiento
                         mensaje = None
-                        return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje})  
+                        
+                        if (Sesion.objects.filter(alumno_id = alumno).exists()):
+                            #Ya tiene sesiones, por lo tanto, se debe comparar actividades anteriores y la cantidad de sesiones faltantes para recalcular el nivel
+                            pass
+                        else:
+                            
+                            actividades = rutina.actividad_id.all()
+                            print('actividades: ' +str(actividades.all()))
+                            actividadesARealizar = []
+                            repeticiones = []
+                            trenSuperior = False
+                            trenInferior = False
+                            for acti in actividades.all():
+                                for det in acti.detalle_id.all():
+                                    if (det.categoria == "Tren Superior" and trenSuperior == False):
+                                        print('Entra en tren superior')
+                                        actividadesARealizar.append(acti)
+                                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                                        trenSuperior = True
+                                        break
+                                    if (det.categoria == "Tren inferior" and trenInferior == False):
+                                        print('Entra en tren inferior')
+                                        actividadesARealizar.append(acti)
+                                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                                        print(repeticiones)
+                                        trenInferior = True
+                                        break
+
+                        return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje, 'actividadesARealizar':actividadesARealizar, 'repeticiones':repeticiones}) 
+                    
+                    
+                    
+                     
                     if str(dia) != str(diasAlumno[i].dia):
+                        #Si entra aca es porque hoy NO es el dia de entrenamiento
                         mensaje = "Hoy no es tu día de entrenamiento, vuelve el "
                         return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje})  
                         break

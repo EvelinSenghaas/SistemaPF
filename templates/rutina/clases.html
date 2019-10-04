@@ -172,14 +172,43 @@
                 <div class="">
                     <div class="form-group">
                         <div class="row form-group">
+                            <div class="col col-md-12">
                                 <label style="color:rgb(130, 128, 128)">
                                     <h6><strong>¡{{alumno.nombre}}, es hora de entrenar!</strong></h6>
-                                    <p>Estas son las actividades que debes realizar hoy.</p>
+                                    <p>Estas son las actividades que debes realizar hoy</p>
                                 </label>
+                            </div>
                         </div>
                         <div class="row form-group">
-                            <div class="col col-md-10">
-                                <div class="card"></div>
+                            <div class="col col-sm-12 col-md-12 col-lg-12">
+                                    {%for acti in repeticiones%}
+                                    <div id="accordion"> 
+                                    <div class="card">
+                                        <div class="card-header" id="headingTwo">
+                                          <h5 class="mb-0">
+                                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                              <strong>{{acti.actividad_id.nombre}}</strong>
+                                            </button>
+                                          </h5>
+                                        </div>
+                                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                                          <div class="row card-body">
+                                                <div class="col col-sm-4 col-md-2 col-lg-2"><b>Descripción</b></div>  
+                                            <div class="col col-sm-8 col-md-10 col-lg-10">{{acti.actividad_id.descripcion}}</div>
+                                          </div>
+                                          <div class="row card-body">
+                                            <div class="col col-sm-4 col-md-2 col-lg-2"><b>Repeticiones</b></div>  
+                                            <div class="col col-sm-8 col-md-10 col-lg-10">{{acti.repeticionesMinimas}}</div>
+                                          </div>
+                                          <div class="row card-body">
+                                            <div class="col col-sm-4 col-md-2 col-lg-2"><b>Explicación</b></div>  
+                                            <div class="col col-sm-8 col-md-10 col-lg-10"></div>
+                                        </div>
+                                        </div>
+                                      </div>
+                                    </div>   
+                                        
+                                    {%endfor%}
                             </div>
                         </div>
                     </div>
