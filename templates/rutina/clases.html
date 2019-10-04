@@ -184,14 +184,15 @@
                                     {%for acti in repeticiones%}
                                     <div id="accordion"> 
                                     <div class="card">
-                                        <div class="card-header" id="headingTwo">
+                                        <div class="card-header" id="">
                                           <h5 class="mb-0">
-                                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                              
+                                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#y{{acti.repeticionesMinimas}}" aria-expanded="false" aria-controls="collapseTwo">
                                               <strong>{{acti.actividad_id.nombre}}</strong>
                                             </button>
                                           </h5>
                                         </div>
-                                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                                        <div id="y{{acti.repeticionesMinimas}}" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                                           <div class="row card-body">
                                                 <div class="col col-sm-4 col-md-2 col-lg-2"><b>Descripción</b></div>  
                                             <div class="col col-sm-8 col-md-10 col-lg-10">{{acti.actividad_id.descripcion}}</div>
@@ -206,8 +207,7 @@
                                         </div>
                                         </div>
                                       </div>
-                                    </div>   
-                                        
+                                    </div>                                          
                                     {%endfor%}
                             </div>
                         </div>
