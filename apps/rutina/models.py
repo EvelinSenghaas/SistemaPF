@@ -53,6 +53,7 @@ class Actividad(models.Model):
     id = models.AutoField(primary_key = True)
     nombre = models.CharField(max_length = 60, blank = False, null = False, unique=True)
     descripcion = models.TextField(blank = False, null = True)
+    gif = models.ImageField(upload_to="gif_actividad", null=True, blank=True)
     detalle_id = models.ManyToManyField(Detalle, verbose_name="Detalle")
     estado = models.BooleanField(default=True)
     class Meta:

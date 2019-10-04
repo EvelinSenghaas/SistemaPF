@@ -19,6 +19,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import logout_then_login
 from apps.home.views import Home, Login, registro, logoutUsuario, PaginaInicial
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,3 +32,6 @@ urlpatterns = [
     path('logout/', login_required(logoutUsuario), name='logout'),
     path('', PaginaInicial.as_view(),  name = 'pag_inicial'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
