@@ -94,3 +94,20 @@ class Rutina(models.Model):
     def id(self):
         return self.id
     
+class Sesion(models.Model):
+    id = models.AutoField(primary_key = True)
+    alumno_id = models.ForeignKey('home.Alumno', related_name='homeAS', on_delete=models.CASCADE)
+    fechaSesion = models.DateField(blank = False, null = True, verbose_name="Fecha de la sesion")
+    actividad_id = models.ForeignKey(Actividad, verbose_name="Actividad", on_delete=models.CASCADE)
+    rutina_id = models.ForeignKey(Rutina, verbose_name="Rutina", on_delete=models.CASCADE)
+    profesor_id = models.ForeignKey('home.Profesor', related_name='homePS', on_delete=models.CASCADE)
+    
+    class Meta:
+        verbose_name = 'Sesion'
+        verbose_name_plural = 'Sesion'
+        ordering = ['fechaSesion']
+    
+    def __str__ (self):
+        return self.alumno_id.nombre + ' '+self.alumno_id.apellido+ ' (' + str(self.fechaSesion)+ ')'
+    
+    
