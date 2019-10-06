@@ -266,6 +266,7 @@ def verActividad(request, pk):
     actividad = Actividad.objects.get(id = pk)
     detalles = []
     det = Actividad.objects.values_list('detalle_id').filter(id=pk)
+    print(det)
     repe =  Repeticion.objects.values_list('nivel_id','repeticionesMinimas').filter(actividad_id = pk)
     repeticiones ={}
     
@@ -330,7 +331,17 @@ def agregarActividad(request):
         peticion2 = request.FILES.copy()
         print(peticion2)
         print(peticion)
+        
+        
         nivel_id = peticion.pop('nivel_id')
+        
+        
+        try:
+            detalles = peticion.pop('detalle_id')
+        except:         
+            error = "\n Debe seleccionar los detalles"
+            return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error})
+        
         
         
         rep_min = peticion.pop('repeticionesMinimas')
@@ -354,8 +365,9 @@ def agregarActividad(request):
             print('sigue')
             
             
-            actividad = form.save(commit = False)
+            actividad = form.save()
             actividad.gif = request.FILES.get('archivo')
+            actividad.detalle_id.set(detalles)
             actividad.save()
             repeticion = form2.save(commit=False)
             acti = Actividad.objects.get(id=actividad.id)  
@@ -388,6 +400,14 @@ def editarActividad(request, pk):
         form2 = RepeticionForm(request.POST)
         
         peticion = request.POST.copy()
+        
+        try:
+            detalles = peticion.pop('detalle_id')
+        except:         
+            error = "\n Debe seleccionar los detalles"
+            return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error})
+        
+        
         nivel_id = peticion.pop('nivel_id')
         rep_min = peticion.pop('repeticionesMinimas')
         
@@ -409,6 +429,7 @@ def editarActividad(request, pk):
         if form.is_valid() and form2.is_valid():
             actividad = form.save(commit = False)
             actividad.gif = request.FILES.get('archivo')
+            actividad.detalle_id.set(detalles)
             actividad.save()
             form2.actividad_id = form
             form2.save(commit=False)
