@@ -14,9 +14,11 @@
                         <div class="form-group">
                             <div class="row form-group">
                                 <div class="col col-md-19">{{actividad.descripcion}}</div>
+                                {%if actividad.gif%}
                                 <div class=" card col col-md-3">
                                     Gif explicativo<img src="/media/{{actividad.gif}}" alt="" width="auto" height="auto">
                                 </div>
+                                {%endif%}
                             </div>
                             
                         </div>

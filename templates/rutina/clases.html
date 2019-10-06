@@ -201,10 +201,12 @@
                                             <div class="col col-sm-4 col-md-2 col-lg-2"><b>Repeticiones</b></div>  
                                             <div class="col col-sm-8 col-md-10 col-lg-10">{{acti.repeticionesMinimas}}</div>
                                           </div>
+                                          {%if acti.actividad_id.gif%}
                                           <div class="row card-body">
                                             <div class="col col-sm-4 col-md-2 col-lg-2"><b>Explicación</b></div>  
                                             <div class="col col-sm-8 col-md-10 col-lg-10"><img src="/media/{{acti.actividad_id.gif}}" alt="" width="auto" height="auto"></div>
                                         </div>
+                                        {%endif%}
                                         </div>
                                       </div>
                                     </div>                                          
