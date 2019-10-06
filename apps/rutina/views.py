@@ -13,6 +13,8 @@ import operator
 from django.contrib.auth.models import Group
 from django.http import HttpResponse
 from django.core import serializers
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
@@ -321,10 +323,13 @@ def agregarActividad(request):
     nivel = Nivel.objects.all() 
     error = None
     if request.method == 'POST':
-        form = ActividadForm(request.POST)
+        form = ActividadForm(request.POST, request.FILES)
         form2 = RepeticionForm(request.POST)
         
         peticion = request.POST.copy()
+        peticion2 = request.FILES.copy()
+        print(peticion2)
+        print(peticion)
         nivel_id = peticion.pop('nivel_id')
         
         
@@ -347,7 +352,11 @@ def agregarActividad(request):
         if form.is_valid() and form2.is_valid():
                        
             print('sigue')
-            actividad = form.save()
+            
+            
+            actividad = form.save(commit = False)
+            actividad.gif = request.FILES.get('archivo')
+            actividad.save()
             repeticion = form2.save(commit=False)
             acti = Actividad.objects.get(id=actividad.id)  
             i=0
@@ -398,7 +407,9 @@ def editarActividad(request, pk):
         
         
         if form.is_valid() and form2.is_valid():
-            actividad = form.save()
+            actividad = form.save(commit = False)
+            actividad.gif = request.FILES.get('archivo')
+            actividad.save()
             form2.actividad_id = form
             form2.save(commit=False)
             i=0

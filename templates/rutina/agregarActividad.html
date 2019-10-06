@@ -22,7 +22,7 @@
                             {%endif%}
                         </div>
                     
-                    <form method="POST">
+                    <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                             <div class="form-group">
                                 <div class="row form-group">
@@ -34,6 +34,16 @@
                                 <div class="row form-group">
                                     <div class="col col-md-3">{{form.descripcion.label}}</div>
                                     <div class="col-12 col-md-9">{{form.descripcion}}</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row form-group">
+                                    <div class="col col-md-3">Gif explicativo</div>
+                                    <div class="col-12 col-md-9">
+                                        <div class="form-group">
+                                            <input type="file" class="form-control-file" id="archivo" name="archivo">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
