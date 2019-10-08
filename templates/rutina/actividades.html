@@ -15,7 +15,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link href=" {% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet">
 
     <title>Actividades</title>
 </head>
@@ -58,47 +58,39 @@
                 </div>
             </div>
         </div>
-        <div class="card-header">
-            <div class="row">
-                <div class="col-3">
-                    <b>Nombre</b>
-                </div>
-                <div class="col-7">
-                    <b>Descripción</b>
-                </div>
-                {% if perms.rutina.change_actividad and perms.rutina.delete_actividad%}
-                <div class="col-0">
-                    <b>Acciones</b>
-                </div>
-        
-                {%endif%}
-            </div>
-        </div>   
-        {% if perms.rutina.view_actividad%}
-        {% for actividad in actividades %}
-        <div class="list-group-item">
-            <div class="row">
-                <div class="col-3">
-                    <a href="/rutinas/ver_actividad/{{actividad.id}}">{{actividad.nombre}}</a>
-                </div>
-                <div class="col-7">
-                    {{actividad.descripcion}}
-                </div>
-                {% if perms.rutina.change_actividad and perms.rutina.delete_actividad%}
-                <div class="col-0">
+
+    <div class="mt-2">
+        <table class="table dataTable" id="mydatatable">
+          <thead class="card-header">
+            <tr>
+              <th width="auto">Nombre</th>
+
+              <th width="auto">Descripcion</th>
+
+              {% if perms.rutina.change_actividad and perms.rutina.delete_actividad%}
+              <th>Acciones</th>
+              {%endif%}
+            </tr>
+          </thead>
+          <tbody>
+          {%for actividad in actividades%}
+            <tr>
+              <td width="250"><a href="/rutinas/ver_actividad/{{actividad.id}}">{{actividad.nombre}}</a></td>
+
+              <td width="auto">{{actividad.descripcion}}</td>
+
+              {% if perms.rutina.change_actividad and perms.rutina.delete_actividad%}
+                <td>
                     <a  href="/rutinas/editar_actividad/{{actividad.id}}"><img src="{%static 'img/edit.png'%}"></a>
 
-                    <!-- <a href="/rutinas/eliminar_actividad/{{actividad.id}}"><img src="{%static 'img/delete.png'%}" alt=""></a> -->
-
                     <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg2{{actividad.id}}">
-                            <img src="{%static 'img/delete.png'%}" alt="">
-                    </a>
-                </div>
+                        <img src="{%static 'img/delete.png'%}" alt="">
+                </a>
+                </td>
                 {%endif%}
-            </div>
-        </div>      
-        <!-- Modal para eliminar -->
-        <div class="modal fade bs-example-modal-lg2{{actividad.id}}" id="myModal2{{actividad.id}}" tabindex="-1" role="dialog" aria-hidden="true">
+            </tr>
+            <!-- Modal para eliminar -->
+            <div class="modal fade bs-example-modal-lg2{{actividad.id}}" id="myModal2{{actividad.id}}" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -113,31 +105,73 @@
                         </div>
                         <div class="modal-footer">
                             <a href="/rutinas/eliminar_actividad/{{actividad.id}}">
-                              <button type="button" class="btn btn-danger" >Confirmar</button>
+                            <button type="button" class="btn btn-danger" >Confirmar</button>
                             </a>
                             <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-                          </div>
+                        </div>
         
                     </div>
                 </div>
             </div>
-        {%endfor%}
-        {%endif%}
-        
-    </section>
+          {%endfor%}
+          </tbody>
+        </table>
+    </div>
+</section>
 
-    <script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+ <!-- Bootstrap core JavaScript -->
+ <script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
+ <script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
-    <!-- Bootstrap core JavaScript -->
-    <script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
-    <script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-  
-      <!-- Optional JavaScript -->
-      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+ <!-- Bootstrap core JavaScript -->
+ <script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
+ <script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+ <script src=" {% static 'js/jquery.dataTables.min.js' %}"></script>
 
+   <!-- Optional JavaScript -->
+   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+   <script src=" {% static 'js/jquery.dataTables.min.js' %}"></script>
+
+      <script>
+        $(document).ready( function () {
+          $('#mydatatable').DataTable({
+            "paging": true,
+            "language": {
+              "sProcessing":     "Procesando...",
+                          "sLengthMenu":     "Ver _MENU_",
+                          "sZeroRecords":    "No se encontraron resultados",
+                          "sEmptyTable":     "No hay resultados",
+                          "sInfo":           "Viendo _START_-_END_ de _TOTAL_.",
+                          "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                          "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                          "sInfoPostFix":    "",
+                          "sSearch":         "Buscar:",
+                          "sUrl":            "",
+                          "sInfoThousands":  ",",
+                          "sLoadingRecords": "Cargando...",
+                          "oPaginate": {
+                              "sFirst":    "Primero",
+                              "sLast":     "Último",
+                              "sNext":     "Siguiente",
+                              "sPrevious": "Anterior"
+                          },
+                          "oAria": {
+                              "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                              "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                          },
+                          "buttons": {
+                              "copy": "Copiar",
+                              "colvis": "Visibilidad"
+                          }
+          },
+            
+          });
+        });
+      </script>
     <script>
             $(document).ready(function(){
                 $('#delete').click(function(){
