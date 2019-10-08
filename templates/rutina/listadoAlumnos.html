@@ -31,15 +31,19 @@
       var i;
       for (i = 0; i < x.length; i++) {
              
-             x[i].style.position = 'relative ';
-             x[i].style.float = 'right ';
-      
-             
-            
-             
-             
+             x[i].style.position = 'relative';
+             x[i].style.float = 'right';
+             x[i].style.margin = '24px 3px 3px 1px';
               }
-              
+      
+              var xy = document.getElementsByClassName("form-control");
+              var u;
+              for (u = 0; u < y.length; u++) {
+                     
+                     y[u].style.position = 'relative';
+                     y[u].style.float = 'right';
+                     y[u].style.margin = '2px 3px 3px 10px';
+                      }
                      
                     
 
@@ -68,6 +72,7 @@
 </style>
 <body>
   <input type="hidden" id="profesor" value="{{profesor}}">
+  <input type="hidden" id="filtrado" value="{{filtrado}}">
   <!-- Navigation -->
   <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
@@ -343,19 +348,21 @@
                 //El titulo lo saco de un input oculto para poder usar esta misma configuracion para reportes distintos, entonces cambia el titulo segun el reporte.
                 var titulo = document.getElementById('titulo_reporte').value;
                 var profesor = $('#profesor').val();
+                var filtrado = $('#filtrado').val();
                 doc['header']=(function() {
                   return {
                     columns: [
                       {
                         image: logo,
-                        width: 60
+                        width: 75
                       },
+                      
                       {
                         alignment: 'center',
-                        text:[{text:"FitRou Rutinas \n \n ", bold:true, fontSize:16}, {text:"Tronador 1019 Oberá, Misiones. \n Teléfono: 03755 264077 \n \n \n" },
-                        {text:"Listado de alumnos \n", bold:true, fontSize:14, alignment:'left'}],
-                        fontSize: 9,
-                        margin: [0,20,0,0]
+                        text:[{text:"FitRou Rutinas \n", bold:true, fontSize:16}, {text:"Tronador 1019 Oberá, Misiones. \n Teléfono: 03755 264077 \n \n \n" },
+                        {text: ''+ filtrado, bold:true, fontSize:11, alignment:'left'}],
+                        fontSize: 10,
+                        margin: [-30,40,0,0]
                       },
                       {
                         alignment: 'right',

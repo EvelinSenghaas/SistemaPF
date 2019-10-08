@@ -416,7 +416,9 @@ def listadoAlumnos(request, pk):
         else:
             mensaje = "Usted no tiene alumnos a cargo"
             
-        return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas})
+        filtrado = 'Listado de alumnos filtrado por Rutinas, Tipo entrenamiento y Nivel'
+            
+        return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas, 'filtrado':filtrado})
     
     if request.method == 'POST':
         rutinas = Rutina.objects.filter(estado=True)
@@ -442,8 +444,8 @@ def listadoAlumnos(request, pk):
         else:
             return redirect('/home')
         
-
-        
+        filtrado = 'Listado de alumnos filtrado por ' + str(ruti)+', '+str(entrenamiento)+' y '+str(nivel)
+        print(filtrado)
         alumnos = filtrar(ruti, entrenamiento, nivel, profesor)
         
 
@@ -473,7 +475,7 @@ def listadoAlumnos(request, pk):
         else:
             nivelSeleccionado = None
                  
-    return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas, 'ruti':ruti, 'entrenamientoSeleccionado':entrenamientoSeleccionado, 'nivelSeleccionado':nivelSeleccionado})         
+    return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas, 'ruti':ruti, 'entrenamientoSeleccionado':entrenamientoSeleccionado, 'nivelSeleccionado':nivelSeleccionado,'filtrado':filtrado})         
         
 
 
