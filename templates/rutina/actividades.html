@@ -135,43 +135,42 @@
    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
    <script src=" {% static 'js/jquery.dataTables.min.js' %}"></script>
-
-      <script>
-        $(document).ready( function () {
-          $('#mydatatable').DataTable({
-            "paging": true,
-            "language": {
-              "sProcessing":     "Procesando...",
-                          "sLengthMenu":     "Ver _MENU_",
-                          "sZeroRecords":    "No se encontraron resultados",
-                          "sEmptyTable":     "No hay resultados",
-                          "sInfo":           "Viendo _START_-_END_ de _TOTAL_.",
-                          "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                          "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                          "sInfoPostFix":    "",
-                          "sSearch":         "Buscar:",
-                          "sUrl":            "",
-                          "sInfoThousands":  ",",
-                          "sLoadingRecords": "Cargando...",
-                          "oPaginate": {
-                              "sFirst":    "Primero",
-                              "sLast":     "Último",
-                              "sNext":     "Siguiente",
-                              "sPrevious": "Anterior"
-                          },
-                          "oAria": {
-                              "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                              "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                          },
-                          "buttons": {
-                              "copy": "Copiar",
-                              "colvis": "Visibilidad"
-                          }
-          },
-            
-          });
-        });
-      </script>
+   <script>
+    $(document).ready( function () {
+      $('#mydatatable').DataTable({
+        "paging": true,
+        "language": {
+          "sProcessing":     "Procesando...",
+                      "sLengthMenu":     "Ver _MENU_",
+                      "sZeroRecords":    "No se encontraron resultados",
+                      "sEmptyTable":     "No hay resultados",
+                      "sInfo":           "Viendo _START_-_END_ de _TOTAL_.",
+                      "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                      "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                      "sInfoPostFix":    "",
+                      "sSearch":         "Buscar:",
+                      "sUrl":            "",
+                      "sInfoThousands":  ",",
+                      "sLoadingRecords": "Cargando...",
+                      "oPaginate": {
+                          "sFirst":    "Primero",
+                          "sLast":     "Último",
+                          "sNext":     "Siguiente",
+                          "sPrevious": "Anterior"
+                      },
+                      "oAria": {
+                          "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                          "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                      },
+                      "buttons": {
+                          "copy": "Copiar",
+                          "colvis": "Visibilidad"
+                      }
+      },
+        
+      });
+    });
+  </script>
     <script>
             $(document).ready(function(){
                 $('#delete').click(function(){
