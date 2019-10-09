@@ -103,6 +103,8 @@ class Sesion(models.Model):
     rutina_id = models.ForeignKey(Rutina, verbose_name="Rutina", on_delete=models.CASCADE)
     profesor_id = models.ForeignKey('home.Profesor', related_name='homePS', on_delete=models.CASCADE)
     #agregar los dos atributos que faltan
+    cantSesiones = models.IntegerField(blank = False, null = False, verbose_name="Sesiones parciales")
+    sesionesRealizadas = models.IntegerField(blank = False, null = False, verbose_name="Sesiones totales")
     class Meta:
         verbose_name = 'Sesion'
         verbose_name_plural = 'Sesion'
