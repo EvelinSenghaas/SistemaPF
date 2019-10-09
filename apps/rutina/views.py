@@ -328,7 +328,6 @@ def listadoEvaluacionNivel (request,pk):
     
     if request.method == 'GET':
         evaluacionNivel = EvaluacionNivel.objects.filter(profesor_id=profesor.id)
-        print(evaluacionNivel)
         return render(request, 'rutina/administrarEvaluacionNivel.html', {'evaluacionNivel':evaluacionNivel})
     else:
         return redirect ('/rutinas/administrar_evaluacion_nivel/')
@@ -371,17 +370,35 @@ def editarEvaluacionNivel(request, pk):
     if (EvaluacionNivel.objects.filter(id=pk).exists()):
         form = EvaluacionNivel.objects.get(id=pk)
         profesor = form.profesor_id
+        nivel_anterior = form.nivel_id
     else: 
         return redirect ('home') 
     
-    if request.method == 'POST':
-        form = ActividadForm(request.POST, instance = form)
-        if form.is_valid():
-            form.save()
-            messages.success = (request,'La evaluacion de nivel se cargó con éxito.')
-    else:
+    if request.method == 'GET':
         form = EvaluacionNivelForm(instance=form)
         return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form})
+    else:
+        print('entro al post')
+        form = EvaluacionNivelForm(request.POST, instance = form)
+        peticion = request.POST.copy()
+        nivel = peticion.pop('nivel_id')
+        nivel = nivel[0]
+        
+        if (EvaluacionNivel.objects.filter(nivel_id=nivel, profesor_id = profesor).exists()):
+            print('entro al primer if')
+            if (EvaluacionNivel.objects.get(nivel_id=nivel, profesor_id = profesor).nivel_id != nivel_anterior):
+                print('entro al segundo if')
+                error = 'No puede ingresar una evaluación de nivel para mas de un nivel'
+                return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form, 'error':error})
+            else:
+                if form.is_valid():
+                    evaluacionNivel = form.save(commit=False)
+                    evaluacionNivel.save()
+                    messages.success = (request,'La evaluacion de nivel se cargó con éxito.')
+                else:
+                    error = form.errors
+                    return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form, 'error':error})
+        
     return redirect('/rutinas/administrar_evaluacion_nivel/2')
             
             

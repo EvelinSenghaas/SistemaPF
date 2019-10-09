@@ -10,16 +10,15 @@
     <div class="card">
         <div class="card-header alert-primary"><strong>Administracion de evaluaciones</strong></div>
             <div class="card-body card-block">  
-                {%if form.errors%}
+                {%if form.errors or error != None%}
                 <div class="alert alert-danger" role="alert">
                     <h4 class="alert-heading">Error</h4>
+                    {%if form.errors%}
                         {{form.errors}}
-                </div>
-                {%endif%}
-                {%if error != None%}
-                <div class="alert alert-danger" role="alert">
-                    <h4 class="alert-heading">Error</h4>
+                    {%endif%}
+                    {%if error != None%}
                         {{error}}
+                    {%endif%}
                 </div>
                 {%endif%}
                 <form method="POST">
@@ -33,7 +32,7 @@
                             <label for="exampleFormControlTextarea1">Cantidad de sesiones</label>
                             {{form.cantSesiones}}
                         </div>
-                        <div class="float-right"><a href="javascript:history.back()">
+                        <div class="float-right"><a href="/rutinas/administrar_evaluacion_nivel/{{user.id}}">
                             <button type="button" class="btn btn-outline-danger">Cancelar</button></a>
                             <button type="submit" class="btn btn-primary">Agregar</button>
                         </div>

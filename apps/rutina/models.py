@@ -38,7 +38,7 @@ class EvaluacionNivel(models.Model):
     id = models.AutoField(primary_key = True)
     nivel_id = models.ForeignKey(Nivel, on_delete=models.CASCADE, verbose_name="Nivel")
     cantSesiones = models.PositiveIntegerField(blank=False, null=False, verbose_name="Sesiones Minimas")
-    profesor_id = models.ForeignKey('home.Profesor', related_name='homeEN', on_delete=models.CASCADE)
+    profesor_id = models.ForeignKey('home.Profesor', related_name='homeEN', on_delete=models.CASCADE, null=True, blank=True)
     
     class Meta:
         verbose_name = 'Evaluacion de nivel'
