@@ -333,8 +333,6 @@ def listadoEvaluacionNivel (request,pk):
         return redirect ('/rutinas/administrar_evaluacion_nivel/')
     
     
-    
-    
 def agregarEvaluacionNivel(request, pk):
     user = User.objects.get(id=pk)
     if (Profesor.objects.filter(user_id=user.id).exists()):
@@ -628,8 +626,6 @@ def eliminarRutina(request, pk):
         return redirect('/rutinas/administrar_rutinas')
     
 
-   
-   
 def eliminarActividad(request, pk):
     actividad = Actividad.objects.get(id=pk)
     if (Rutina.objects.filter(actividad_id = actividad.id).exists()):
