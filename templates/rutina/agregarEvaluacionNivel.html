@@ -1,0 +1,48 @@
+{%extends 'home/home.html'%}
+{%load staticfiles%}
+
+{%block titulo%}Administrar evaluación de nivel{%endblock titulo%}
+{%block imagen_principal%}
+{%endblock imagen_principal%}
+
+{%block contenido%}
+<body class="container mt-2">
+    <div class="card">
+        <div class="card-header alert-primary"><strong>Administracion de evaluaciones</strong></div>
+            <div class="card-body card-block">  
+                {%if form.errors%}
+                <div class="alert alert-danger" role="alert">
+                    <h4 class="alert-heading">Error</h4>
+                        {{form.errors}}
+                </div>
+                {%endif%}
+                {%if error != None%}
+                <div class="alert alert-danger" role="alert">
+                    <h4 class="alert-heading">Error</h4>
+                        {{error}}
+                </div>
+                {%endif%}
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="">
+                        <div class="form-group">
+                            <label for="">Nivel</label>
+                            {{form.nivel_id}}
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlTextarea1">Cantidad de sesiones</label>
+                            {{form.cantSesiones}}
+                        </div>
+                        <div class="float-right"><a href="javascript:history.back()">
+                            <button type="button" class="btn btn-outline-danger">Cancelar</button></a>
+                            <button type="submit" class="btn btn-primary">Agregar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div> 
+    </div>
+</body>
+{%endblock contenido%}
+{%block pie%}
+{%endblock pie%}

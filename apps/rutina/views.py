@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Rutina, Actividad, Detalle, Nivel, Repeticion, EvaluacionNivel, Sesion
 from ..home.models import Alumno, FichaAlumno, Profesor, Semana, DisponibilidadProfesor
 from ..home.forms import AlumnoForm, FichaForm
-from .forms import DetalleForm, ActividadForm, RutinaForm, NivelForm, RepeticionForm
+from .forms import DetalleForm, ActividadForm, RutinaForm, NivelForm, RepeticionForm, EvaluacionNivelForm
 from django.views.generic import View, TemplateView, ListView, UpdateView, CreateView, DeleteView
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
@@ -318,8 +318,73 @@ class AgregarActividad(PermissionRequiredMixin, CreateView):
             return HttpResponseRedirect(self.get_success_url)()
         else:
             return self.render_to_response(self.get_context_data(form=form, form2=form2))    
+
+def listadoEvaluacionNivel (request,pk):
+    user = User.objects.get(id=pk)
+    if (Profesor.objects.filter(user_id=user.id).exists()):
+        profesor = Profesor.objects.get(user_id=user.id)
+    else: 
+        return redirect ('home')
+    
+    if request.method == 'GET':
+        evaluacionNivel = EvaluacionNivel.objects.filter(profesor_id=profesor.id)
+        print(evaluacionNivel)
+        return render(request, 'rutina/administrarEvaluacionNivel.html', {'evaluacionNivel':evaluacionNivel})
+    else:
+        return redirect ('/rutinas/administrar_evaluacion_nivel/')
     
     
+    
+    
+def agregarEvaluacionNivel(request, pk):
+    user = User.objects.get(id=pk)
+    if (Profesor.objects.filter(user_id=user.id).exists()):
+        profesor = Profesor.objects.get(user_id=user.id)
+    else: 
+        return redirect ('home')
+    
+    if request.method == 'POST':
+        form = EvaluacionNivelForm(request.POST)
+        peticion = request.POST.copy()
+        nivel = peticion.pop('nivel_id')
+        nivel = nivel[0]
+        
+        if (EvaluacionNivel.objects.filter(nivel_id=nivel, profesor_id = profesor).exists()):
+            error = 'No puede ingresar una evaluación de nivel para mas de un nivel'
+            return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form, 'error':error})
+        else:
+            if form.is_valid():
+                evaluacionNivel = form.save(commit=False)
+                evaluacionNivel.profesor_id = profesor
+                evaluacionNivel.save()
+                messages.success(request, 'Evaluación de nivel agregada con éxito.')
+            else:
+                error = form.errors
+                messages.error(request, 'No se pudo cargar, por favor verifique los datos ingresados')
+    else:
+        form = EvaluacionNivelForm()
+        return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form})
+    return redirect('/rutinas/administrar_evaluacion_nivel/2')
+        
+
+def editarEvaluacionNivel(request, pk):
+    if (EvaluacionNivel.objects.filter(id=pk).exists()):
+        form = EvaluacionNivel.objects.get(id=pk)
+        profesor = form.profesor_id
+    else: 
+        return redirect ('home') 
+    
+    if request.method == 'POST':
+        form = ActividadForm(request.POST, instance = form)
+        if form.is_valid():
+            form.save()
+            messages.success = (request,'La evaluacion de nivel se cargó con éxito.')
+    else:
+        form = EvaluacionNivelForm(instance=form)
+        return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form})
+    return redirect('/rutinas/administrar_evaluacion_nivel/2')
+            
+            
 def agregarActividad(request):
     nivel = Nivel.objects.all() 
     error = None

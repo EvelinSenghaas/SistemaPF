@@ -1,5 +1,5 @@
 from django import forms
-from .models import Detalle, Actividad, Rutina, Nivel, Repeticion
+from .models import Detalle, Actividad, Rutina, Nivel, Repeticion, EvaluacionNivel
 
 class DetalleForm (forms.ModelForm):
     class Meta:
@@ -76,6 +76,18 @@ class RepeticionForm (forms.ModelForm):
         fields = ['repeticionesMinimas', 'nivel_id']
         widgets = {
             'repeticionesMinimas' : forms.NumberInput(
+                attrs = { 'class':'form-control'}
+                ), 'nivel_id' : forms.Select(
+                attrs = { 'class':'form-class'}
+                ),
+        }
+        
+class EvaluacionNivelForm(forms.ModelForm):
+    class Meta:
+        model = EvaluacionNivel
+        fields = ['nivel_id', 'cantSesiones']
+        widgets = {
+            'cantSesiones' : forms.NumberInput(
                 attrs = { 'class':'form-control'}
                 ), 'nivel_id' : forms.Select(
                 attrs = { 'class':'form-class'}

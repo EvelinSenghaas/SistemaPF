@@ -102,7 +102,7 @@ class Sesion(models.Model):
     actividad_id = models.ForeignKey(Actividad, verbose_name="Actividad", on_delete=models.CASCADE)
     rutina_id = models.ForeignKey(Rutina, verbose_name="Rutina", on_delete=models.CASCADE)
     profesor_id = models.ForeignKey('home.Profesor', related_name='homePS', on_delete=models.CASCADE)
-    
+    #agregar los dos atributos que faltan
     class Meta:
         verbose_name = 'Sesion'
         verbose_name_plural = 'Sesion'
