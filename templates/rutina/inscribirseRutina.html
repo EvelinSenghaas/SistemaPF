@@ -188,9 +188,9 @@
                                                         <div class="col col-md-3">Días disponibles</div>
                                                         <div class="col-12 col-md-9">
                                                             <select name="dias" class="selectpicker" multiple data-live-search="true">
-                                                                {%for d in alumno.semana_id%}
+                                                                {%for dia in dias%}
                                                                 <option value="{{dia.id}}">
-                                                                    {{d}}
+                                                                    {{dia}}
                                                                 </option>
                                                                 {%endfor%}
                                                             </select>

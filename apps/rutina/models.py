@@ -98,8 +98,8 @@ class Rutina(models.Model):
 class Sesion(models.Model):
     id = models.AutoField(primary_key = True)
     alumno_id = models.ForeignKey('home.Alumno', related_name='homeAS', on_delete=models.CASCADE)
-    fechaSesion = models.DateField(blank = False, null = True, verbose_name="Fecha de la sesion")
-    actividad_id = models.ForeignKey(Actividad, verbose_name="Actividad", on_delete=models.CASCADE)
+    fechaSesion = models.DateField(blank = False, null = True, verbose_name="Fecha de la sesion", auto_now=False, auto_now_add=True)
+    actividad_id = models.ForeignKey(Actividad, verbose_name="Actividad", on_delete=models.CASCADE, blank=True)
     rutina_id = models.ForeignKey(Rutina, verbose_name="Rutina", on_delete=models.CASCADE)
     profesor_id = models.ForeignKey('home.Profesor', related_name='homePS', on_delete=models.CASCADE)
     #agregar los dos atributos que faltan

@@ -4,8 +4,15 @@
 {%block titulo%} Clase {%endblock titulo%}
 {%block imagen_principal%}
 {%endblock imagen_principal%}
-
+<head>
+        <link href=" {% static 'css/rangeslider.css' %}" rel="stylesheet">
+</head>
 {%block contenido%}
+<style type="text/css">
+    #ex1Slider .slider-selection {
+        background: #BABABA;
+    }
+</style>
 <body class="container mt-2">
     <!-- Si el usuario entrena con un profesor -->
     {%if not alumno.entrenamiento_sistema%}
@@ -165,6 +172,51 @@
     {%else%}
     {%if mensaje == None%}
     <!-- Si es dia de entrenamiento -->
+    <!-- Modal para terminar sesion -->
+    <div class="modal fade bs-example-modal-lg2{{rutina.id}}" id="myModal2{{rutina.id}}" tabindex="-1" role="dialog" aria-hidden="true">
+            <form method="POST"></form>
+            {% csrf_token %}
+            <input type="hidden" value="{{repeticiones}}" name="repeticiones">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel{{rutina.id}}">Terminar la sesión</h4>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                    </button>
+                    
+                </div>
+                <div class="modal-body">
+
+                        <div class="row form-group">
+                            <div class="col-4 col-md-4">¿Qué tan dura estuvo la clase?</div>
+                            <div class="col-6 col-md-6">
+                                <label style="color:rgb(130, 128, 128)"></label>
+                                <input name="esfuerzo" type="range" class="form-control-range" id="formControlRange" min="1" max="10" step="1">  
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-4 col-md-4">Cuéntanos como te ha ido</div>
+                            <div class="col-7 col-md-7">
+                                <textarea name="descripcion" id="" cols="46" rows="5"></textarea>
+                                <br>
+                                <input class="form-check-input" type="checkbox" id="disabledFieldsetCheck" value="1">
+                                <label class="form-check-label" for="disabledFieldsetCheck">
+                                Solicitar revisión de ésta clase
+                                </label>
+                            </div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="">
+                      <button type="button" class="btn btn-outline-success" >Confirmar</button>
+                    </a>
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+                  </div>
+
+            </div>
+        </div>
+    </form>
+    </div>
     <div class="card active">
             <div class="card-header alert alert-success"><a href="/home/"><h6><img src="{% static 'img/back_negro.png'%}"></a><strong>Actividades del día</strong></h6>
             </div>
@@ -215,6 +267,7 @@
                         </div>
                     </div>
                 </div>
+                <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg2{{disp.id}}" class="btn btn-primary">Terminar sesión</a>
             </div>
         </div> 
     {%else%}
@@ -227,11 +280,11 @@
         </div>
     {%endif%}
     {%endif%}
-        
+    
 </body>
-
+<script src=" {% static 'js/rangeslider.min.js' %}"></script>
+<script src=" {% static 'js/rangeslider.js' %}"></script>
 
 {%endblock contenido%}
-
 {%block pie%}
 {%endblock pie%}

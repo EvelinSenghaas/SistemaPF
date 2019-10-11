@@ -24,6 +24,7 @@ from django.utils import timezone
 import time
 import calendar
 from datetime import datetime, date
+from datetime import date
 
 
 # Create your views here.
@@ -129,10 +130,13 @@ def verClase(request, pk):
         else:
             if request.method == 'GET':
                 
-                #Obtengo el dia de hoy
+                #Obtengo el dia y fecha de hoy
                 now = datetime.now()
+                today = date.today()
                 dia = now.strftime("%A")
                 dia = traducirDia(dia)
+                fechaActual = today.strftime("%d/%m/%Y")
+                print(fechaActual)
                 print(dia)
                 
                 diasAlumno=[]
@@ -151,6 +155,8 @@ def verClase(request, pk):
                         
                         if (Sesion.objects.filter(alumno_id = alumno).exists()):
                             #Ya tiene sesiones, por lo tanto, se debe comparar actividades anteriores y la cantidad de sesiones faltantes para recalcular el nivel
+                            #Primero se debe verificar que no haya realizado la sesion de hoy
+                            
                             pass
                         else:
                             
@@ -179,9 +185,9 @@ def verClase(request, pk):
                         return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje, 'actividadesARealizar':actividadesARealizar, 'repeticiones':repeticiones}) 
                     
                     
-                    
+                    print(len(diasAlumno))
                      
-                    if str(dia) != str(diasAlumno[i].dia):
+                    if str(dia) != str(diasAlumno[i].dia) and i==len(diasAlumno)-1:
                         #Si entra aca es porque hoy NO es el dia de entrenamiento
                         mensaje = "Hoy no es tu día de entrenamiento, vuelve el "
                         return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje})  
@@ -190,7 +196,40 @@ def verClase(request, pk):
                     i+=1
                         
                         
-                return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje})        
+                return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje})   
+            else:
+                pass
+                """peticion = request.POST.copy()
+                repeticiones = peticion.pop('repeticiones')
+                actividades = []
+                
+                #cargo las actividades que el alumno realizo
+                for r in repeticiones:
+                    actividades.append(r.actividad_id)
+                
+                #creamos la nueva sesion
+                sesion = Sesion.objects.create(alumno_id=alumno, rutina_id=rutina, profesor_id=profesor)
+                for a in actividades:
+                    sesion.actividad_id.add(a)
+                #Si el chico no tiene sesion (debo asignarle 1 porque es la primer sesion)
+                if not ((Sesion.objects.filter(alumno_id = alumno).exists())):
+                    sesion.cantSesiones = 1
+                    sesion.sesionesRealizadas = 1
+                else:
+                    #tengo que obtener la sesion y actualizar las cosas
+                    pass
+                    ultimaSesion = Sesion.objects.latest('fechaSesion').date.filter(alumno_id=alumno.id)"""
+                
+                    
+                    
+                    
+                sesion.save()
+                """else:
+                    pass"""
+                    #si existe la sesion
+                    
+                    
+                    
                         
     
     
