@@ -568,6 +568,14 @@ def perfil(request, pk):
             ficha = FichaAlumno.objects.get(alumno_id=alumno.id)
             mensaje = None
             disponibilidad = alumno.semana_id.all()
+ 
+            sesiones = Sesion.objects.filter(alumno_id=alumno.id).order_by('-id')
+            ultimaSesion = Sesion.objects.filter(alumno_id=alumno.id).latest()
+            for sesion in sesiones:
+                sesion.cantSesiones = (sesion.sesionesRealizadas * 100) / EvaluacionNivel.objects.get(nivel_id=alumno.nivel_id).cantSesiones
+            
+            
+            
 
         else:
             alumno = Alumno.objects.get(user_id=pk)
@@ -575,12 +583,13 @@ def perfil(request, pk):
             ficha = FichaAlumno.objects.get(alumno_id=alumno.id)
             mensaje = None
             disponibilidad = DisponibilidadProfesor.objects.filter(alumno_id = alumno.id)
+            sesiones = None
             
     else:
         mensaje = "El alumno no existe"
         return redirect('/home/')
     
-    return render (request, 'home/verPerfil.html', { 'alumno': alumno, 'mensaje':mensaje, 'ficha':ficha, 'edad':edad, 'disponibilidad':disponibilidad})
+    return render (request, 'home/verPerfil.html', { 'alumno': alumno, 'mensaje':mensaje, 'ficha':ficha, 'edad':edad, 'disponibilidad':disponibilidad, 'sesiones':sesiones})
     
     
 def verRutina(request, pk):

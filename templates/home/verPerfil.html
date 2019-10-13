@@ -265,6 +265,60 @@
                             </div>
                           </div>
                         </div>
+                        {%if alumno.entrenamiento_sistema == True%}
+                        <div class="card">
+                            <div class="card-header alert alert-primary" id="headingThree">
+                              <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                      <strong>Sesiones</strong>
+                                </button>
+                              </h5>
+                            </div>
+                            <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">                                  
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col-1">
+                                            <b>#</b>
+                                        </div>
+                                        <div class="col-2">
+                                            <b>Fecha</b>
+                                        </div>
+                                        <div class="col-2">
+                                            <b>Esfuerzo</b>
+                                        </div>
+                                        <div class="col-6">
+                                            <b>Comentario</b>
+                                        </div>
+                                        <div class="col-0">
+                                            <b>Porcentaje</b>
+                                        </div>
+                                    </div>
+                                </div>   
+                                {% for sesion in sesiones %}
+                                <div class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-1">
+                                            {{sesion.sesionesRealizadas}}</a>
+                                        </div>
+                                        <div class="col-2" >
+                                            {{sesion.fechaSesion}}
+                                        </div>
+                                        <div class="col-2">
+                                            {{sesion.esfuerzoSesion}}
+                                        </div>
+                                        <div class="col-6">
+                                            {{sesion.descripcion}}
+                                        </div>
+                                        <div class="col-0">
+                                            <h6><span class="badge badge-success">{{sesion.cantSesiones}}%</span></h6>
+                                        </div>
+                                    </div>
+                                </div>     
+                                {%endfor%}
+                            </div>
+                          </div>
+                          {%endif%}
+
                       </div>
             </div>
 
