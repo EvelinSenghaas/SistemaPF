@@ -274,47 +274,57 @@
                                 </button>
                               </h5>
                             </div>
-                            <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">                                  
-                                <div class="card-header">
-                                    <div class="row">
-                                        <div class="col-1">
-                                            <b>#</b>
-                                        </div>
-                                        <div class="col-2">
-                                            <b>Fecha</b>
-                                        </div>
-                                        <div class="col-2">
-                                            <b>Esfuerzo</b>
-                                        </div>
-                                        <div class="col-6">
-                                            <b>Comentario</b>
-                                        </div>
-                                        <div class="col-0">
-                                            <b>Porcentaje</b>
-                                        </div>
-                                    </div>
-                                </div>   
-                                {% for sesion in sesiones %}
-                                <div class="list-group-item">
-                                    <div class="row">
-                                        <div class="col-1">
-                                            {{sesion.sesionesRealizadas}}</a>
-                                        </div>
-                                        <div class="col-2" >
-                                            {{sesion.fechaSesion}}
-                                        </div>
-                                        <div class="col-2">
-                                            {{sesion.esfuerzoSesion}}
-                                        </div>
-                                        <div class="col-6">
-                                            {{sesion.descripcion}}
-                                        </div>
-                                        <div class="col-0">
-                                            <h6><span class="badge badge-success">{{sesion.cantSesiones}}%</span></h6>
-                                        </div>
-                                    </div>
-                                </div>     
-                                {%endfor%}
+                            <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">                          <div class="mt-2">
+                                <table class="table dataTable" id="mydatatable">
+                                  <thead class="card-header">
+                                    <tr>
+                                      <th width="10">#</th>
+                
+                                      <th width="150">Fecha</th>
+                
+                                      <th width="120">Esfuerzo</th>
+                                      <th width="500">Comentario</th>
+                                      <th width="0" align="right">Porcentaje</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                  {%for sesion in sesiones%}
+                                    <tr>
+                                        <td width="10">{{sesion.sesionesRealizadas}}</td>
+                
+                                        <td width="150">{{sesion.fechaSesion}}</td>
+                
+                                        <td width="120" align="center">{{sesion.esfuerzoSesion}}</td>
+                                        <td width="500">{{sesion.descripcion}}</td>
+                                        <td width="0" align="center"><h6><span class="badge badge-success">{{sesion.cantSesiones}}%</span></h6></td>
+                                    </tr>
+                                    <!-- Modal para eliminar -->
+                                    <div class="modal fade bs-example-modal-lg2{{detalle.id}}" id="myModal2{{detalle.id}}" tabindex="-1" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                              <div class="modal-content">
+                                                  <div class="modal-header">
+                                                      <h4 class="modal-title" id="myModalLabel{{detalle.id}}">Confirmar eliminación</h4>
+                                                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                                                      
+                                                  </div>
+                                                  <div class="modal-body">
+                                                      <h5>¿Seguro que desea eliminar <strong>{{detalle.musculo}}</strong>?</h5>
+                                                      
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                      <a href="/rutinas/eliminar_detalle/{{detalle.id}}">
+                                                        <button type="button" class="btn btn-danger" >Confirmar</button>
+                                                      </a>
+                                                      <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+                                                    </div>
+                                  
+                                              </div>
+                                          </div>
+                                      </div>
+                                  {%endfor%}
+                                  </tbody>
+                                </table>
+                            </div>        
                             </div>
                           </div>
                           {%endif%}
