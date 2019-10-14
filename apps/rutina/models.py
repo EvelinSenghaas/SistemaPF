@@ -110,11 +110,27 @@ class Sesion(models.Model):
     
     class Meta:
         verbose_name = 'Sesion'
-        verbose_name_plural = 'Sesion'
+        verbose_name_plural = 'Sesiones'
         ordering = ['fechaSesion']
         get_latest_by = "fechaSesion"
     
     def __str__ (self):
         return self.alumno_id.nombre + ' '+self.alumno_id.apellido+ ' (' + str(self.fechaSesion)+ ')'
     
+    
+class Revision(models.Model):
+    id = models.AutoField(primary_key = True)
+    fechaRevision = models.DateField('Fecha de creacion', auto_now = True, auto_now_add = False)
+    profesor_id = models.ForeignKey('home.Profesor', related_name='homePR', on_delete=models.CASCADE)
+    sesion_id = models.ForeignKey(Sesion, on_delete=models.CASCADE)
+    
+    
+    class Meta:
+        verbose_name = 'Revision'
+        verbose_name_plural = 'Revisiones'
+        ordering = ['fechaRevision']
+        get_latest_by = "fechaRevision"
+    
+    def __str__ (self):
+        return self.sesion_id.alumno_id.nombre + ', ' + self.sesion_id.alumno_id.apellido  + ' (' + str(self.fechaRevision) + ' )'
     

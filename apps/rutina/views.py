@@ -573,6 +573,8 @@ def perfil(request, pk):
             ultimaSesion = Sesion.objects.filter(alumno_id=alumno.id).latest()
             for sesion in sesiones:
                 sesion.cantSesiones = (sesion.sesionesRealizadas * 100) / EvaluacionNivel.objects.get(nivel_id=alumno.nivel_id).cantSesiones
+
+
             
             
             
@@ -601,6 +603,10 @@ def verRutina(request, pk):
         actividades += Actividad.objects.filter(id=a[i], estado=True)
         i+=1
     return render (request, 'rutina/verRutina.html', { 'rutina': rutina, 'actividades':actividades})
+
+
+def verRevisiones(request, pk):
+    pass
 
 
 def verActividad(request, pk):
