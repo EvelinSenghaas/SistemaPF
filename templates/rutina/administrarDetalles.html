@@ -43,7 +43,7 @@
               <li class="nav-item">
                 <a class="nav-link" href="/rutinas">Rutinas</a>
               </li>
-              {% if perms.rutina.edit_actividad and perms.rutina.delete_actividad and perms.rutina.edit_rutina and perms.rutina.delete_rutina and not user.is_staff%}
+              {% if perms.rutina.change_actividad and perms.rutina.delete_actividad and perms.rutina.change_rutina and perms.rutina.delete_rutina and not user.is_staff%}
               <li class="nav-item">
                 <a class="nav-link" href="/rutinas/revisiones/{{user.id}}">Revisiones</a>
               </li>
