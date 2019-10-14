@@ -115,9 +115,9 @@
                       <td width="auto"> De <b>{{disp.horario_inicio}}</b> a <b>{{disp.horario_final}}</b> </td>
                       
                       {%if disp.alumno_id != None%}
-                      <td width="auto">Ocupado por <b>{{disp.alumno_id}}</b></td>
+                      <td width="auto"><h5><span class="badge badge-secondary">Ocupado por {{disp.alumno_id}}</span></h5></td>
                       {%else%}
-                      <td> Libre</td>
+                      <td><h5><span class="badge badge-success">Libre</span></h5></td>
                       {%endif%}
 
                       {% if perms.home.change_disponibilidadprofesor and perms.home.delete_disponibilidadprofesor%}
