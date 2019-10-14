@@ -71,7 +71,222 @@ def traducirDia(dia):
     if dia == "Saturday":
         dia = "Sabado"
     return dia
+
+
+def calcularCantidadActividades(alumno, auxActividades, sesionesPorNivel, sesionesAlumno):
+    pass
+    """ 
+        PRINCIPIANTE
+                    x < 40
+                            una por musculo (2)
+                    40 <= x <= 65
+                            incremenetamos una mas por musculo (4)
+                    x > 65
+                            incremenetamos una mas por musculo (6)
+                            
+                            
+        INTERMEDIO
+                    x < 25
+                            una por musculo (2)
+                    25 <= x < 50
+                            incremenetamos una mas por musculo (4)
+                    50 <= x < 75
+                            incremenetamos una mas por musculo (6)
+                    75 <= x
+                            incremenetamos una mas por musculo (8)
+                            
+        AVANZADO
+                    x < 20
+                            una por musculo (2)
+                    20 <= x < 40
+                            incremenetamos una mas por musculo (4)
+                    40 <= x 60
+                            incremenetamos una mas por musculo (6)
+                    60 <= x < 80
+                            incremenetamos una mas por musculo (8)
+                    80 <= x
+                            incremenetamos una mas por musculo (10)
+    """
+    repeticiones = []
+    porcentaje = (sesionesAlumno * 100) / sesionesPorNivel
     
+    if alumno.nivel_id.nombre == "Principiante":
+        if porcentaje < 40:
+            trenSuperior = 1
+            trenInferior = 1
+            for acti in auxActividades:
+                for det in acti.detalle_id.all():
+                    if (det.categoria == "Tren Superior" and trenSuperior != 0):
+                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                        trenSuperior -=1
+                        break
+                    if (det.categoria == "Tren inferior" and trenInferior != 0):
+                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                        trenInferior -=1
+                        break
+        
+        if 40 <= porcentaje <= 65:
+            trenSuperior = 2
+            trenInferior = 2
+            for acti in auxActividades:
+                for det in acti.detalle_id.all():
+                    if (det.categoria == "Tren Superior" and trenSuperior != 0):
+                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                        trenSuperior -=1
+                        break
+                    if (det.categoria == "Tren inferior" and trenInferior != 0):
+                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                        trenInferior -=1
+                        break
+        
+        if porcentaje > 65:
+            trenSuperior = 3
+            trenInferior = 3
+            for acti in auxActividades:
+                for det in acti.detalle_id.all():
+                    if (det.categoria == "Tren Superior" and trenSuperior != 0):
+                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                        trenSuperior -=1
+                        break
+                    if (det.categoria == "Tren inferior" and trenInferior != 0):
+                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                        trenInferior -=1
+                        break
+        
+    
+    if alumno.nivel_id.nombre == "Intermedio":
+        if porcentaje < 25:
+            trenSuperior = 1
+            trenInferior = 1
+            for acti in auxActividades:
+                for det in acti.detalle_id.all():
+                    if (det.categoria == "Tren Superior" and trenSuperior != 0):
+                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                        trenSuperior -=1
+                        break
+                    if (det.categoria == "Tren inferior" and trenInferior != 0):
+                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                        trenInferior -=1
+                        break
+        
+        if 25 <= porcentaje < 50:
+            trenSuperior = 2
+            trenInferior = 2
+            for acti in auxActividades:
+                for det in acti.detalle_id.all():
+                    if (det.categoria == "Tren Superior" and trenSuperior != 0):
+                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                        trenSuperior -=1
+                        break
+                    if (det.categoria == "Tren inferior" and trenInferior != 0):
+                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                        trenInferior -=1
+                        break
+        
+        if 50 <= porcentaje < 75:
+            trenSuperior = 3
+            trenInferior = 3
+            for acti in auxActividades:
+                for det in acti.detalle_id.all():
+                    if (det.categoria == "Tren Superior" and trenSuperior != 0):
+                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                        trenSuperior -=1
+                        break
+                    if (det.categoria == "Tren inferior" and trenInferior != 0):
+                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                        trenInferior -=1
+                        break
+                    
+        if 75 <= porcentaje:
+            trenSuperior = 4
+            trenInferior = 4
+            for acti in auxActividades:
+                for det in acti.detalle_id.all():
+                    if (det.categoria == "Tren Superior" and trenSuperior != 0):
+                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                        trenSuperior -=1
+                        break
+                    if (det.categoria == "Tren inferior" and trenInferior != 0):
+                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                        trenInferior -=1
+                        break
+               
+                    
+    if alumno.nivel_id.nombre == "Avanzado":
+        if porcentaje < 20:
+            trenSuperior = 1
+            trenInferior = 1
+            for acti in auxActividades:
+                for det in acti.detalle_id.all():
+                    if (det.categoria == "Tren Superior" and trenSuperior != 0):
+                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                        trenSuperior -=1
+                        break
+                    if (det.categoria == "Tren inferior" and trenInferior != 0):
+                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                        trenInferior -=1
+                        break   
+        
+        if 20 <= porcentaje < 40:
+            trenSuperior = 2
+            trenInferior = 2
+            for acti in auxActividades:
+                for det in acti.detalle_id.all():
+                    if (det.categoria == "Tren Superior" and trenSuperior != 0):
+                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                        trenSuperior -=1
+                        break
+                    if (det.categoria == "Tren inferior" and trenInferior != 0):
+                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                        trenInferior -=1
+                        break  
+                    
+        if 40 <= porcentaje < 60:
+            trenSuperior = 3
+            trenInferior = 3
+            for acti in auxActividades:
+                for det in acti.detalle_id.all():
+                    if (det.categoria == "Tren Superior" and trenSuperior != 0):
+                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                        trenSuperior -=1
+                        break
+                    if (det.categoria == "Tren inferior" and trenInferior != 0):
+                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                        trenInferior -=1
+                        break     
+                    
+        if 60 <= porcentaje < 80:
+            trenSuperior = 4
+            trenInferior = 4
+            for acti in auxActividades:
+                for det in acti.detalle_id.all():
+                    if (det.categoria == "Tren Superior" and trenSuperior != 0):
+                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                        trenSuperior -=1
+                        break
+                    if (det.categoria == "Tren inferior" and trenInferior != 0):
+                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                        trenInferior -=1
+                        break   
+                    
+        if 80 <= porcentaje:
+            trenSuperior = 5
+            trenInferior = 5
+            for acti in auxActividades:
+                for det in acti.detalle_id.all():
+                    if (det.categoria == "Tren Superior" and trenSuperior != 0):
+                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                        trenSuperior -=1
+                        break
+                    if (det.categoria == "Tren inferior" and trenInferior != 0):
+                        repeticiones.append(Repeticion.objects.get(actividad_id=acti.id, nivel_id=alumno.nivel_id))
+                        trenInferior -=1
+                        break  
+    
+    return repeticiones
+        
+
+
 def verClase(request, pk):
     user = User.objects.get(id=pk)
     
@@ -129,7 +344,7 @@ def verClase(request, pk):
         #Si entrena por el sistema    
         else:
             if request.method == 'GET':
-                
+                alumno = Alumno.objects.get(user_id=pk)
                 #Obtengo el dia y fecha de hoy
                 now = datetime.now()
                 today = date.today()
@@ -155,11 +370,54 @@ def verClase(request, pk):
                         
                         if (Sesion.objects.filter(alumno_id = alumno).exists()):
                             #Ya tiene sesiones, por lo tanto, se debe comparar actividades anteriores y la cantidad de sesiones faltantes para recalcular el nivel
-                            #Primero se debe verificar que no haya realizado la sesion de hoy
                             
-                            pass
+                            #Obtengo la ultima sesion del alumno
+                            ultimaSesion = Sesion.objects.filter(alumno_id=alumno.id).latest()
+                            print(ultimaSesion)
+                            if today != ultimaSesion.fechaSesion:
+                                #No hizo la sesion de hoy
+                                """Procedimientos
+                                        * debo obtener las actividades y sacar aquellas que ya hizo en la ultima sesion SI ES QUE HAY OTRAS   
+                                        * """
+                                actividades = rutina.actividad_id.all()
+                                actividadesRealizadas = ultimaSesion.actividad_id.all()
+                                print('Actividades realizadas en la ultima sesion\n'+str(actividadesRealizadas))
+                                print('Actividades de la rutina\n'+str(actividades))
+                                
+                                #Sacamos las actividades de la clase anterior
+                                auxActividades = []
+                                auxActividades = list(actividades)
+                                list(actividadesRealizadas)
+                                for i in actividadesRealizadas:
+                                    auxActividades.remove(i)                   
+                                print('Actividades supuestamente filtradas\n'+str(auxActividades))
+                                
+                                
+                                """ Debemos decidir cuantas actividades darle dependiendo del porcentaje de sesiones que lleva realizando
+                                    Hacemos
+                                            Hasta el 40%  solo uno por musculo
+                                            Entre 40%  y 60%  incrementamos uno por musculo
+                                            Entre 60%  y 80%  incrementamos uno por musculo
+                                            Mas de 80%  incrementamos uno por musculo
+                                """
+                                
+                                #Obtenemos la cantidad de sesiones que debe hacer segun el nivel y las que lleva
+                                sesionesPorNivel = EvaluacionNivel.objects.get(nivel_id = alumno.nivel_id).cantSesiones
+                                sesionesAlumno = ultimaSesion.cantSesiones
+                                
+                                #Obtenemos las repeticiones que debe hacer segun su nivel y el porcentaje de avance en el nivel
+                                repeticiones = calcularCantidadActividades(alumno, auxActividades, sesionesPorNivel, sesionesAlumno)         
+                                
+                                mensaje = None
+                                return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje, 'repeticiones':repeticiones})
+                                
+                            else:
+                                #Ya hizo la sesion de hoy
+                                mensaje = "Gracias por entrenarte con nosotros, tu sesión ha terminado. Vuelve el "
+                                return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje})
+                            
                         else:
-                            
+                            #Si es la primera sesion del alumno
                             actividades = rutina.actividad_id.all()
                             print('actividades: ' +str(actividades.all()))
                             actividadesARealizar = []
@@ -198,35 +456,64 @@ def verClase(request, pk):
                         
                 return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje})   
             else:
-                pass
-                """peticion = request.POST.copy()
-                repeticiones = peticion.pop('repeticiones')
+                today = date.today()
+                print('entro al post')
+                peticion = request.POST.copy()
+                print(peticion)
+                #Obtenemos los datos requeridos de la sesion (SE DEBE CONTROLAR CON TRY EXCEP DESPUES)
+                repe = peticion.pop('repeticiones')
+                repeticiones = []
+                for r in repe:
+                    repeticiones.append(Repeticion.objects.get(id=r))
+                
+                
+                esfuerzo = peticion.pop('esfuerzo')
+                esfuerzo = esfuerzo[0]
+                int(esfuerzo)
+                descripcion = peticion.pop('descripcion')
+                descripcion = descripcion[0]
+                print('            ')
+                print(esfuerzo)
+                print(repeticiones)
+                print(descripcion)
+                print('             ')
                 actividades = []
                 
-                #cargo las actividades que el alumno realizo
+                #cargo las actividades que el alumno realizo                
                 for r in repeticiones:
                     actividades.append(r.actividad_id)
                 
                 #creamos la nueva sesion
                 sesion = Sesion.objects.create(alumno_id=alumno, rutina_id=rutina, profesor_id=profesor)
                 for a in actividades:
+                    print(type(a))
                     sesion.actividad_id.add(a)
+                sesion.fechaSesion = today
+                sesion.esfuerzoSesion = esfuerzo
+                print('le cargo el esfuerzo')
+                sesion.descripcion = descripcion
+                print('le cargo la descripcion')
+                
+
                 #Si el chico no tiene sesion (debo asignarle 1 porque es la primer sesion)
-                if not ((Sesion.objects.filter(alumno_id = alumno).exists())):
+                sesionesAlumno = Sesion.objects.filter(alumno_id = alumno)
+                print(len(sesionesAlumno))
+                if(len(sesionesAlumno) == 1):
+                    print('le puso uno en cantSesiones y sesionesRealizadas')
                     sesion.cantSesiones = 1
                     sesion.sesionesRealizadas = 1
                 else:
+                    print('entro al else, osea ya tiene sesion')
                     #tengo que obtener la sesion y actualizar las cosas
-                    pass
-                    ultimaSesion = Sesion.objects.latest('fechaSesion').date.filter(alumno_id=alumno.id)"""
-                
+                    ultimaSesion = Sesion.objects.filter(alumno_id=alumno.id).latest()
+                    print(ultimaSesion)
+                    sesion.cantSesiones = ultimaSesion.cantSesiones + 1
+                    sesion.sesionesRealizadas = ultimaSesion.sesionesRealizadas + 1        
                     
-                    
-                    
-                sesion.save()
-                """else:
-                    pass"""
-                    #si existe la sesion
+                sesion.save() 
+                mensaje = "Gracias por entrenarte con nosotros, tu sesión ha terminado. Vuelve el "
+                return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje}) 
+                      
                     
                     
                     
