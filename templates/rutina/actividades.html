@@ -48,7 +48,7 @@
             <div class="list-group-item active">
                 <div class="row">
                     <div class="col col-sm-11 col-md-11 col-lg-11">
-                        <a href="/home/administracion/"><h5><img src="{% static 'img/back_blanco.png'%}"></a>Lista de Actividades</h5></div>
+                        <a href="javascript:history.back()"><h5><img src="{% static 'img/back_blanco.png'%}"></a>Lista de Actividades</h5></div>
                     {% if perms.rutina.add_actividad%}
                     <div class="col col-sm-1 col-md-1 col-lg-1">
                         <a class="btn btn-light" href="/rutinas/agregar_actividad" src="">

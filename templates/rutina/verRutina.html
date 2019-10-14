@@ -7,7 +7,7 @@
 {%block contenido%}
 <body class="container mt-2">
     <div class="card active">
-        <div class="card-header alert-primary"><a href="/rutinas/administrar_rutinas/"><h6><img src="{% static 'img/back_azul.png'%}"></a><strong>{{rutina.nombre}}</strong></h6></div>
+        <div class="card-header alert-primary"><a href="javascript:history.back()"><h6><img src="{% static 'img/back_azul.png'%}"></a><strong>{{rutina.nombre}}</strong></h6></div>
             <div class="card-body card-block">
                     {% csrf_token %}
                     <div class="">
