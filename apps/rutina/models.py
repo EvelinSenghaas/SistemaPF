@@ -98,17 +98,21 @@ class Rutina(models.Model):
 class Sesion(models.Model):
     id = models.AutoField(primary_key = True)
     alumno_id = models.ForeignKey('home.Alumno', related_name='homeAS', on_delete=models.CASCADE)
-    fechaSesion = models.DateField(blank = False, null = True, verbose_name="Fecha de la sesion", auto_now=False, auto_now_add=True)
-    actividad_id = models.ForeignKey(Actividad, verbose_name="Actividad", on_delete=models.CASCADE, blank=True)
+    fechaSesion = models.DateField(blank = True, null = True, verbose_name="Fecha de la sesion")
+    actividad_id = models.ManyToManyField(Actividad, verbose_name="Actividad", blank=True, null=True)
     rutina_id = models.ForeignKey(Rutina, verbose_name="Rutina", on_delete=models.CASCADE)
     profesor_id = models.ForeignKey('home.Profesor', related_name='homePS', on_delete=models.CASCADE)
     #agregar los dos atributos que faltan
-    cantSesiones = models.IntegerField(blank = False, null = False, verbose_name="Sesiones parciales")
-    sesionesRealizadas = models.IntegerField(blank = False, null = False, verbose_name="Sesiones totales")
+    cantSesiones = models.IntegerField(blank = True, null = True, verbose_name="Sesiones parciales")
+    sesionesRealizadas = models.IntegerField(blank = True, null = True, verbose_name="Sesiones totales")
+    esfuerzoSesion = models.IntegerField(blank = True, null = True, verbose_name="Costo de sesión")
+    descripcion = models.TextField(blank = True, null = True)
+    
     class Meta:
         verbose_name = 'Sesion'
         verbose_name_plural = 'Sesion'
         ordering = ['fechaSesion']
+        get_latest_by = "fechaSesion"
     
     def __str__ (self):
         return self.alumno_id.nombre + ' '+self.alumno_id.apellido+ ' (' + str(self.fechaSesion)+ ')'
