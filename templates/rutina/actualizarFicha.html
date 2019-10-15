@@ -7,12 +7,31 @@
 {%block contenido%}
 <body class="container mt-2">
     <div class="card active">
+            
         {%if mensaje3 == None%}
         <form method="POST">
         {% csrf_token %}
         <input type="hidden" name="clase" value="0">
         <div class="card-header alert-primary"><strong>Actualización de mis datos</strong></h6></div>
             <div class="card-body card-block">
+                    {% if messages %}
+          
+                    {% for message in messages %}
+                    {% if message.tags == 'success'%}
+                    <ul class="alert alert-success alert-dismissible">
+                      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                      <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+                    </ul> 
+                    {%endif%}
+                    {% if message.tags == 'error'%}
+                    <ul class="alert alert-danger alert-dismissible">
+                      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                      <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+                    </ul> 
+                    {%endif%}
+                    {% endfor %}
+                
+                  {% endif %}
                 <div class="alert alert-light"> 
                     <p>Necesitamos que actualices los datos de tu ficha para poder reevaluarte</p>
                 </div>
@@ -20,7 +39,7 @@
                     <div class="row form-group">
                         <div class="col col-md-3">Nuevo peso</div>
                         <div class="col-12 col-md-9">
-                            <input type="number" name="peso" class="form-control">     
+                            <input type="number" name="peso" class="form-control" step="0.01" placeholder="Ingrese su peso (en kg)">     
                         </div>
                     </div>
                 </div>
@@ -28,7 +47,7 @@
                     <div class="row form-group">
                         <div class="col col-md-3">Circunferencia de la muñeca</div>
                         <div class="col-12 col-md-9">
-                            <input type="number" name="circu" class="form-control">
+                            <input type="number" name="circu" class="form-control" step="0.01" placeholder="Ingrese la circunferencia de su muñeca (en cm)">
                         </div>
                     </div>
                 </div>

@@ -359,8 +359,14 @@ def actualizarFicha(request):
         
         if clase == '1':
             print('ENTRA EN LA SELECCION DE HORARIO')
-            disp = peticion.pop('disponibilidad')
-            disp = disp[0]
+            try:
+                disp = peticion.pop('disponibilidad')
+                disp = disp[0]
+            except:
+                mensaje = "Debes seleccionar un horario para la clase presencial"
+                return render (request, 'rutina/actualizarFicha.html', {'mensaje':mensaje})
+                
+                
             DisponibilidadProfesor.objects.filter(id=int(disp)).update(alumno_id=alumno, ocupado=True)
             return render(request, 'rutina/clases.html', {'alumno':alumno})
         
@@ -371,11 +377,25 @@ def actualizarFicha(request):
             
             altura = ficha.altura
             
-            circu = peticion.pop('circu')
-            circu = circu[0]
+            try:
+                circu = peticion.pop('circu')
+                circu = circu[0]
+                float(circu)
+            except:
+                print('entra en el except')
+                messages.error(request,'Necesitamos que ingreses la circunferencia de tu muñeca')
+                mensaje3= None 
+                return render (request, 'rutina/actualizarFicha.html', {'mensaje3':mensaje3})
             
-            peso = peticion.pop('peso')
-            peso = peso[0]
+            try:
+                peso = peticion.pop('peso')
+                peso = peso[0]
+                float(peso)
+            except:
+                print('entra en el except')
+                messages.error(request,'Necesitamos que ingreses tu peso')
+                mensaje3= None 
+                return render (request, 'rutina/actualizarFicha.html', {'mensaje3':mensaje3})
             
             sexo = ficha.sexo
             
@@ -420,7 +440,8 @@ def actualizarFicha(request):
     #return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje3":mensaje3})
     else:
         print('get de la funcion correcta')
-        return render (request, 'rutina/actualizarFicha.html')
+        mensaje = None
+        return render (request, 'rutina/actualizarFicha.html', {'mensaje':mensaje})
     
     
         
