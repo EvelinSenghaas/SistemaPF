@@ -848,9 +848,14 @@ def verRevisiones(request, pk):
     profesor = Profesor.objects.get(user_id=user.id)
     
     if request.method == 'GET':
-        revisiones = Revision.objects.filter(profesor_id=profesor.id)
-        print(revisiones[0].sesion_id.alumno_id.nombre)
-        return render (request, 'rutina/verRevisiones.html', { 'revisiones': revisiones})
+        if (Revision.objects.filter(profesor_id=profesor.id).exists()):
+            revisiones = Revision.objects.filter(profesor_id=profesor.id)
+            mensaje = None
+        else:
+            mensaje = "Por el momento no tenes revisiones que atender"
+            revisiones = None
+        
+        return render (request, 'rutina/verRevisiones.html', { 'revisiones': revisiones, 'mensaje':mensaje})
 
 
 def verActividad(request, pk):
@@ -952,7 +957,7 @@ def agregarEvaluacionNivel(request, pk):
     else:
         form = EvaluacionNivelForm()
         return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form})
-    return redirect('/rutinas/administrar_evaluacion_nivel/2')
+    return redirect('/rutinas/administrar_evaluacion_nivel/'+str(profesor.user_id))
         
 
 def editarEvaluacionNivel(request, pk):
@@ -988,7 +993,7 @@ def editarEvaluacionNivel(request, pk):
                     error = form.errors
                     return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form, 'error':error})
         
-    return redirect('/rutinas/administrar_evaluacion_nivel/2')
+    return redirect('/rutinas/administrar_evaluacion_nivel/'+str(profesor.user_id))
             
             
 def agregarActividad(request):
