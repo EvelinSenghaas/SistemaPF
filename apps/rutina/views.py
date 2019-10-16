@@ -483,6 +483,8 @@ def verClase(request, pk):
                 for r in repeticiones:
                     actividades.append(r.actividad_id)
                 
+                #Obtenemos la ultima sesion del alumno
+                ultimaSesion = Sesion.objects.filter(alumno_id=alumno.id).latest()
                 #creamos la nueva sesion
                 sesion = Sesion.objects.create(alumno_id=alumno, rutina_id=rutina, profesor_id=profesor)
                 for a in actividades:
@@ -500,15 +502,19 @@ def verClase(request, pk):
                 print(len(sesionesAlumno))
                 if(len(sesionesAlumno) == 1):
                     print('le puso uno en cantSesiones y sesionesRealizadas')
-                    sesion.cantSesiones = 1
-                    sesion.sesionesRealizadas = 1
+                    sesion.cantSesiones = int(1)
+                    sesion.sesionesRealizadas = int(1)
                 else:
                     print('entro al else, osea ya tiene sesion')
                     #tengo que obtener la sesion y actualizar las cosas
-                    ultimaSesion = Sesion.objects.filter(alumno_id=alumno.id).latest()
                     print(ultimaSesion)
-                    sesion.cantSesiones = ultimaSesion.cantSesiones + 1
-                    sesion.sesionesRealizadas = ultimaSesion.sesionesRealizadas + 1        
+                    
+                    #Obtenemos las sesiones parciales y totales
+                    cantSesiones = ultimaSesion.cantSesiones + 1
+                    sesionesRealizadas = ultimaSesion.sesionesRealizadas + 1
+                    
+                    sesion.cantSesiones = cantSesiones
+                    sesion.sesionesRealizadas = sesionesRealizadas
                     
                 sesion.save() 
                 mensaje = "Gracias por entrenarte con nosotros, tu sesión ha terminado. Vuelve el "
