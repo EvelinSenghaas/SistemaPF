@@ -402,10 +402,20 @@ def actualizarFicha(request):
                 mensaje3= "Subiste de nivel, ahora solo falta que tu profesor te evalúe. Para ello, debes elegir qué día queres tener una clase presencial"
                 disponibilidad = DisponibilidadProfesor.objects.filter(profesor_id=alumno.profesor_id, ocupado=False)
                 print(disponibilidad)
+                return render(request, 'rutina/actualizarFicha.html', {'alumno':alumno, 'mensaje3': mensaje3, 'disponibilidad': disponibilidad})
+                              
             else:
+                print('no cambio de nivel')
+                Alumno.objects.filter(id=alumno.id).update(nivel_id=Nivel.objects.get(nombre=nivel))
+                FichaAlumno.objects.filter(alumno_id=alumno.id).update(peso = float(peso), circunferenciaMuneca = float(circu))
+                
+                sesion = Sesion.objects.filter(alumno_id=alumno.id).latest()
+                sesion.cantSesiones=0
+                sesion.claseRevision = False
+                sesion.save()
                 mensaje3= None   
-                   
-            return render(request, 'rutina/actualizarFicha.html', {'alumno':alumno, 'mensaje3': mensaje3, 'disponibilidad': disponibilidad}) 
+                return redirect('/rutinas/clases/'+str(user.id))   
+             
     
     #return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje3":mensaje3})
     else:

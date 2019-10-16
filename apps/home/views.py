@@ -163,7 +163,7 @@ def editarDisponibilidad(request, pk):
             
 
     
-    return redirect('/home/administrar_disponibilidad/2')
+    return redirect('/home/administrar_disponibilidad/'+str(profesor.user_id))
      
            
 #No se usa mas
@@ -187,7 +187,7 @@ def eliminarDisponibilidad(request, pk):
     else:
         DisponibilidadProfesor.objects.get(id = disp.id).delete()
         messages.success(request, "Disponibilidad eliminada con éxito.")  
-    return redirect('/home/administrar_disponibilidad/2') 
+    return redirect('/home/administrar_disponibilidad/'+str(disp.profesor_id.user_id)) 
 
 
     
