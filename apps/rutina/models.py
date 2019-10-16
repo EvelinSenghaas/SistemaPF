@@ -107,6 +107,7 @@ class Sesion(models.Model):
     sesionesRealizadas = models.IntegerField(blank = True, null = True, verbose_name="Sesiones totales")
     esfuerzoSesion = models.IntegerField(blank = True, null = True, verbose_name="Costo de sesión")
     descripcion = models.TextField(blank = True, null = True)
+    claseRevision = models.BooleanField(default=False, verbose_name="Clase de revision")
     
     class Meta:
         verbose_name = 'Sesion'

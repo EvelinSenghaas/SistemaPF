@@ -6,6 +6,7 @@ from .forms import DetalleForm, ActividadForm, RutinaForm, NivelForm, Repeticion
 from django.views.generic import View, TemplateView, ListView, UpdateView, CreateView, DeleteView
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
+from django.shortcuts import render_to_response
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from apps.home.models import Profesor
 from django.contrib.auth.models import User
@@ -71,6 +72,62 @@ def traducirDia(dia):
     if dia == "Saturday":
         dia = "Sabado"
     return dia
+
+
+    
+#Metodo para calcular el nivel a asignar al alumno
+def calcularNivel(altura, circu, peso, actividad, sexo):
+    print(type(altura))
+    
+    if sexo == 'M':
+        contextura = (float(altura)/float(circu))
+        if contextura > 10.4:
+            nombreContextura = "pequeña"
+        if 9.6 <= contextura <= 10.4:
+            nombreContextura = "mediana"
+        if contextura < 9.6:
+            nombreContextura = "grande"
+    else:
+        contextura = (float(altura)/float(circu))
+        if contextura > 11:
+            nombreContextura = "pequeña"
+        if 10.1 <= contextura <= 11:
+            nombreContextura = "mediana"
+        if contextura < 10.1:
+            nombreContextura = "grande"
+
+    altura = float(altura)/100
+    imc = float(peso) / (altura*altura)
+    if imc < 18.4:
+        nombreImc = "delgado"
+    if 18.4 <= imc <= 24.9:
+        nombreImc = "normal"
+    if imc > 24.9:
+        nombreImc = "gordo"
+
+
+    if actividad == "mucho":
+        if (nombreImc == "delgado") or (nombreImc == "normal"):
+            nivel = "avanzado"
+        else:
+            if (nombreContextura == "grande"):
+                nivel = "intermedio"
+            if (nombreContextura == "pequeña") or (nombreContextura == "mediana"):
+                nivel = "principiante"
+        return nivel
+    if actividad == "poco":
+        if (nombreImc == "delgado") or (nombreImc == "normal"):
+            nivel = "intermedio"
+        if (nombreImc == "gordo"):
+            nivel = "principiante"
+        return nivel
+    if actividad == "nada":
+        if (nombreImc == "delgado"):
+            nivel = "intermedio"
+        else:
+            nivel = "principiante"
+        return nivel
+    
 
 
 def calcularCantidadActividades(alumno, auxActividades, sesionesPorNivel, sesionesAlumno):
@@ -286,6 +343,121 @@ def calcularCantidadActividades(alumno, auxActividades, sesionesPorNivel, sesion
     return repeticiones
         
 
+def actualizarFicha(request):
+    if request.method == 'POST':
+        print('ENTRO AL POST DE LA FUNCION ACTUALIZAR FICHA')
+        peticion = request.POST.copy()
+        print(peticion)
+        #Obtenemos el usuario y el alumno
+        us = peticion.pop('user')
+        us = us[0]
+        user = User.objects.get(id=us)
+        alumno = Alumno.objects.get(user_id=user.id)
+            
+        clase = peticion.pop('clase')
+        clase = clase[0]
+        
+        if clase == '1':
+            print('ENTRA EN LA SELECCION DE HORARIO')
+            disp = peticion.pop('disponibilidad')
+            disp = disp[0]
+            DisponibilidadProfesor.objects.filter(id=int(disp)).update(alumno_id=alumno, ocupado=True)
+            return render(request, 'rutina/clases.html', {'alumno':alumno})
+        
+        if clase == '0':    
+            print('ENTRA EN LA ACTUALIZACION DE DATOS')
+            
+            ficha = FichaAlumno.objects.get(alumno_id=alumno.id)
+            
+            altura = ficha.altura
+            
+            circu = peticion.pop('circu')
+            circu = circu[0]
+            
+            peso = peticion.pop('peso')
+            peso = peso[0]
+            
+            sexo = ficha.sexo
+            
+            print(altura)
+            print(circu)
+            print(peso)
+            #Obtenemos cuanta actividad hace el alumno
+            if len(alumno.semana_id.all()) <= 2:
+                actividad = "poco"
+            if len(alumno.semana_id.all()) >= 3:
+                actividad = "mucho"
+            if len(alumno.semana_id.all())  == 0:
+                actividad = "nada"
+                
+            #Recalculamos el nivel
+            nivel = calcularNivel(altura, circu, peso, actividad, sexo)
+            nivel = nivel.capitalize()
+            print(nivel)
+            
+            if nivel != str(alumno.nivel_id.nombre):
+                Alumno.objects.filter(id=alumno.id).update(nivel_id=Nivel.objects.get(nombre=nivel))
+                FichaAlumno.objects.filter(alumno_id=alumno.id).update(peso = float(peso), circunferenciaMuneca = float(circu))
+                #ACA DEBEMOS CAMBIAR A TRUE EL ATRIBUTO CLASE DE REVISION
+                mensaje3= "Subiste de nivel, ahora solo falta que tu profesor te evalúe. Para ello, debes elegir qué día queres tener una clase presencial"
+                disponibilidad = DisponibilidadProfesor.objects.filter(profesor_id=alumno.profesor_id, ocupado=False)
+                print(disponibilidad)
+            else:
+                mensaje3= None   
+                   
+            return render(request, 'rutina/actualizarFicha.html', {'alumno':alumno, 'mensaje3': mensaje3, 'disponibilidad': disponibilidad}) 
+    
+    #return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje3":mensaje3})
+    else:
+        print('get de la funcion correcta')
+        return render (request, 'rutina/actualizarFicha.html')
+    
+    
+        
+    """
+    print('Llego al limite de sesiones, se debe recalcular el nivel')
+                    #Obtenemos los datos necesarios para recalcular el nivel
+                    ficha = FichaAlumno.objects.get(alumno_id = alumno.id)
+                    altura = ficha.altura
+                    circu = ficha.circunferenciaMuneca
+                    peso = ficha.peso
+                    sexo = ficha.sexo
+                    
+                    
+                    x <= 2
+                        poco
+                    x >= 3
+                        mucho
+                    x = 0
+                        nada
+                    
+                    #Obtenemos cuanta actividad hace el alumno
+                    if len(alumno.semana_id) <= 2:
+                        actividad = "poco"
+                    if len(alumno.semana_id) >= 3:
+                        actividad = "mucho"
+                    if len(alumno.semana_id)  == 0:
+                        actividad = "nada"
+                    
+                    
+                    #Recalculamos el nivel
+                    nivel = calcularNivel(altura, circu, peso, actividad, sexo)
+                    nivel = nivel.capitalize()
+                    print(nivel)
+                    if nivel != str(alumno.nivel_id.nombre):
+                        Alumno.objects.filter(id=alumno.id).update(nivel_id=Nivel.objects.get(nombre=nivel))
+                        #ACA DEBEMOS CAMBIAR A TRUE EL ATRIBUTO CLASE DE REVISION
+                        mensaje2= "Subiste de nivel, ahora solo falta que tu profesor te evalúe"
+                    else:
+                        mensaje2= None
+                    
+                    
+                else:
+                    print('Todavia no llego al limite de sesiones')
+    """    
+        
+
+
 
 def verClase(request, pk):
     user = User.objects.get(id=pk)
@@ -373,49 +545,63 @@ def verClase(request, pk):
                             
                             #Obtengo la ultima sesion del alumno
                             ultimaSesion = Sesion.objects.filter(alumno_id=alumno.id).latest()
-                            print(ultimaSesion)
-                            if today != ultimaSesion.fechaSesion:
-                                #No hizo la sesion de hoy
-                                """Procedimientos
-                                        * debo obtener las actividades y sacar aquellas que ya hizo en la ultima sesion SI ES QUE HAY OTRAS   
-                                        * """
-                                print(today)
-                                actividades = rutina.actividad_id.all()
-                                actividadesRealizadas = ultimaSesion.actividad_id.all()
-                                print('Actividades realizadas en la ultima sesion\n'+str(actividadesRealizadas))
-                                print('Actividades de la rutina\n'+str(actividades))
-                                
-                                #Sacamos las actividades de la clase anterior
-                                auxActividades = []
-                                auxActividades = list(actividades)
-                                list(actividadesRealizadas)
-                                for i in actividadesRealizadas:
-                                    auxActividades.remove(i)                   
-                                print('Actividades supuestamente filtradas\n'+str(auxActividades))
-                                
-                                
-                                """ Debemos decidir cuantas actividades darle dependiendo del porcentaje de sesiones que lleva realizando
-                                    Hacemos
-                                            Hasta el 40%  solo uno por musculo
-                                            Entre 40%  y 60%  incrementamos uno por musculo
-                                            Entre 60%  y 80%  incrementamos uno por musculo
-                                            Mas de 80%  incrementamos uno por musculo
-                                """
-                                
-                                #Obtenemos la cantidad de sesiones que debe hacer segun el nivel y las que lleva
-                                sesionesPorNivel = EvaluacionNivel.objects.get(nivel_id = alumno.nivel_id).cantSesiones
-                                sesionesAlumno = ultimaSesion.cantSesiones
-                                
-                                #Obtenemos las repeticiones que debe hacer segun su nivel y el porcentaje de avance en el nivel
-                                repeticiones = calcularCantidadActividades(alumno, auxActividades, sesionesPorNivel, sesionesAlumno)         
-                                
-                                mensaje = None
-                                return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje, 'repeticiones':repeticiones})
-                                
+                            if ultimaSesion.claseRevision == False:
+                                print(ultimaSesion)
+                                if today != ultimaSesion.fechaSesion:
+                                    #No hizo la sesion de hoy
+                                    """Procedimientos
+                                            * debo obtener las actividades y sacar aquellas que ya hizo en la ultima sesion SI ES QUE HAY OTRAS   
+                                            * """
+                                    print(today)
+                                    actividades = rutina.actividad_id.all()
+                                    actividadesRealizadas = ultimaSesion.actividad_id.all()
+                                    print('Actividades realizadas en la ultima sesion\n'+str(actividadesRealizadas))
+                                    print('Actividades de la rutina\n'+str(actividades))
+                                    
+                                    #Sacamos las actividades de la clase anterior
+                                    auxActividades = []
+                                    auxActividades = list(actividades)
+                                    list(actividadesRealizadas)
+                                    for i in actividadesRealizadas:
+                                        auxActividades.remove(i)                   
+                                    print('Actividades supuestamente filtradas\n'+str(auxActividades))
+                                    
+                                    
+                                    """ Debemos decidir cuantas actividades darle dependiendo del porcentaje de sesiones que lleva realizando
+                                        Hacemos
+                                                Hasta el 40%  solo uno por musculo
+                                                Entre 40%  y 60%  incrementamos uno por musculo
+                                                Entre 60%  y 80%  incrementamos uno por musculo
+                                                Mas de 80%  incrementamos uno por musculo
+                                    """
+                                    
+                                    #Obtenemos la cantidad de sesiones que debe hacer segun el nivel y las que lleva
+                                    sesionesPorNivel = EvaluacionNivel.objects.get(nivel_id = alumno.nivel_id).cantSesiones
+                                    sesionesAlumno = ultimaSesion.cantSesiones
+                                    
+                                    #Obtenemos las repeticiones que debe hacer segun su nivel y el porcentaje de avance en el nivel
+                                    repeticiones = calcularCantidadActividades(alumno, auxActividades, sesionesPorNivel, sesionesAlumno)         
+                                    
+                                    mensaje = None
+                                    return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje, 'repeticiones':repeticiones})
+                                    
+                                else:
+                                    #Ya hizo la sesion de hoy
+                                    mensaje = "Gracias por entrenarte con nosotros, tu sesión ha terminado. Vuelve el "
+                                    return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje})
                             else:
-                                #Ya hizo la sesion de hoy
-                                mensaje = "Gracias por entrenarte con nosotros, tu sesión ha terminado. Vuelve el "
-                                return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje})
+                                if str(dia) == str(DisponibilidadProfesor.objects.get(alumno_id=alumno.id).semana_id.dia):
+                                    #La clase de hoy es una de revision
+                                    print('entra donde quieroo')
+                                    mensaje = "Hoy te toca una clase dictada por " + str(alumno.profesor_id) + " a las HORA"
+                                    return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje})
+                                
+                                else:
+                                    mensaje = "Hoy no es tu día de entrenamiento, vuelve el "
+                                    return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje}) 
+                            
+                            
+                                    
                             
                         else:
                             #Si es la primera sesion del alumno
@@ -485,8 +671,11 @@ def verClase(request, pk):
                 for r in repeticiones:
                     actividades.append(r.actividad_id)
                 
-                #Obtenemos la ultima sesion del alumno
-                ultimaSesion = Sesion.objects.filter(alumno_id=alumno.id).latest()
+                sesionesAlumno = Sesion.objects.filter(alumno_id = alumno)
+                if len(sesionesAlumno) != 0:
+                    #Obtenemos la ultima sesion del alumno
+                    ultimaSesion = Sesion.objects.filter(alumno_id=alumno.id).latest()
+                
                 #creamos la nueva sesion
                 sesion = Sesion.objects.create(alumno_id=alumno, rutina_id=rutina, profesor_id=profesor)
                 for a in actividades:
@@ -517,8 +706,12 @@ def verClase(request, pk):
                     
                     sesion.cantSesiones = cantSesiones
                     sesion.sesionesRealizadas = sesionesRealizadas
-                    
-                sesion.save() 
+                
+                sesion.save()
+                
+                
+                #Se vuelve a obtener la ultima sesion (la que acaba de guardarse) del alumno para ver si completo todas las sesiones
+                sesionActual = Sesion.objects.filter(alumno_id=alumno.id).latest()
                 
                 try:
                     check = peticion.pop('check')
@@ -531,9 +724,26 @@ def verClase(request, pk):
                 except:
                     pass
                 
-                mensaje = "Gracias por entrenarte con nosotros, tu sesión ha terminado. Vuelve el "
-                return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje}) 
-                      
+                    
+                #Se controla si con la sesion que acaba de realizar llego al 100% de las sesiones
+                if sesionActual.cantSesiones == EvaluacionNivel.objects.get(nivel_id=alumno.nivel_id).cantSesiones:
+                    print('entra donde quiero')
+                    #Redireccionamos a la pagina de actualizacion de datos
+                    #return redirect('/rutinas/actualizar_ficha/')
+                    ficha = FichaAlumno.objects.get(alumno_id=alumno.id)
+                    Sesion.objects.filter(id=sesionActual.id).update(claseRevision=True)
+                    
+                    mensaje = "Debes actualizar los datos de tu ficha de entrenamiento para que podamos evaluar tu nivel nuevamente"
+                    
+                    #return render_to_response ('rutina/actualizarFicha.html', context = {'alumno':alumno,'ficha':ficha, "mensaje":mensaje})
+                    return redirect ('/rutinas/actualizar_ficha/')
+                
+                else:     
+                    print('sigue donde no debe seguir')
+                    mensaje = "Gracias por entrenarte con nosotros, tu sesión ha terminado. Vuelve el "
+                    return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje}) 
+                
+                print('aca no deberia estar')  
                     
                     
                     
@@ -583,10 +793,14 @@ def perfil(request, pk):
             mensaje = None
             disponibilidad = alumno.semana_id.all()
  
-            sesiones = Sesion.objects.filter(alumno_id=alumno.id).order_by('-id')
-            ultimaSesion = Sesion.objects.filter(alumno_id=alumno.id).latest()
-            for sesion in sesiones:
-                sesion.cantSesiones = (sesion.sesionesRealizadas * 100) / EvaluacionNivel.objects.get(nivel_id=alumno.nivel_id).cantSesiones
+            try:
+                sesiones = Sesion.objects.filter(alumno_id=alumno.id).order_by('-id')
+                ultimaSesion = Sesion.objects.filter(alumno_id=alumno.id).latest()
+                for sesion in sesiones:
+                    sesion.cantSesiones = (sesion.sesionesRealizadas * 100) / EvaluacionNivel.objects.get(nivel_id=alumno.nivel_id).cantSesiones
+            except:
+                sesiones = None
+                
 
 
             
@@ -1016,62 +1230,6 @@ def eliminarDetalle(request, pk):
     return redirect('/rutinas/administrar_detalles')
  
 
-    
-    
-    
-#Metodo para calcular el nivel a asignar al alumno
-def calcularNivel(altura, circu, peso, actividad, sexo):
-    
-    if sexo == 'M':
-        contextura = (float(altura)/float(circu))
-        if contextura > 10.4:
-            nombreContextura = "pequeña"
-        if 9.6 <= contextura <= 10.4:
-            nombreContextura = "mediana"
-        if contextura < 9.6:
-            nombreContextura = "grande"
-    else:
-        contextura = (float(altura)/float(circu))
-        if contextura > 11:
-            nombreContextura = "pequeña"
-        if 10.1 <= contextura <= 11:
-            nombreContextura = "mediana"
-        if contextura < 10.1:
-            nombreContextura = "grande"
-
-    altura = float(altura)/100
-    imc = float(peso) / (altura*altura)
-    if imc < 18.4:
-        nombreImc = "delgado"
-    if 18.4 <= imc <= 24.9:
-        nombreImc = "normal"
-    if imc > 24.9:
-        nombreImc = "gordo"
-
-
-    if actividad == "mucho":
-        if (nombreImc == "delgado") or (nombreImc == "normal"):
-            nivel = "avanzado"
-        else:
-            if (nombreContextura == "grande"):
-                nivel = "intermedio"
-            if (nombreContextura == "pequeña") or (nombreContextura == "mediana"):
-                nivel = "principiante"
-        return nivel
-    if actividad == "poco":
-        if (nombreImc == "delgado") or (nombreImc == "normal"):
-            nivel = "intermedio"
-        if (nombreImc == "gordo"):
-            nivel = "principiante"
-        return nivel
-    if actividad == "nada":
-        if (nombreImc == "delgado"):
-            nivel = "intermedio"
-        else:
-            nivel = "principiante"
-        return nivel
-    
-
 #No se usa
 def BusquedaDisponibilidad(TemplateView):
     
@@ -1187,6 +1345,7 @@ def inscribirseRutina(request, pk1, pk2):
                     grupo = Group.objects.get(name='Alumno') 
                     grupo.user_set.add(user)        
                     ficha.alumno_id = alumno
+                    ficha.circunferenciaMuneca = circu
                     ficha.save()
                     return render (request, 'rutina/inscripcionExitosa.html', {'alumno':Alumno.objects.get(user_id=user.id), 'rutina':rutina})
             else:

@@ -126,6 +126,7 @@ class FichaAlumno (models.Model):
     sexo = models.CharField(max_length = 1, blank = False, null = True)
     altura = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=False)
     grupo_sanguineo = models.CharField(max_length = 2, blank = False, null = False)
+    circunferenciaMuneca = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=False)
     profesion = models.CharField(max_length = 40, blank = False, null = True)
     alumno_id = models.OneToOneField(Alumno, on_delete=models.CASCADE)
     

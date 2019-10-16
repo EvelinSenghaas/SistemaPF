@@ -75,7 +75,7 @@
                 <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                     <div class="card-header">
                         <div class="row">
-                            <div class="col-4">
+                            <div class="col-3">
                                 <b>Alumno</b>
                             </div>
                             <div class="col-4">
@@ -89,7 +89,7 @@
                     {% for alumno in alumnos %}
                     <div class="list-group-item">
                         <div class="row">
-                            <div class="col-4">
+                            <div class="col-3">
                                 {{alumno.alumno_id}}
                             </div>
                             <div class="col-4">
@@ -97,6 +97,13 @@
                             </div>
                             <div class="col-4">
                                 {{alumno.alumno_id.rutina_id}}
+                            </div>
+                            <div class="auto">
+                                <h5>
+                                    <span class="badge badge-success">
+                                        <a href="" style="color:rgb(255, 255, 255);"> Revision</a>
+                                    </span>
+                                </h5>
                             </div>
                         </div>
                     </div> 
@@ -121,7 +128,7 @@
             {%if mensaje == None%}
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-3">
                             <b>Alumno</b>
                         </div>
                         <div class="col-4">
@@ -135,7 +142,7 @@
                 {% for alumno in alumnosPendientes %}
                 <div class="list-group-item">
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-3">
                             {{alumno.alumno_id}}
                         </div>
                         <div class="col-4">
@@ -143,6 +150,13 @@
                         </div>
                         <div class="col-4">
                             {{alumno.alumno_id.rutina_id}}
+                        </div>
+                        <div class="auto">
+                            <h5>
+                                <span class="badge badge-success">
+                                    <a href="" style="color:rgb(255, 255, 255);"> Revision</a>
+                                </span>
+                            </h5>
                         </div>
                     </div>
                 </div> 
@@ -169,6 +183,9 @@
     <!-- ################################################################################################################################## -->
     
     <!-- Si el usuario entrena con el sistema -->
+    {%else%}
+    {%if mensaje3 != None%}
+        {{mensaje3}}
     {%else%}
     {%if mensaje == None%}
     <!-- Si es dia de entrenamiento -->
@@ -272,17 +289,20 @@
                         </div>
                     </div>
                 </div>
-                <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg2{{disp.id}}" class="btn btn-primary">Terminar sesión</a>
+                <div class="float-right">
+                    <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg2{{disp.id}}" class="btn btn-primary">Terminar sesión</a>
+                </div>
             </div>
         </div> 
     {%else%}
     <!-- Si no es dia de entrenamiento -->
     <div class="alert alert-info" role="alert">
-            <h4 class="alert-heading">¡Te mereces un descanso!</h4>
-            <p>{{mensaje}}</p>
-            <hr>
-            <p class="mb-0"><strong><a href="/home/">Volver</a></strong></p>
-        </div>
+        <h4 class="alert-heading">¡Te mereces un descanso!</h4>
+        <p>{{mensaje}}</p>
+        <hr>
+        <p class="mb-0"><strong><a href="/home/">Volver</a></strong></p>
+    </div>
+    {%endif%}
     {%endif%}
     {%endif%}
     

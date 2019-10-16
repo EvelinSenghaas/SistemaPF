@@ -1,0 +1,90 @@
+{%extends 'home/home.html'%}
+{%load staticfiles%}
+
+{%block titulo%}Actualización de datos{%endblock titulo%}
+{%block imagen_principal%}
+{%endblock imagen_principal%}
+{%block contenido%}
+<body class="container mt-2">
+    <div class="card active">
+        {%if mensaje3 == None%}
+        <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="clase" value="0">
+        <div class="card-header alert-primary"><strong>Actualización de mis datos</strong></h6></div>
+            <div class="card-body card-block">
+                <div class="alert alert-light"> 
+                    <p>Necesitamos que actualices los datos de tu ficha para poder reevaluarte</p>
+                </div>
+                <div class="form-group">
+                    <div class="row form-group">
+                        <div class="col col-md-3">Nuevo peso</div>
+                        <div class="col-12 col-md-9">
+                            <input type="number" name="peso" class="form-control">     
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row form-group">
+                        <div class="col col-md-3">Circunferencia de la muñeca</div>
+                        <div class="col-12 col-md-9">
+                            <input type="number" name="circu" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="user" value="{{user.id}}">
+                <div class="float-right">
+                    <button type="submit" class="btn btn-primary">Actualizar mis datos</button>
+                </div>   
+                <br>
+            </div>
+        </div>
+        </form>
+        {%else%}
+        <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="clase" value="1">
+                <div class="card-header alert-primary"><strong>Selección de horario</strong></h6></div>
+                    <div class="card-body card-block">
+                        <div class="alert alert-light"> 
+                            <p>Selecciona el horario en el que queres tener la clase presencial</p>
+                        </div>
+                        <div class="form-group">
+                            <div class="row form-group">
+                                <div class="col col-md-3">Horarios</div>
+                                <div class="col-12 col-md-9">
+                                    <select name="disponibilidad" class="selectpicker" data-live-search="true">
+                                        {%for disp in disponibilidad%}
+                                            <option value="{{disp.id}}">
+                                                {{disp}}
+                                            </option>
+                                        {%endfor%}
+                                    </select>     
+                                </div>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="user" value="{{user.id}}">
+                        <div class="float-right">
+                            <button type="submit" class="btn btn-primary">Confirmar</button>
+                        </div>   
+                        <br>    
+                    </div>
+                </div>
+                </form>
+        {%endif%}
+
+    </div>
+
+    <!--SCRIPTS-->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+{%endblock contenido%}
+{%block pie%}
+{%endblock pie%}

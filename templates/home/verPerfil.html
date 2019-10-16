@@ -275,6 +275,9 @@
                               </h5>
                             </div>
                             <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">                          <div class="mt-2">
+                                {%if sesiones == None%}
+                                    <label style="color:rgb(130, 128, 128)">No ha realizado ninguna sesion aún</label>
+                                {%else%}
                                 <table class="table dataTable" id="mydatatable">
                                   <thead class="card-header">
                                     <tr>
@@ -324,6 +327,7 @@
                                   {%endfor%}
                                   </tbody>
                                 </table>
+                                {%endif%}
                             </div>        
                             </div>
                           </div>
