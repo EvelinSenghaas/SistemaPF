@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Rutina, Actividad, Detalle, Nivel, Repeticion, EvaluacionNivel, Sesion
+from .models import Rutina, Actividad, Detalle, Nivel, Repeticion, EvaluacionNivel, Sesion, Revision
 from ..home.models import Alumno, FichaAlumno, Profesor, Semana, DisponibilidadProfesor
 from ..home.forms import AlumnoForm, FichaForm
 from .forms import DetalleForm, ActividadForm, RutinaForm, NivelForm, RepeticionForm, EvaluacionNivelForm
@@ -379,6 +379,7 @@ def verClase(request, pk):
                                 """Procedimientos
                                         * debo obtener las actividades y sacar aquellas que ya hizo en la ultima sesion SI ES QUE HAY OTRAS   
                                         * """
+                                print(today)
                                 actividades = rutina.actividad_id.all()
                                 actividadesRealizadas = ultimaSesion.actividad_id.all()
                                 print('Actividades realizadas en la ultima sesion\n'+str(actividadesRealizadas))
@@ -459,7 +460,8 @@ def verClase(request, pk):
                 today = date.today()
                 print('entro al post')
                 peticion = request.POST.copy()
-                print(peticion)
+                print(peticion)          
+                
                 #Obtenemos los datos requeridos de la sesion (SE DEBE CONTROLAR CON TRY EXCEP DESPUES)
                 repe = peticion.pop('repeticiones')
                 repeticiones = []
@@ -517,6 +519,18 @@ def verClase(request, pk):
                     sesion.sesionesRealizadas = sesionesRealizadas
                     
                 sesion.save() 
+                
+                try:
+                    check = peticion.pop('check')
+                    check = check[0]
+                    print(check)
+                    if check != None:
+                        print('selecciono')
+                        revision = Revision.objects.create(profesor_id=profesor, sesion_id=sesion)
+                        revision.save()
+                except:
+                    pass
+                
                 mensaje = "Gracias por entrenarte con nosotros, tu sesión ha terminado. Vuelve el "
                 return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje}) 
                       
@@ -606,7 +620,13 @@ def verRutina(request, pk):
 
 
 def verRevisiones(request, pk):
-    pass
+    user = User.objects.get(id=pk)
+    profesor = Profesor.objects.get(user_id=user.id)
+    
+    if request.method == 'GET':
+        revisiones = Revision.objects.filter(profesor_id=profesor.id)
+        print(revisiones[0].sesion_id.alumno_id.nombre)
+        return render (request, 'rutina/verRevisiones.html', { 'revisiones': revisiones})
 
 
 def verActividad(request, pk):

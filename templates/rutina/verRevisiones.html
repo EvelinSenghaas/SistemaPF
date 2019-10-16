@@ -1,0 +1,137 @@
+{% extends 'home/home.html'%}
+{% load staticfiles%}
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap core CSS -->
+  <link href=" {% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/modern-business.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link href=" {% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet">
+
+    <title>Revisiones</title>
+</head>
+{%block imagen_principal%}
+{%endblock imagen_principal%}
+
+    {%block contenido%}
+    <section class="container mt-2">
+
+            {% if messages %}
+        
+            {% for message in messages %}
+            {% if message.tags == 'success'%}
+            <ul class="alert alert-success alert-dismissible">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+            </ul> 
+            {%endif%}
+            {% if message.tags == 'error'%}
+            <ul class="alert alert-danger alert-dismissible">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+            </ul> 
+            {%endif%}
+            {% endfor %}
+           
+      {% endif %}
+        <div class="list-group" >
+        
+            <div class="list-group-item active">
+                <div class="row">
+                    <div class="col col-sm-11 col-md-11 col-lg-11">
+                        <a href="javascript:history.back()"><h5><img src="{% static 'img/back_blanco.png'%}"></a>Lista de Revisiones</h5></div>
+                </div>
+            </div>
+        </div>
+    <div class="card">
+    <div class="mt-2">
+        <table class="table dataTable" id="mydatatable">
+          <thead class="card-header">
+            <tr>
+              <th width="150">Alumno</th>
+
+              <th width="130">Fecha de sesión</th>
+
+              <th width="490">Descripción</th>
+
+              <th width="auto">Contacto</th>
+            </tr>
+          </thead>
+          <tbody>
+          {%for revision in revisiones%}
+            <tr>
+                <td width="150">{{revision.sesion_id.alumno_id.nombre}}, {{revision.sesion_id.alumno_id.apellido}}</td>
+
+                <td width="130">{{revision.sesion_id.fechaSesion}}</td>
+
+                <td width="500">{{revision.sesion_id.descripcion}}</td>
+
+                <td width="auto" ><button type="button" class="btn btn-success btn-sm">Mensaje</button></td>
+            </tr>
+            <!-- Modal para eliminar -->
+            <div class="modal fade bs-example-modal-lg2{{actividad.id}}" id="myModal2{{actividad.id}}" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel{{actividad.id}}">Confirmar eliminación</h4>
+                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                            </button>
+                            
+                        </div>
+                        <div class="modal-body">
+                            <h5>¿Seguro que desea eliminar <strong>{{actividad.nombre}}</strong>?</h5>
+                            
+                        </div>
+                        <div class="modal-footer">
+                            <a href="/rutinas/eliminar_actividad/{{actividad.id}}">
+                            <button type="button" class="btn btn-danger" >Confirmar</button>
+                            </a>
+                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+                        </div>
+        
+                    </div>
+                </div>
+            </div>
+          {%endfor%}
+          </tbody>
+        </table>
+    </div>
+</div>
+</section>
+
+ <!-- Bootstrap core JavaScript -->
+ <script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
+ <script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+ <!-- Bootstrap core JavaScript -->
+ <script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
+ <script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+ <script src=" {% static 'js/jquery.dataTables.min.js' %}"></script>
+
+   <!-- Optional JavaScript -->
+   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+   <script src=" {% static 'js/jquery.dataTables.min.js' %}"></script>
+    <script>
+            $(document).ready(function(){
+                $('#delete').click(function(){
+                    $('#delModal').modal('show');
+                });
+            });
+    </script>
+{%endblock contenido%}
+
+{%block pie%}
+{%endblock pie%}
