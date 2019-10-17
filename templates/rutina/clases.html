@@ -13,6 +13,23 @@
         background: #BABABA;
     }
 </style>
+<script>
+        
+        function mensajeChange() {
+          console.log("change");
+          const mensaje = document.getElementById("mensaje");
+          const boton = document.getElementById("enviar");
+          console.log(boton)
+          
+          if (mensaje.value.trim() !== "") {
+            console.log("Se muestra")
+            boton.removeAttribute('disabled')
+          } else {
+            boton.setAttribute('disabled', "true");
+          }
+        }
+        
+      </script>
 <body class="container mt-2">
     <!-- Si el usuario entrena con un profesor -->
     {%if not alumno.entrenamiento_sistema%}
@@ -208,7 +225,24 @@
                     
                 </div>
                 <div class="modal-body">
-
+                        {% if messages %}
+          
+                            {% for message in messages %}
+                            {% if message.tags == 'success'%}
+                            <ul class="alert alert-success alert-dismissible">
+                              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                              <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+                            </ul> 
+                            {%endif%}
+                            {% if message.tags == 'error'%}
+                            <ul class="alert alert-danger alert-dismissible">
+                              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                              <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+                            </ul> 
+                            {%endif%}
+                            {% endfor %}
+                        
+                          {% endif %}
                         <div class="row form-group">
                             <div class="col-4 col-md-4">¿Qué tan dura estuvo la clase?</div>
                             <div class="col-6 col-md-6">
@@ -219,9 +253,9 @@
                         <div class="row form-group">
                             <div class="col-4 col-md-4">Cuéntanos como te ha ido</div>
                             <div class="col-7 col-md-7">
-                                <textarea name="descripcion" id="" cols="46" rows="5"></textarea>
+                                <textarea onkeyup="mensajeChange()" name="descripcion" id="mensaje" cols="46" rows="5"></textarea>
                                 <br>
-                                <input class="form-check-input" type="checkbox" id="disabledFieldsetCheck" value="1" name="check">
+                                <input class="form-check-input" type="checkbox" id="enviar" value="1" name="check" disabled>
                                 <label class="form-check-label" for="disabledFieldsetCheck">
                                 Solicitar revisión de ésta clase
                                 </label>
