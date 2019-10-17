@@ -65,6 +65,24 @@
                 <input type="hidden" name="clase" value="1">
                 <div class="card-header alert-primary"><strong>Selección de horario</strong></h6></div>
                     <div class="card-body card-block">
+                            {% if messages %}
+          
+                            {% for message in messages %}
+                            {% if message.tags == 'success'%}
+                            <ul class="alert alert-success alert-dismissible">
+                              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                              <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+                            </ul> 
+                            {%endif%}
+                            {% if message.tags == 'error'%}
+                            <ul class="alert alert-danger alert-dismissible">
+                              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                              <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+                            </ul> 
+                            {%endif%}
+                            {% endfor %}
+                        
+                          {% endif %}
                         <div class="alert alert-light"> 
                             <p>Selecciona el horario en el que queres tener la clase presencial</p>
                         </div>
@@ -73,6 +91,7 @@
                                 <div class="col col-md-3">Horarios</div>
                                 <div class="col-12 col-md-9">
                                     <select name="disponibilidad" class="selectpicker" data-live-search="true">
+                                        <option selected>Selecciona un horario</option>
                                         {%for disp in disponibilidad%}
                                             <option value="{{disp.id}}">
                                                 {{disp}}

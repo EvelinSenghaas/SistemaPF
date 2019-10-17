@@ -362,9 +362,13 @@ def actualizarFicha(request):
             try:
                 disp = peticion.pop('disponibilidad')
                 disp = disp[0]
+                int(disp)
             except:
-                mensaje = "Debes seleccionar un horario para la clase presencial"
-                return render (request, 'rutina/actualizarFicha.html', {'mensaje':mensaje})
+                messages.error(request,'Necesitamos que selecciones un horario para tener tu clase presencial')
+                mensaje3= "dispo"
+                disponibilidad = DisponibilidadProfesor.objects.filter(profesor_id=alumno.profesor_id, ocupado=False)
+                print(disponibilidad)
+                return render(request, 'rutina/actualizarFicha.html', {'alumno':alumno, 'mensaje3': mensaje3, 'disponibilidad': disponibilidad})
                 
                 
             DisponibilidadProfesor.objects.filter(id=int(disp)).update(alumno_id=alumno, ocupado=True)
@@ -624,7 +628,8 @@ def verClase(request, pk):
                                 if str(dia) == str(DisponibilidadProfesor.objects.get(alumno_id=alumno.id).semana_id.dia):
                                     #La clase de hoy es una de revision
                                     print('entra donde quieroo')
-                                    mensaje = "Hoy te toca una clase dictada por " + str(alumno.profesor_id) + " a las HORA"
+                                    dispo = DisponibilidadProfesor.objects.get(alumno_id=alumno.id, ocupado=True)
+                                    mensaje = "Hoy te toca una clase dictada por " + str(alumno.profesor_id) + " desde las " +str(dispo.horario_inicio) + " hasta las " + str(dispo.horario_final) + "hs" 
                                     return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje})
                                 
                                 else:
