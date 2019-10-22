@@ -832,7 +832,7 @@ def verClase(request, pk):
                     ultimaSesion = Sesion.objects.filter(alumno_id=alumno.id).latest()
                 
                 #creamos la nueva sesion
-                sesion = Sesion.objects.create(alumno_id=alumno, rutina_id=rutina, profesor_id=profesor)
+                sesion = Sesion.objects.create(alumno_id=alumno, rutina_id=rutina, profesor_id=profesor, nivelSesion=str(alumno.nivel_id.nombre))
                 for a in actividades:
                     print(type(a))
                     sesion.actividad_id.add(a)

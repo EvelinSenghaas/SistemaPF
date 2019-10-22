@@ -109,6 +109,7 @@ class Sesion(models.Model):
     esfuerzoSesion = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     descripcion = models.TextField(blank = True, null = True)
     claseRevision = models.BooleanField(default=False, verbose_name="Clase de revision")
+    nivelSesion = models.CharField(max_length = 60, blank = True, null = True, verbose_name="Nivel de sesion")
     
     
     

@@ -91,7 +91,6 @@
                                         '</div>'+
                                         '</div>'
 
-                            
                             $('#revision').html(html2);
                             console.log(html2);
                         }
@@ -244,6 +243,7 @@
                              
                 }
         </script>
+
 
         <div class="container">
                 <div class="row profile mt-1 ">
@@ -550,26 +550,25 @@
                                             <div class="tab-pane fade" id="nav-profile2" role="tabpanel" aria-labelledby="nav-profile-tab">
                                                 <div class="card-body">
                                                         <div class="form-group">
-                                                            <div class="row">
-                                                                <br>
-                                                                <div class="col-3">Seleccione una actividad</div>
-                                                                <div class="col-3">
-                                                                    <select name="selectActividad" id="selectActividad" class="custom-select">
-                                                                        {%for actividad in listaActividades%}
-                                                                        <option value="{{actividad}}" >{{actividad}}</option>
-                                                                        {%endfor%}
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-1">
-                                                                    <button type="button" class="btn btn-primary" id="graficar" onclick="evolucionActividad()">Graficar</button>
-                                                                </div>
-                                                            </div>
-                                                            <br>
+                                                            
                                                             <div class="row form-group">
                                                                 
                                                                 {%if sesiones == None%}
                                                                 <label style="color:rgb(130, 128, 128)">No se puede mostrar la evolución porque no hrealizado sesiones.</label>
                                                                 {%else%}
+
+                                                                    <div class="col-3">Seleccione una actividad</div>
+                                                                    <div class="col-3">
+                                                                        <select name="selectActividad" id="selectActividad" class="custom-select">
+                                                                            {%for actividad in listaActividades%}
+                                                                            <option value="{{actividad}}" >{{actividad}}</option>
+                                                                            {%endfor%}
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-1">
+                                                                        <button type="button" class="btn btn-primary" id="graficar" onclick="evolucionActividad()">Graficar</button>
+                                                                    </div>
+                                                                <br>
                                                                 <canvas id="lineChart2" height="auto" width="auto"></canvas>
                                                                 {%endif%}
                                                             </div>
@@ -609,7 +608,8 @@
                                       <th width="150">Fecha</th>
                 
                                       <th width="120">Esfuerzo</th>
-                                      <th width="500">Comentario</th>
+                                      <th width="350">Comentario</th>
+                                      <th width="150">Nivel</th>
                                       <th width="auto">Rutina</th>
                                     </tr>
                                   </thead>
@@ -625,7 +625,8 @@
                                         </td>
                 
                                         <td width="120" >{{sesion.esfuerzoSesion}}/10</td>
-                                        <td width="500">{{sesion.descripcion}}</td>
+                                        <td width="350">{{sesion.descripcion}}</td>
+                                        <td width="150">{{sesion.nivelSesion}}</td>
                                         <td width="auto" >{{sesion.rutina_id}}</td>
                                     </tr>
                                     <!-- Modal para ver sesiones -->
