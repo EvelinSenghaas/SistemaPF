@@ -43,7 +43,8 @@
             {% endfor %}
            
       {% endif %}
-      {%if mensaje == None%}2
+
+      {%if mensaje == None%}
         <div class="list-group" >
         
             <div class="list-group-item active">
@@ -79,12 +80,11 @@
 
                 <td width="auto" ><button type="button" class="btn btn-success btn-sm">Mensaje</button></td>
             </tr>
-            <!-- Modal para eliminar -->
-            <div class="modal fade bs-example-modal-lg2{{actividad.id}}" id="myModal2{{actividad.id}}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal fade bs-example-modal-lg2{{disp.id}}" id="myModal2{{disp.id}}" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title" id="myModalLabel{{actividad.id}}">Confirmar eliminación</h4>
+                            <h4 class="modal-title" id="myModalLabel{{disp.id}}">Confirmar eliminación</h4>
                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                             </button>
                             
@@ -94,11 +94,11 @@
                             
                         </div>
                         <div class="modal-footer">
-                            <a href="/rutinas/eliminar_actividad/{{actividad.id}}">
-                            <button type="button" class="btn btn-danger" >Confirmar</button>
+                            <a href="/home/eliminar_disponibilidad/{{disp.id}}">
+                              <button type="button" class="btn btn-danger" >Confirmar</button>
                             </a>
                             <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-                        </div>
+                          </div>
         
                     </div>
                 </div>
