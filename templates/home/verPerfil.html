@@ -13,6 +13,7 @@
 {%block imagen_principal%}
 {%endblock imagen_principal%}
 {%block contenido%}
+
         <div class="container">
                 <div class="row profile mt-1 ">
                     <div class="col-md-3">
@@ -265,7 +266,33 @@
                             </div>
                           </div>
                         </div>
-                        {%if alumno.entrenamiento_sistema == True%}
+                        
+                          <div class="card">
+                            <div class="card-header alert alert-primary" id="headingFive">
+                              <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                  <strong>Evolución</strong>
+                                </button>
+                              </h5>
+                            </div>
+                            <div id="collapseFive" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                              <div class="card-body">
+                                      <div class="card-body">
+                                              <div class="form-group">
+                                                  <div class="row form-group">
+                                                    {%if sesiones == None%}
+                                                    <label style="color:rgb(130, 128, 128)">No se puede mostrar la evolución porque no ha realizado sesiones.</label>
+                                                    {%else%}
+                                                    <canvas id="lineChart" height="10" width="10"></canvas>
+                                                    {%endif%}
+                                                  </div>
+                                              </div>
+                                          </div>
+                              </div>
+                            </div>
+                          </div>
+             
+                          {%if alumno.entrenamiento_sistema == True%}
                         <div class="card">
                             <div class="card-header alert alert-primary" id="headingThree">
                               <h5 class="mb-0">
@@ -292,6 +319,8 @@
                                   </thead>
                                   <tbody>
                                   {%for sesion in sesiones%}
+                                  <div>
+                                </div>
                                     <tr>
                                         <td width="10">{{sesion.sesionesRealizadas}}</td>
                 
@@ -325,6 +354,7 @@
                                           </div>
                                       </div>
                                   {%endfor%}
+                                </div>
                                   </tbody>
                                 </table>
                                 {%endif%}
@@ -336,6 +366,82 @@
                       </div>
             </div>
 
+
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js" integrity="sha256-arMsf+3JJK2LoTGqxfnuJPFTU4hAK57MtIPdFpiHXOU=" crossorigin="anonymous"></script>
+            <script>
+            var sesiones = [];
+            var esfuerzos = [];
+            </script>
+            {%for sesion  in sesiones%}
+            <script>
+                sesiones.push('{{sesion.fechaSesion}}')
+                esfuerzos.push('{{sesion.esfuerzoSesion}}') 
+            </script>
+            {%endfor%}
+
+            <script>
+                var ctx = document.getElementById('lineChart').getContext("2d");
+                ctx.canvas.width = 10;
+                ctx.canvas.height = 10;            
+                var chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                      labels:[],
+                      
+                      datasets: [{ 
+                          data: [],
+                          label: "Esfuerzo",
+                          borderColor: "#3e95cd",
+                          fill: false
+                        }
+                      ]
+                      
+                    },
+                    options: {
+                      responsive: true,
+                      title: {
+                        display: true,
+                        text: 'Gráfico de esfuerzo del alumno',
+                        fontSize : 17,
+                      },
+                      
+                      scales: {
+                        yAxes: [{
+                            ticks: {
+                                stepSize: 1,
+                                min: 0,
+                                max: 10
+                            },
+                          scaleLabel: {
+                            display: true,
+                            labelString: 'Esfuerzo promedio',
+                            fontSize : 16
+                          }
+                        }],
+                        xAxes: [{
+                            ticks: {
+                                beginAtZero: false,
+                                stepSize: 1,
+                                min: 0,
+                                max: 10
+                            },
+                          scaleLabel: {
+                            display: true,
+                            labelString: 'Sesiones',
+                            fontSize : 16
+                          }
+                        }],
+                      }
+                    }
+                  });
+
+                  chart.data.labels = sesiones;
+                  
+                  chart.data.datasets.forEach((dataset) => {
+                    dataset.data = esfuerzos;
+                });
+            </script>
+                  
 {%endblock contenido%}
 {%block pie%}
 {%endblock pie%}
