@@ -1,7 +1,9 @@
+from auditlog.registry import auditlog
 from django.db import models
 from django.contrib.auth.models import User
 from django.apps import apps
 from datetime import date
+
 
 
 
@@ -95,6 +97,7 @@ class Alumno(models.Model):
         edad_numerica = diferencia_fechas_dias / 365.2425
         edad = int(edad_numerica)
         return edad
+
     
     
 class DisponibilidadProfesor(models.Model):
@@ -139,4 +142,4 @@ class FichaAlumno (models.Model):
         return 'Ficha '+self.alumno_id.nombre
 
     
-    
+auditlog.register(Alumno)

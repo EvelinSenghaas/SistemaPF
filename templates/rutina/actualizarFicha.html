@@ -5,7 +5,7 @@
 {%block imagen_principal%}
 {%endblock imagen_principal%}
 {%block contenido%}
-<body class="container mt-2">
+<body class="container mt-2" onload="mensaje();">
     <div class="card active">
             
         {%if mensaje3 == None%}
@@ -60,6 +60,7 @@
         </div>
         </form>
         {%else%}
+        <input type="hidden" id="mensaje" value="{{mensaje3}}">
         <form method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="clase" value="1">
@@ -123,6 +124,16 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 
+
+    <script type="text/javascript">
+        function mensaje(){
+            var mensaje = $('#mensaje').val();
+            compa = new String("Subiste de nivel, ahora solo falta que tu profesor te evalúe. Para ello, debes elegir qué día queres tener una clase presencial");
+            if (mensaje == compa){
+                swal("Felicitaciones", mensaje, "success");
+            }
+        }
+    </script>
 {%endblock contenido%}
 {%block pie%}
 {%endblock pie%}

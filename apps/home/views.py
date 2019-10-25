@@ -16,6 +16,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from .models import Profesor, Alumno, FichaAlumno, Semana, DisponibilidadProfesor
 from ..rutina.models import Rutina, Nivel
+import sweetify
 
 
 from django.contrib import messages
@@ -662,6 +663,7 @@ def agregarDisponibilidad(request, pk):
                 mensaje = None
                 disponibilidad = DisponibilidadProfesor.objects.filter(estado=True, profesor_id=profesor.id)
                 messages.success(request, "Disponibilidad agregada con éxito.")
+                sweetify.success(request, 'You successfully changed your password')
                 return render(request, 'rutina/administrarDisponibilidad.html', {'disponibilidad':disponibilidad})
             else:
                 mensaje = "El horario final no puede ser igual o menor al horario de inicio."

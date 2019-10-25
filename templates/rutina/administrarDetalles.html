@@ -1,4 +1,4 @@
-
+e
 {% load staticfiles%}
 
 
@@ -20,6 +20,15 @@
 
 
     <link href=" {% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet">
+
+  <!-- Alertify -->
+  <link href=" {% static 'css/alertify.min.css' %}" rel="stylesheet">
+  <link href=" {% static 'css/alertify.css' %}" rel="stylesheet">
+  <link href=" {% static 'css/themes/default.css' %}" rel="stylesheet">
+  <link href=" {% static 'css/themes/default.min.css' %}" rel="stylesheet">
+
+  <link href=" {% static 'css/notiflix-1.9.1.css' %}" rel="stylesheet">
+  <link href=" {% static 'css/notiflix-1.9.1.min.css' %}" rel="stylesheet">
 
     <title>Detalles</title>
 </head>
@@ -81,10 +90,15 @@
           
             {% for message in messages %}
             {% if message.tags == 'success'%}
+            <input type="hidden" id="mensaje" value="{{message}}">
             <ul class="alert alert-success alert-dismissible">
               <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
               <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
-            </ul> 
+            </ul>
+            <script type="text/javascript">
+              var mensaje = document.getElementById("mensaje").value;
+              alertify.message('Mensaje Normal',10, null);
+            </script> 
             {%endif%}
             {% if message.tags == 'error'%}
             <ul class="alert alert-danger alert-dismissible">
@@ -180,7 +194,21 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <script src=" {% static 'js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'js/alertify.min.js' %}"></script>
+    <script src="{% static 'js/alertify.js' %}"></script>
+
+    <script src="{% static 'js/notiflix-1.9.1.js' %}"></script>
+    <script src="{% static 'js/notiflix-1.9.1.min.js' %}"></script>
+    <script src="{% static 'js/notiflix-aio-1.9.1.js' %}"></script>
+    <script src="{% static 'js/notiflix-aio-1.9.1.min.js' %}"></script>
+
+
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     
+    
+  
+
     <script>
       $(document).ready( function () {
         $('#mydatatable').DataTable({

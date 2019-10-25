@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.rutina',
     'apps.home',
+    'sweetify',
     'rolepermissions',
 ]
 
@@ -132,3 +133,4 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'

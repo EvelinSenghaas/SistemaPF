@@ -27,6 +27,12 @@
   
   <link href=" {% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet">
 
+  <!-- Alertify -->
+  <link href=" {% static 'css/alertify.min.css' %}" rel="stylesheet">
+  <link href=" {% static 'css/alertify.css' %}" rel="stylesheet">
+  <link href=" {% static 'css/themes/default.css' %}" rel="stylesheet">
+  <link href=" {% static 'css/themes/default.min.css' %}" rel="stylesheet">
+  
   
 
 
@@ -147,16 +153,10 @@
   <script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
   <script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
   <script src=" {% static 'js/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'js/alertify.min.js' %}"></script>
+  <script src="{% static 'js/alertify.js' %}"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-
-<script type="text/javascript">
-  $(function() {
-    $('#datetimepicker2').datetimepicker({
-      language: 'en',
-      pick12HourFormat: true
-    });
-  });
-</script>
 <script>
   $(document).ready( function () {
     $('#mydatatable').DataTable({

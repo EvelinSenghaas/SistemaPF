@@ -1,3 +1,4 @@
+from auditlog.registry import auditlog
 from django.db import models
 from django.db.models import *
 
@@ -105,9 +106,11 @@ class Sesion(models.Model):
     #agregar los dos atributos que faltan
     cantSesiones = models.IntegerField(blank = True, null = True, verbose_name="Sesiones parciales")
     sesionesRealizadas = models.IntegerField(blank = True, null = True, verbose_name="Sesiones totales")
-    esfuerzoSesion = models.IntegerField(blank = True, null = True, verbose_name="Costo de sesión")
+    esfuerzoSesion = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=False)
     descripcion = models.TextField(blank = True, null = True)
     claseRevision = models.BooleanField(default=False, verbose_name="Clase de revision")
+    
+    
     
     class Meta:
         verbose_name = 'Sesion'
@@ -117,6 +120,22 @@ class Sesion(models.Model):
     
     def __str__ (self):
         return self.alumno_id.nombre + ' '+self.alumno_id.apellido+ ' (' + str(self.fechaSesion)+ ')'
+    
+class EsfuerzoActividad(models.Model):
+    id = models.AutoField(primary_key = True)
+    alumno_id = models.ForeignKey('home.Alumno', related_name='homeASEA', on_delete=models.CASCADE)
+    esfuerzoActividad = models.IntegerField(blank = True, null = True, verbose_name="Costo de actividad")
+    actividad_id = models.ForeignKey(Actividad, on_delete=models.CASCADE, verbose_name="Actividad")
+    sesion_id = models.ForeignKey(Sesion, on_delete=models.CASCADE)
+    
+    
+    class Meta:
+        verbose_name = 'Esfuerzo de actividad'
+        verbose_name_plural = 'Esfuerzos de actividades'
+        ordering = ['id']
+    
+    def __str__ (self):
+        return self.actividad_id.nombre +' '+ str(self.esfuerzoActividad)
     
     
 class Revision(models.Model):
@@ -135,3 +154,4 @@ class Revision(models.Model):
     def __str__ (self):
         return self.sesion_id.alumno_id.nombre + ', ' + self.sesion_id.alumno_id.apellido  + ' (' + str(self.fechaRevision) + ' )'
     
+auditlog.register(Sesion)
