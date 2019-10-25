@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'apps.home',
     'sweetify',
     'rolepermissions',
+    'auditlog',
 ]
 
 MIDDLEWARE = [
@@ -52,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'auditlog.middleware.AuditlogMiddleware',
 ]
 
 ROOT_URLCONF = 'sistema.urls'
@@ -134,3 +136,10 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
+
+"""CHANNEL_LAYERS = {
+    'default' : {
+        'BACKEND' : 'asgiref.inmemory.ChannelLayer',
+        'ROUTING' : 'chat.routing.channel_routing',
+    }
+}"""
