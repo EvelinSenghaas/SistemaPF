@@ -181,7 +181,8 @@ class EliminarDisponibilidad(DeleteView):
 
 
 def eliminarDisponibilidad(request, pk):
-    disp = DisponibilidadProfesor.objects.get(id = pk)  
+    disp = DisponibilidadProfesor.objects.get(id = pk)
+    print(request) 
     if not (DisponibilidadProfesor.objects.filter(id=disp.id, ocupado=False).exists()):
             messages.error(request, "Usted no puede deshabilitar este horario debido a que el mismo se encuentra ocupado por el alumno/a " + str(disp.alumno_id)+".")
             
@@ -424,6 +425,7 @@ def listadoAlumnos(request, pk):
     if request.method == 'POST':
         rutinas = Rutina.objects.filter(estado=True)
         peticion = request.POST.copy()
+        print(peticion)
         
         ruti = peticion.pop('rutinas')
         ruti = ruti[0]

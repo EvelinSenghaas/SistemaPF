@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Rutina, Actividad, Detalle, Nivel, Repeticion, EvaluacionNivel, Sesion, Revision
+from .models import Rutina, Actividad, Detalle, Nivel, Repeticion, EvaluacionNivel, Sesion, Revision, EsfuerzoActividad
 from ..home.models import Alumno, FichaAlumno, Profesor, Semana, DisponibilidadProfesor
 from ..home.forms import AlumnoForm, FichaForm
 from .forms import DetalleForm, ActividadForm, RutinaForm, NivelForm, RepeticionForm, EvaluacionNivelForm
@@ -372,7 +372,7 @@ def actualizarFicha(request):
                 
                 
             DisponibilidadProfesor.objects.filter(id=int(disp)).update(alumno_id=alumno, ocupado=True)
-            return render(request, 'rutina/clases.html', {'alumno':alumno})
+            return redirect('/rutinas/clases/'+str(alumno.user_id))
         
         if clase == '0':    
             print('ENTRA EN LA ACTUALIZACION DE DATOS')
@@ -422,6 +422,10 @@ def actualizarFicha(request):
             if nivel != str(alumno.nivel_id.nombre):
                 Alumno.objects.filter(id=alumno.id).update(nivel_id=Nivel.objects.get(nombre=nivel))
                 FichaAlumno.objects.filter(alumno_id=alumno.id).update(peso = float(peso), circunferenciaMuneca = float(circu))
+                
+                sesion = Sesion.objects.filter(alumno_id=alumno.id).latest()
+                sesion.cantSesiones=0
+                sesion.save()
                 #ACA DEBEMOS CAMBIAR A TRUE EL ATRIBUTO CLASE DE REVISION
                 mensaje3= "Subiste de nivel, ahora solo falta que tu profesor te evalúe. Para ello, debes elegir qué día queres tener una clase presencial"
                 disponibilidad = DisponibilidadProfesor.objects.filter(profesor_id=alumno.profesor_id, ocupado=False)
@@ -692,8 +696,22 @@ def verClase(request, pk):
                 
                 
                 esfuerzo = peticion.pop('esfuerzo')
-                esfuerzo = esfuerzo[0]
-                int(esfuerzo)
+                list(esfuerzo)
+                
+                actividad_id = peticion.pop('actividad_id')
+                list(actividad_id)                 
+                    
+                
+                #Calculamos el esfuerzo promedio 
+                i = 0
+                esfuerzoPromedio = 0
+                while (i<len(esfuerzo)):
+                    esfuerzoPromedio = esfuerzoPromedio + int(esfuerzo[i])
+                    i+=1
+                    
+                esfuerzoPromedio = esfuerzoPromedio / (i)
+                print(esfuerzoPromedio)
+                
                 descripcion = peticion.pop('descripcion')
                 descripcion = descripcion[0]
                 print('            ')
@@ -718,7 +736,7 @@ def verClase(request, pk):
                     print(type(a))
                     sesion.actividad_id.add(a)
                 sesion.fechaSesion = today
-                sesion.esfuerzoSesion = esfuerzo
+                sesion.esfuerzoSesion = esfuerzoPromedio
                 print('le cargo el esfuerzo')
                 sesion.descripcion = descripcion
                 print('le cargo la descripcion')
@@ -744,6 +762,15 @@ def verClase(request, pk):
                     sesion.sesionesRealizadas = sesionesRealizadas
                 
                 sesion.save()
+                
+                #Creamos todas las actividades con sus esfuerzos en EsfuerzoActividad
+                i=0
+                while (i< len(esfuerzo)):
+                    EsfuerzoActividad.objects.create(alumno_id=sesion.alumno_id, 
+                                                     esfuerzoActividad=int(esfuerzo[i]), 
+                                                     actividad_id=Actividad.objects.get(id=actividad_id[i]), 
+                                                     sesion_id=sesion)
+                    i+=1
                 
                 
                 #Se vuelve a obtener la ultima sesion (la que acaba de guardarse) del alumno para ver si completo todas las sesiones
@@ -798,8 +825,22 @@ def verClase(request, pk):
             dia = Semana.objects.get(dia=dia)
             
             if (DisponibilidadProfesor.objects.filter(profesor_id=profesor.id, semana_id=dia, ocupado=True).exists()):
-                alumnos = DisponibilidadProfesor.objects.filter(profesor_id=profesor.id, semana_id=dia, ocupado=True)
+                
+                alum = DisponibilidadProfesor.objects.filter(profesor_id=profesor.id, semana_id=dia, ocupado=True)
+                alumnos = []
+                print(len(alum))
+                for alu in alum:
+                    if Sesion.objects.filter(alumno_id=alu.alumno_id).exists():
+                        ultimaSesion = Sesion.objects.filter(alumno_id=alu.alumno_id).latest()
+                        if ultimaSesion.claseRevision==True:
+                            alumnos.append(alu)
+                    else:
+                        alumnos.append(alu)
+                print(len)
+                if len(alumnos) == 0:
+                    alumnos = "vacio"
                 mensaje = None
+
             else:
                 mensaje = "Por hoy no tenes más alumnos que atender."
                 alumnos = 'vacio'
@@ -812,11 +853,59 @@ def verClase(request, pk):
                         mensaje = None
                     else:
                         mensaje = "Por hoy no tenes más alumnos que atender."
+            
+            niveles = Nivel.objects.all()
                     
-        return render (request, 'rutina/clases.html', {'alumnos':alumnos, 'profesor':profesor, 'profesor':profesor, 'alumnosPendientes':alumnosPendientes, 'mensaje':mensaje})
-        
+            return render (request, 'rutina/clases.html', {'alumnos':alumnos, 'profesor':profesor, 'profesor':profesor, 'alumnosPendientes':alumnosPendientes, 'mensaje':mensaje, 'niveles':niveles})
+        else:
+            peticion = request.POST.copy()
+            
+            print(peticion)
+            alum = peticion.pop('alumno')
+            alum = int(alum[0])
+            alumno = Alumno.objects.get(id=alum)
+            
+            
+            nivel = peticion.pop('nivel')
+            nivel = nivel[0]
+            
+            if nivel == alumno.nivel_id:
+                #El profesor aprueba la condicion del alumno
                 
-    
+                
+                
+                #Le sacamos de la clase de revision
+                sesion = Sesion.objects.filter(alumno_id=alumno.id).latest()
+                sesion.claseRevision=False
+                sesion.save()
+                
+                #Le sacamos de la disponibilidad del profesor
+                disponibilidad = DisponibilidadProfesor.objects.get(alumno_id=alumno.id, profesor_id=alumno.profesor_id)
+                disponibilidad.alumno_id = None
+                disponibilidad.ocupado = False
+                disponibilidad.save()
+            else:
+                #El profesor no aprueba la condicion del alumno
+                
+                alumno.nivel_id = Nivel.objects.get(id=nivel)
+                alumno.save()
+                
+                #Le sacamos de la clase de revision
+                sesion = Sesion.objects.filter(alumno_id=alumno.id).latest()
+                sesion.claseRevision=False
+                sesion.save()
+                
+                #Le sacamos de la disponibilidad del profesor
+                disponibilidad = DisponibilidadProfesor.objects.get(alumno_id=alumno.id, profesor_id=alumno.profesor_id)
+                disponibilidad.alumno_id = None
+                disponibilidad.ocupado = False
+                disponibilidad.save()
+            return redirect ('/rutinas/clases/'+str(alumno.profesor_id.user_id))
+            
+                
+ 
+def realizarRevision(request, pk):
+    pass    
 
 def perfil(request, pk):
     if (Alumno.objects.filter(user_id=pk).exists()):
@@ -830,18 +919,13 @@ def perfil(request, pk):
             disponibilidad = alumno.semana_id.all()
  
             try:
-                sesiones = Sesion.objects.filter(alumno_id=alumno.id).order_by('-id')
+                sesiones = Sesion.objects.filter(alumno_id=alumno.id)
                 ultimaSesion = Sesion.objects.filter(alumno_id=alumno.id).latest()
+                esfuerzo=[]
                 for sesion in sesiones:
                     sesion.cantSesiones = (sesion.sesionesRealizadas * 100) / EvaluacionNivel.objects.get(nivel_id=alumno.nivel_id).cantSesiones
             except:
                 sesiones = None
-                
-
-
-            
-            
-            
 
         else:
             alumno = Alumno.objects.get(user_id=pk)

@@ -115,15 +115,60 @@
                             <div class="col-4">
                                 {{alumno.alumno_id.rutina_id}}
                             </div>
+                            {%if alumno.alumno_id.entrenamiento_sistema%}
                             <div class="auto">
                                 <h5>
                                     <span class="badge badge-success">
-                                        <a href="" style="color:rgb(255, 255, 255);"> Revision</a>
+                                        <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg22{{alumno.alumno_id.rutina_id}}1" style="color:rgb(255, 255, 255);">Revision</a>
                                     </span>
                                 </h5>
                             </div>
+                            {%endif%}
                         </div>
                     </div> 
+                    <!-- Modal realizar revision -->
+                <div class="modal fade bs-example-modal-lg22{{alumno.alumno_id.rutina_id}}1" id="myModal22{{alumno.alumno_id.rutina_id}}1" tabindex="-1" role="dialog" aria-hidden="true">
+                        <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="alumno" value="{{alumno.alumno_id.id}}">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="myModalLabel2{{alumno.alumno_id.rutina_id}}1">Terminar revisión</h4>
+                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                    </button>
+                                    
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row form-group">
+                                        <div class="col-4 col-md-4">Selecciona el nivel de <strong>{{alumno.alumno_id.nombre}}</strong>
+                                        <br>
+    
+                                            <label style="color:rgb(130, 128, 128)"></label>
+                                            <select name="nivel" class="custom-select">
+                                                {%for nivel in niveles%}
+                                                    {%if nivel == alumno.alumno_id.nivel_id%}
+                                                        <option value="{{nivel.id}}" selected>{{nivel}}</option>
+                                                    {%else%}
+                                                        <option value="{{nivel.id}}">{{nivel}}</option>
+                                                    {%endif%}
+                                                {%endfor%}
+                                              </select>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="/rutinas/clases/{{user.id}}">
+                                      <button type="submit" class="btn btn-outline-success" >Confirmar</button>
+                                    </a>
+                                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+                                  </div>
+                
+                            </div>
+                        </div>
+                        </form>
+                    </div>
                     {%endfor%}
                 </div>
             </div>
@@ -168,15 +213,60 @@
                         <div class="col-4">
                             {{alumno.alumno_id.rutina_id}}
                         </div>
+                        {%if alumno.alumno_id.entrenamiento_sistema%}
                         <div class="auto">
                             <h5>
                                 <span class="badge badge-success">
-                                    <a href="" style="color:rgb(255, 255, 255);"> Revision</a>
+                                    <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg22{{alumno.alumno_id.rutina_id}}" style="color:rgb(255, 255, 255);">Revision</a>
                                 </span>
                             </h5>
                         </div>
+                        {%endif%}
                     </div>
                 </div> 
+                <!-- Modal realizar revision -->
+                <div class="modal fade bs-example-modal-lg22{{alumno.alumno_id.rutina_id}}" id="myModal22{{alumno.alumno_id.rutina_id}}" tabindex="-1" role="dialog" aria-hidden="true">
+                    <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="alumno" value="{{alumno.alumno_id.id}}">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="myModalLabel2{{alumno.alumno_id.rutina_id}}">Terminar revisión</h4>
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                </button>
+                                
+                            </div>
+                            <div class="modal-body">
+                                <div class="row form-group">
+                                    <div class="col-4 col-md-4">Selecciona el nivel de <strong>{{alumno.alumno_id.nombre}}</strong>
+                                    <br>
+
+                                        <label style="color:rgb(130, 128, 128)"></label>
+                                        <select name="nivel" class="custom-select">
+                                            {%for nivel in niveles%}
+                                                {%if nivel == alumno.alumno_id.nivel_id%}
+                                                    <option value="{{nivel.id}}" selected>{{nivel}}</option>
+                                                {%else%}
+                                                    <option value="{{nivel.id}}">{{nivel}}</option>
+                                                {%endif%}
+                                            {%endfor%}
+                                          </select>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="modal-footer">
+                                <a href="/rutinas/clases/{{user.id}}">
+                                  <button type="submit" class="btn btn-outline-success" >Confirmar</button>
+                                </a>
+                                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+                              </div>
+            
+                        </div>
+                    </div>
+                    </form>
+                </div>
                 {%endfor%}
             </div>
         </div>
@@ -243,17 +333,21 @@
                             {% endfor %}
                         
                           {% endif %}
+                        {%for repeticion in repeticiones%}
                         <div class="row form-group">
-                            <div class="col-4 col-md-4">¿Qué tan dura estuvo la clase?</div>
+                            <div class="col-5 col-md-5">¿Cuánto te costó <strong>{{repeticion.actividad_id.nombre}}</strong>?</div>
                             <div class="col-6 col-md-6">
                                 <label style="color:rgb(130, 128, 128)"></label>
-                                <input name="esfuerzo" type="range" class="form-control-range" id="formControlRange" value="5"  min="1" max="10" step="1">  
+                                <input name="esfuerzo" type="range" class="custom-range w-75" id="formControlRange" value="5"  min="1" max="10" step="1">  
+                                <input type="hidden" name="actividad_id" value="{{repeticion.actividad_id.id}}">
                             </div>
                         </div>
+                        {%endfor%}
+                        <br>
                         <div class="row form-group">
-                            <div class="col-4 col-md-4">Cuéntanos como te ha ido</div>
-                            <div class="col-7 col-md-7">
-                                <textarea onkeyup="mensajeChange()" name="descripcion" id="mensaje" cols="46" rows="5"></textarea>
+                            <div class="col-5 col-md-5">Cuéntanos como te ha ido</div>
+                            <div class="col-6 col-md-6">
+                                <textarea onkeyup="mensajeChange()" name="descripcion" id="mensaje" cols="35" rows="5" class="responsive"></textarea>
                                 <br>
                                 <input class="form-check-input" type="checkbox" id="enviar" value="1" name="check" disabled>
                                 <label class="form-check-label" for="disabledFieldsetCheck">
@@ -341,6 +435,7 @@
     {%endif%}
     
 </body>
+
 <script src=" {% static 'js/rangeslider.min.js' %}"></script>
 <script src=" {% static 'js/rangeslider.js' %}"></script>
 
