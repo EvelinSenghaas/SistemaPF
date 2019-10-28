@@ -55,7 +55,7 @@
                             Object.keys(musculos).forEach(function(key) {
                                 console.log(key, musculos[key])
                                 labelsMusculos.push(key);
-                                dataMusculos.push(musculos[key]);
+                                dataMusculos.push(parseInt(musculos[key]));
                               })
                             
                         }
@@ -316,7 +316,7 @@
                             </div>
                           </div>
                         </div>
-                        
+                        {%if alumno.entrenamiento_sistema == True%}
                           <div class="card">
                             <div class="card-header alert alert-primary" id="headingFive">
                               <h5 class="mb-0">
@@ -334,14 +334,18 @@
                                           </nav>
                                           <div class="tab-content" id="nav-tabContent">
                                             <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                                                    
+
+                                                <button type="button" id="descargar" onclick="descargar()">Descargar</button>
+                                                <img id="url">
+                                                <a id="link2" download="ChartJpg.jpg">Save as jpg</a>
+
                                                 <div class="card-body">
                                                     <div class="form-group">
                                                         <div class="row form-group">
                                                             {%if sesiones == None%}
                                                             <label style="color:rgb(130, 128, 128)">No se puede mostrar la evolución porque no hrealizado sesiones.</label>
                                                                         {%else%}
-                                                            <canvas id="lineChart" height="800" width="800"></canvas>
+                                                            <canvas id="lineChart" height="auto" width="auto"></canvas>
                                                             {%endif%}
                                                         </div>
                                                     </div>
@@ -354,8 +358,8 @@
                                                                 <div class="row form-group">
                                                                     {%if sesiones == None%}
                                                                     <label style="color:rgb(130, 128, 128)">No se puede mostrar la evolución porque no hrealizado sesiones.</label>
-                                                                                {%else%}
-                                                                    <canvas id="radarChart" height="10" width="10"></canvas>
+                                                                    {%else%}
+                                                                    <canvas id="radarChart" height="auto" width="auto"></canvas>
                                                                     {%endif%}
                                                                 </div>
                                                             </div>
@@ -365,6 +369,7 @@
                                 
                             </div>
                           </div>
+                          {%endif%}
              
                           {%if alumno.entrenamiento_sistema == True%}
                         <div class="card">
@@ -455,6 +460,13 @@
 
 
             <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js" integrity="sha256-arMsf+3JJK2LoTGqxfnuJPFTU4hAK57MtIPdFpiHXOU=" crossorigin="anonymous"></script>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
+
+            <script src="{% static 'js/html2canvas.js' %}"></script>
+            <script src="{% static 'js/html2canvas.min.js' %}"></script>
+
+
+
             <script>
             var sesiones = [];
             var esfuerzos = [];
@@ -467,9 +479,7 @@
             {%endfor%}
 
             <script>
-                var ctx = document.getElementById('lineChart').getContext("2d");
-                ctx.canvas.width = 10;
-                ctx.canvas.height = 10;            
+                var ctx = document.getElementById('lineChart').getContext("2d");           
                 var chart = new Chart(ctx, {
                     type: 'line',
                     data: {
@@ -477,15 +487,14 @@
                       
                       datasets: [{ 
                           data: [],
-                          label: "Esfuerzo",
-                          borderColor: "#3e95cd",
+                          label: "Esfuerzo promedio",
+                          borderColor: "#14B517",
                           fill: false
                         }
                       ]
                       
                     },
                     options: {
-                      responsive: true,
                       title: {
                         display: true,
                         text: 'Gráfico de esfuerzo del alumno',
@@ -519,14 +528,10 @@
                           }
                         }],
                       }
-                    }
-                  });
+                    },
+                  });                
 
-                  chart.data.labels = sesiones;
-                  
-                  chart.data.datasets.forEach((dataset) => {
-                    dataset.data = esfuerzos;
-                });
+
             </script>
             <script>
                 var radar_chart = new Chart(document.getElementById('radarChart').getContext("2d"), {
@@ -547,28 +552,29 @@
                       ]
                     },
                     options: {
-                        responsive: true,
+                        exportEnabled: true,
+	                    animationEnabled: true,
                         title: {
                           display: true,
                           text: 'Músculos',
                           fontSize : 17,
                         },
+                        
                     }
                 });
+
                 radar_chart.data.labels = labelsMusculos;
                   
                 radar_chart.data.datasets.forEach((dataset) => {
                     dataset.data = dataMusculos;
                 });
-                /*function addData(label, data) {
-                    alert(label)
-                    radar_chart.data.labels.push(label);
-                    radar_chart.data.datasets.forEach((dataset) => {
-                        dataset.data.push(data);
-                    });
-                    radar_chart.update();
-                }*/
+                chart.data.labels = sesiones;
+                
+                chart.data.datasets.forEach((dataset) => {
+                    dataset.data = esfuerzos;
+                });
             </script>
+
                   
 {%endblock contenido%}
 {%block pie%}

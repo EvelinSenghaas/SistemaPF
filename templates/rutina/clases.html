@@ -30,6 +30,27 @@
         }
         
       </script>
+
+    <script>
+        function comprobarRevision(id){
+            $.ajax({
+                data : {'id' : id},
+                url : '/comprobar_revision_ajax/', //El id que estoy guardando en data se va a enviar en esa url
+                type : 'get',
+                success : function(data){
+                    if (data){
+                        var html = '<span class="badge badge-success">'+
+                                '<a href="#" data-toggle="modal" data-target=".bs-example-modal-lg22{{'+id+'}}" style="color:rgb(255, 255, 255);">'+'Revision'+'</a>'+
+                            '</span>'
+                    }
+                    $('#revision').html(html);
+                            console.log(html);
+                    alert(data);
+                }
+
+            });              
+        }
+    </script>
 <body class="container mt-2">
     <!-- Si el usuario entrena con un profesor -->
     {%if not alumno.entrenamiento_sistema%}
@@ -107,7 +128,7 @@
                     <div class="list-group-item">
                         <div class="row">
                             <div class="col-3">
-                                {{alumno.alumno_id}}
+                                <a href="/rutinas/ver_perfil/{{alumno.alumno_id.user_id}}"><strong>{{alumno.alumno_id}}</strong></a>
                             </div>
                             <div class="col-4">
                                 De <b>{{alumno.horario_inicio}}</b> a <b>{{alumno.horario_final}}</b>hs
@@ -205,7 +226,7 @@
                 <div class="list-group-item">
                     <div class="row">
                         <div class="col-3">
-                            {{alumno.alumno_id}}
+                            <a href="/rutinas/ver_perfil/{{alumno.alumno_id.user_id}}"><strong>{{alumno.alumno_id}}</strong></a>
                         </div>
                         <div class="col-4">
                             De <b>{{alumno.horario_inicio}}</b> a <b>{{alumno.horario_final}}</b>hs

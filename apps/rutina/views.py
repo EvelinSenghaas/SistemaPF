@@ -17,6 +17,11 @@ from django.core import serializers
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 import json
+from auditlog.models import LogEntry, LogEntryManager
+from auditlog.mixins import LogEntryAdminMixin
+from easyaudit.signals.model_signals import should_audit
+
+
 
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
@@ -980,6 +985,26 @@ def obtenerCantidadMusculos(request):
                 json.dumps(musculos),
                 content_type="application/json")
 
+
+#Esta funcion se usa para sacar el boton de revision de la vista de clases
+def comprobarRevision(request):
+    alumno = Alumno.objects.get(id=request.GET['id'])
+    if (Sesion.objects.filter(alumno_id=alumno.id)):
+        data = True
+    else:
+        data = False
+        
+    return HttpResponse(
+                json.dumps(data),
+                content_type="application/json")
+
+
+
+def auditoria(request):
+    sesion = Sesion.objects.get(fechaSesion='2019-10-29')
+    print(should_audit(sesion))
+    return render (request, 'rutina/auditoria.html')
+
     
 def verRutina(request, pk):
     rutina = Rutina.objects.get(id = pk)
@@ -1005,6 +1030,8 @@ def verRevisiones(request, pk):
             revisiones = None
         
         return render (request, 'rutina/verRevisiones.html', { 'revisiones': revisiones, 'mensaje':mensaje})
+
+
 
 
 def verActividad(request, pk):
@@ -1500,6 +1527,7 @@ def inscribirseRutina(request, pk1, pk2):
                     alumno.save() 
                     if entrenamiento == 'sistema':
                         alumno.semana_id.set(dias)  
+                        ficha.circunferenciaMuneca = circu
                         
                     
                     if entrenamiento == 'profesor':
@@ -1509,7 +1537,6 @@ def inscribirseRutina(request, pk1, pk2):
                     grupo = Group.objects.get(name='Alumno') 
                     grupo.user_set.add(user)        
                     ficha.alumno_id = alumno
-                    ficha.circunferenciaMuneca = circu
                     ficha.save()
                     return render (request, 'rutina/inscripcionExitosa.html', {'alumno':Alumno.objects.get(user_id=user.id), 'rutina':rutina})
             else:

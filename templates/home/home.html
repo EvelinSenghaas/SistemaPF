@@ -99,16 +99,25 @@
       </div>
     </div>
   </div> -->
+  <!-- <div class="header">
+    <div id="header-container" class="container">
+      <div class="headerdiv">
+        <a href="" class="headerleft">
+          <img src="{% static 'img/header1.jpg'%}" class="img-fluid" alt="header SU">
+        </a>
+      </div>     
+    </div>
+  </div>  -->
     
   {%block imagen_principal%}
   <header>
-    <div id="carouselExampleIndicators" class="carousel slide mt-1" data-ride="carousel" alt="Responsive image by Bootstrap">
+    <div id="carouselExampleIndicators" class="carousel slide mt-1" data-ride="carousel" alt="header SU">
       <ol class="carousel-indicators"></ol>
       <div class="carousel-inner" role="listbox">
         <!-- Slide One - Set the background image for this slide in the line below -->
-        <div class="carousel-item active" style="background-image: url('http://placehold.it/1900x1080')">
+        <div class="carousel-item active" style="background-image: url('http://placehold.it/1900x1080')" alt="header SU">
           {%block imagen%}
-          <img src="{% static 'img/img_home.jpg'%}" class="img-fluid" alt="Responsive image by Bootstrap">
+          <img src="{% static 'img/img_home.jpg'%}" class="img-fluid" alt="header SU">
           {%endblock imagen%}
           <div class="carousel-caption d-none d-md-block">
             {%block titulo_imagen%}
