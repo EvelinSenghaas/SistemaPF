@@ -20,7 +20,7 @@ import json
 from auditlog.models import LogEntry, LogEntryManager
 from auditlog.mixins import LogEntryAdminMixin
 from easyaudit.signals.model_signals import should_audit
-
+import psycopg2
 
 
 from django.contrib import messages
@@ -1001,9 +1001,47 @@ def comprobarRevision(request):
 
 
 def auditoria(request):
-    sesion = Sesion.objects.get(fechaSesion='2019-10-29')
-    print(should_audit(sesion))
-    return render (request, 'rutina/auditoria.html')
+    sesiones = []
+    log = {}
+    logs = []
+    objetos = []
+    conexion1 = psycopg2.connect(database="sistema1", user="postgres", password="38774803")
+    cursor1=conexion1.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    sql="select id, login_type, username, datetime, remote_ip from easyaudit_loginevent"
+    cursor1.execute(sql)
+    
+    
+    for fila in cursor1.fetchall():       
+        diccionario = {
+            'id':fila['id'], 'accion':fila['login_type'], 'usuario':fila['username'], 'fecha':fila['datetime'], 'ip':fila['remote_ip']}
+        logs.append(diccionario)
+    conexion1.close()
+
+
+    conexion2 = psycopg2.connect(database="sistema1", user="postgres", password="38774803")
+    cursor2=conexion2.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    sql = "select event_type, datetime, content_type_id, user_id from easyaudit_crudevent"
+    cursor2.execute(sql)
+    
+    for fila in cursor2.fetchall():       
+        diccionario = {
+            'accion':fila['event_type'], 'fecha':fila['datetime'], 'modelo':fila['content_type_id'], 'fecha':fila['datetime'], 'idUsuario':fila['user_id']}
+        objetos.append(diccionario)
+    conexion2.close()
+        
+            
+    for o in objetos:
+        if o.get('accion') == 1:
+            o['accion'] = 'Eliminación'
+            
+        elif o['accion'] == 2:
+            o['accion'] = 'Actualización'
+            
+        elif o['accion'] == 3:
+            o['accion'] = 'Modificación'
+            
+    
+    return render (request, 'rutina/auditoria.html', {'logs':logs, 'objetos':objetos})
 
     
 def verRutina(request, pk):

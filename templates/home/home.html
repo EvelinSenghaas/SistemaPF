@@ -174,7 +174,9 @@
   <script src="{% static 'js/alertify.min.js' %}"></script>
   <script src="{% static 'js/alertify.js' %}"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="{% static 'js/jquery-3.4.1.js' %}"></script>
 
+{%block scriptTabla%}
 <script>
   $(document).ready( function () {
     $('#mydatatable').DataTable({
@@ -211,7 +213,8 @@
     });
   });
 </script>
-  
+{%endblock scriptTabla%}  
+
   {%endblock body%}
 </body>
 
