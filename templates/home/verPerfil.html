@@ -13,6 +13,56 @@
 {%block imagen_principal%}
 {%endblock imagen_principal%}
 {%block contenido%}
+        <script>
+                function verActividades(id){
+                    $.ajax({
+                        data : {'id' : id},
+                        url : '/rutinas/obtener_actividades_ajax/', //El id que estoy guardando en data se va a enviar en esa url
+                        type : 'get',
+                        success : function(data){
+                            var html = ""
+                            for (var i=0; i< data.length; i++){
+                                html += '<div class="list-group-item">'+'<div class="row">'+
+                                        '<div class="col-8">'
+                                            +data[i].fields.nombreActividad+
+                                        '</div>'+
+                                        '<div class="col-3">'
+                                            +data[i].fields.esfuerzoActividad+'/10'+
+                                        '</div>'+
+                                    '</div>'+
+                                    '</div>'
+                                
+                            }
+                            $('#contenido').html(html);
+                            console.log(html);
+                        }
+
+                    });
+                
+                }
+        </script>
+        <script>
+                var labelsMusculos = [];
+                var dataMusculos = [];
+        </script>
+        <script>
+                function verMusculos(id){
+                    $.ajax({
+                        data : {'id' : id},
+                        url : '/rutinas/obtener_cantidad_musculos_ajax/', //El id que estoy guardando en data se va a enviar en esa url
+                        type : 'get',
+                        success : function(musculos){
+                            Object.keys(musculos).forEach(function(key) {
+                                console.log(key, musculos[key])
+                                labelsMusculos.push(key);
+                                dataMusculos.push(musculos[key]);
+                              })
+                            
+                        }
+
+                    });              
+                }
+        </script>
 
         <div class="container">
                 <div class="row profile mt-1 ">
@@ -270,25 +320,49 @@
                           <div class="card">
                             <div class="card-header alert alert-primary" id="headingFive">
                               <h5 class="mb-0">
-                                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                <button class="btn btn-link collapsed" onclick="verMusculos({{alumno.id}})"data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
                                   <strong>Evolución</strong>
                                 </button>
                               </h5>
                             </div>
                             <div id="collapseFive" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                              <div class="card-body">
-                                      <div class="card-body">
-                                              <div class="form-group">
-                                                  <div class="row form-group">
-                                                    {%if sesiones == None%}
-                                                    <label style="color:rgb(130, 128, 128)">No se puede mostrar la evolución porque no ha realizado sesiones.</label>
-                                                    {%else%}
-                                                    <canvas id="lineChart" height="10" width="10"></canvas>
-                                                    {%endif%}
-                                                  </div>
-                                              </div>
+                                    <nav>
+                                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                              <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Esfuerzo</a>
+                                              <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Músculos</a>
+                                            </div>
+                                          </nav>
+                                          <div class="tab-content" id="nav-tabContent">
+                                            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                                    
+                                                <div class="card-body">
+                                                    <div class="form-group">
+                                                        <div class="row form-group">
+                                                            {%if sesiones == None%}
+                                                            <label style="color:rgb(130, 128, 128)">No se puede mostrar la evolución porque no hrealizado sesiones.</label>
+                                                                        {%else%}
+                                                            <canvas id="lineChart" height="800" width="800"></canvas>
+                                                            {%endif%}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                                    <div class="card-body">
+                                                            <div class="form-group">
+                                                                <div class="row form-group">
+                                                                    {%if sesiones == None%}
+                                                                    <label style="color:rgb(130, 128, 128)">No se puede mostrar la evolución porque no hrealizado sesiones.</label>
+                                                                                {%else%}
+                                                                    <canvas id="radarChart" height="10" width="10"></canvas>
+                                                                    {%endif%}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                            </div>
                                           </div>
-                              </div>
+                                
                             </div>
                           </div>
              
@@ -301,9 +375,15 @@
                                 </button>
                               </h5>
                             </div>
-                            <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">                          <div class="mt-2">
+                            <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">                      <div class="mt-2">
                                 {%if sesiones == None%}
-                                    <label style="color:rgb(130, 128, 128)">No ha realizado ninguna sesion aún</label>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <div class="row form-group">
+                                                <label style="color:rgb(130, 128, 128)">No ha realizado ninguna sesion aún</label>
+                                        </div>
+                                    </div>
+                                </div>
                                 {%else%}
                                 <table class="table dataTable" id="mydatatable">
                                   <thead class="card-header">
@@ -314,7 +394,7 @@
                 
                                       <th width="120">Esfuerzo</th>
                                       <th width="500">Comentario</th>
-                                      <th width="0" align="right">Porcentaje</th>
+                                      <th width="0" align="center">Porcentaje</th>
                                     </tr>
                                   </thead>
                                   <tbody>
@@ -324,32 +404,39 @@
                                     <tr>
                                         <td width="10">{{sesion.sesionesRealizadas}}</td>
                 
-                                        <td width="150">{{sesion.fechaSesion}}</td>
+                                        <td width="150">
+                                                <a href="#" onclick="verActividades({{sesion.id}})" data-toggle="modal" data-target=".bs-example-modal-lg2">{{sesion.fechaSesion}} </a>    
+                                        </td>
                 
-                                        <td width="120" align="center">{{sesion.esfuerzoSesion}}</td>
+                                        <td width="120" >{{sesion.esfuerzoSesion}}/10</td>
                                         <td width="500">{{sesion.descripcion}}</td>
                                         <td width="0" align="center"><h6><span class="badge badge-success">{{sesion.cantSesiones}}%</span></h6></td>
                                     </tr>
-                                    <!-- Modal para eliminar -->
-                                    <div class="modal fade bs-example-modal-lg2{{detalle.id}}" id="myModal2{{detalle.id}}" tabindex="-1" role="dialog" aria-hidden="true">
+                                    <!-- Modal para ver sesiones -->
+                                    <div class="modal fade bs-example-modal-lg2" id="myModal2" tabindex="-1" role="dialog" aria-hidden="true">
                                         <div class="modal-dialog modal-lg">
                                               <div class="modal-content">
                                                   <div class="modal-header">
-                                                      <h4 class="modal-title" id="myModalLabel{{detalle.id}}">Confirmar eliminación</h4>
-                                                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
-                                                      
+                                                      <h4 class="modal-title" id="myModalLabel">Detalles de la sesion</h4>
+                                                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>                                                      
                                                   </div>
                                                   <div class="modal-body">
-                                                      <h5>¿Seguro que desea eliminar <strong>{{detalle.musculo}}</strong>?</h5>
-                                                      
-                                                  </div>
-                                                  <div class="modal-footer">
-                                                      <a href="/rutinas/eliminar_detalle/{{detalle.id}}">
-                                                        <button type="button" class="btn btn-danger" >Confirmar</button>
-                                                      </a>
-                                                      <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+                                                        <div class="card-header">
+                                                              <div class="row">
+                                                                  <div class="col-8">
+                                                                      <b>Actividad</b>
+                                                                  </div>
+                                                                  <div class="col-3">
+                                                                      <b>Esfuerzo</b>
+                                                                  </div>
+                                                              </div>
+                                                        </div>
+                                                        <div id="contenido"></div>
+                                                           
                                                     </div>
-                                  
+                                                  <div class="modal-footer">
+                                                      <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
+                                                    </div>
                                               </div>
                                           </div>
                                       </div>
@@ -375,7 +462,7 @@
             {%for sesion  in sesiones%}
             <script>
                 sesiones.push('{{sesion.fechaSesion}}')
-                esfuerzos.push('{{sesion.esfuerzoSesion}}') 
+                esfuerzos.push(parseInt('{{sesion.esfuerzoSesion}}'))
             </script>
             {%endfor%}
 
@@ -440,6 +527,47 @@
                   chart.data.datasets.forEach((dataset) => {
                     dataset.data = esfuerzos;
                 });
+            </script>
+            <script>
+                var radar_chart = new Chart(document.getElementById('radarChart').getContext("2d"), {
+                    type: 'radar',
+                    data: {
+                      labels: [],
+                      datasets: [
+                        {
+                          label: "Musculos",
+                          fill: true,
+                          backgroundColor: "rgba(255,99,132,0.2)",
+                          borderColor: "rgba(255,99,132,1)",
+                          pointBorderColor: "#fff",
+                          pointBackgroundColor: "rgba(255,99,132,1)",
+                          pointBorderColor: "#fff",
+                          data: []
+                        }
+                      ]
+                    },
+                    options: {
+                        responsive: true,
+                        title: {
+                          display: true,
+                          text: 'Músculos',
+                          fontSize : 17,
+                        },
+                    }
+                });
+                radar_chart.data.labels = labelsMusculos;
+                  
+                radar_chart.data.datasets.forEach((dataset) => {
+                    dataset.data = dataMusculos;
+                });
+                /*function addData(label, data) {
+                    alert(label)
+                    radar_chart.data.labels.push(label);
+                    radar_chart.data.datasets.forEach((dataset) => {
+                        dataset.data.push(data);
+                    });
+                    radar_chart.update();
+                }*/
             </script>
                   
 {%endblock contenido%}

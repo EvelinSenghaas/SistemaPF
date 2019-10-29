@@ -106,7 +106,7 @@ class Sesion(models.Model):
     #agregar los dos atributos que faltan
     cantSesiones = models.IntegerField(blank = True, null = True, verbose_name="Sesiones parciales")
     sesionesRealizadas = models.IntegerField(blank = True, null = True, verbose_name="Sesiones totales")
-    esfuerzoSesion = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=False)
+    esfuerzoSesion = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     descripcion = models.TextField(blank = True, null = True)
     claseRevision = models.BooleanField(default=False, verbose_name="Clase de revision")
     
@@ -127,6 +127,7 @@ class EsfuerzoActividad(models.Model):
     esfuerzoActividad = models.IntegerField(blank = True, null = True, verbose_name="Costo de actividad")
     actividad_id = models.ForeignKey(Actividad, on_delete=models.CASCADE, verbose_name="Actividad")
     sesion_id = models.ForeignKey(Sesion, on_delete=models.CASCADE)
+    nombreActividad =  models.CharField(max_length = 60, blank = True, null = True)
     
     
     class Meta:

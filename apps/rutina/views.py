@@ -16,6 +16,7 @@ from django.http import HttpResponse
 from django.core import serializers
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+import json
 
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
@@ -769,7 +770,8 @@ def verClase(request, pk):
                     EsfuerzoActividad.objects.create(alumno_id=sesion.alumno_id, 
                                                      esfuerzoActividad=int(esfuerzo[i]), 
                                                      actividad_id=Actividad.objects.get(id=actividad_id[i]), 
-                                                     sesion_id=sesion)
+                                                     sesion_id=sesion,
+                                                     nombreActividad=Actividad.objects.get(id=actividad_id[i]).nombre)
                     i+=1
                 
                 
@@ -941,6 +943,43 @@ def perfil(request, pk):
     
     return render (request, 'home/verPerfil.html', { 'alumno': alumno, 'mensaje':mensaje, 'ficha':ficha, 'edad':edad, 'disponibilidad':disponibilidad, 'sesiones':sesiones})
     
+
+def obtenerActividadesSesion(request):
+    print(request)
+    actividades = EsfuerzoActividad.objects.filter(sesion_id=request.GET['id'])
+    print(actividades)
+    
+    for acti in actividades:
+        print(acti.actividad_id)
+    
+    data = serializers.serialize('json',actividades,
+                                     fields=('esfuerzoActividad', 'actividad_id', 'nombreActividad'))
+    return HttpResponse(data, content_type='application/json')
+    
+
+def obtenerCantidadMusculos(request):
+    alumno = Alumno.objects.get(id=request.GET['id'])
+    sesiones = Sesion.objects.filter(alumno_id=alumno.id)
+    list(sesiones)
+    musculos = {}
+    
+    for sesion in sesiones:
+        actividades = sesion.actividad_id.all()        
+        for actividad in actividades:
+            for detalle in actividad.detalle_id.all():
+                if not detalle.musculo in musculos:
+                    musculos[detalle.musculo] = 1
+                else:
+                    musculos[str(detalle.musculo)] = musculos.get(str(detalle.musculo)) + 1
+                       
+    #data = serializers.serialize('json', musculos)
+    
+    print(musculos)
+    
+    return HttpResponse(
+                json.dumps(musculos),
+                content_type="application/json")
+
     
 def verRutina(request, pk):
     rutina = Rutina.objects.get(id = pk)
