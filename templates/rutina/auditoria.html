@@ -7,6 +7,33 @@
 
 {%block contenido%}
 
+<script>
+    function verDetalles(id){
+        $.ajax({
+            data : {'id' : id},
+            url : '/rutinas/ver_detalles_ajax/', //El id que estoy guardando en data se va a enviar en esa url
+            type : 'get',
+            success : function(dic){
+              Object.keys(dic).forEach(function(key) {
+                
+                var html1 = '<label id="idObjeto">'+dic['idObjeto']+'</label>'
+                $('#idObjeto').html(html1);
+
+                var html2 = '<label id="objeto">'+dic['objeto']+'</label>'
+                $('#objeto').html(html2);
+
+                var html3 = '<label id="idModelo">'+dic['idModelo']+'</label>'
+                $('#idModelo').html(html3);
+
+                /*var html4 = '<label id="fecha">'+dic['fecha']+'</label>'
+                $('#fecha').html(html4);*/
+              })
+              
+            }
+
+        });              
+    }
+</script>
 <div class="container mt-2">
 
         <!-- Auditoria en general -->
@@ -19,25 +46,79 @@
                 </div>
             </div> 
             <br>
-          <table class="table table-striped" id="mydatatable2b">
+          <table class="table table-striped" id="mydatatable">
             <thead class="card-header">
               <tr>
                 <th width="150">Operación</th>
                 <th width="200">Modelo</th>
                 <th width="200">Usuario</th>
-                <th width="auto">Fecha</th>
+                <th width="150">Fecha</th>
+                <th width="auto">Acción</th>
               </tr>
             </thead>
             <tbody>
             {%for objeto in objetos%}
-            <tr>
-                {%if objeto.accion != 5 and objeto.accion != 4%}
+            {%if objeto.accion != 5 and objeto.accion != 4 and objeto.modelo != 'Users'%}
+            <tr class="fila">
                 <td width="150">{{objeto.accion}}</td>                
                 <td width="200">{{objeto.modelo}}</td>
                 <td width="200">{{objeto.idUsuario}}</td>
-                <td width="auto">{{objeto.fecha}}</td>
-                {%endif%}
+                <td width="100">{{objeto.fecha}}</td>
+                <td width="100" align="center"><a href="#" onclick="verDetalles({{objeto.id}})" data-toggle="modal" data-target=".bs-example-modal-lg2"><img src="{%static 'img/activo.png'%}" alt=""></a></td>
             </tr>
+            {%endif%}
+            <!-- Modal para ver los detalles -->
+            <div class="modal fade bs-example-modal-lg2" id="myModal2" tabindex="-1" role="dialog" aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel">Detalles</h4>
+                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>                                                      
+                        </div>
+                        <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <b>ID Objeto</b>
+                                        </div>
+                                        <div class="col-auto">
+                                            <label id="idObjeto"></label>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                      <div class="col-3">
+                                          <b>Objeto</b>
+                                      </div>
+                                      <div class="col-auto">
+                                          <label id="objeto"></label>
+                                      </div>
+                                  </div>
+                                  <hr>
+                                  <div class="row">
+                                    <div class="col-3">
+                                        <b>ID Modelo</b>
+                                    </div>
+                                    <div class="col-auto">
+                                        <label id="idModelo"></label>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                  <div class="col-3">
+                                      <b>Fecha</b>
+                                  </div>
+                                  <div class="col-auto">
+                                      <label id="fecha">{{objeto.fecha}}</label>
+                                  </div>
+                              </div>
+                                 
+                          </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
+                          </div>
+                    </div>
+                </div>
+            </div>
             {%endfor%}
             </tbody>
           </table>
@@ -53,7 +134,7 @@
                 </div>
             </div> 
             <br>
-          <table class="table table-striped" id="mydatatable">
+          <table class="table table-striped" id="bosta">
             <thead class="card-header">
               <tr>
                     <th width="150">Operación</th>
@@ -82,9 +163,10 @@
     </div>
 {%endblock contenido%}
 
+{%block tabla%}
 <script>
   $(document).ready( function () {
-        $('#mydatatable2b').DataTable({
+        $('#mydatatable').DataTable({
           "paging": true,
           "language": {
             "sProcessing":     "Procesando...",
@@ -116,9 +198,43 @@
         },
           
         });
+
+        $('#bosta').DataTable({
+          "paging": true,
+          "language": {
+            "sProcessing":     "Procesando...",
+                        "sLengthMenu":     "Ver _MENU_",
+                        "sZeroRecords":    "No se encontraron resultados",
+                        "sEmptyTable":     "No hay resultados",
+                        "sInfo":           "Viendo _START_-_END_ de _TOTAL_.",
+                        "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                        "sInfoPostFix":    "",
+                        "sSearch":         "Buscar:",
+                        "sUrl":            "",
+                        "sInfoThousands":  ",",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst":    "Primero",
+                            "sLast":     "Último",
+                            "sNext":     "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "oAria": {
+                            "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        },
+                        "buttons": {
+                            "copy": "Copiar",
+                            "colvis": "Visibilidad"
+                        }
+        },
+          
+        });
+
       });
 </script>
-  
+{%endblock tabla%}
 
 {%block pie%}
 {%endblock pie%}

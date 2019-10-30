@@ -178,7 +178,7 @@
 
   <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
   <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
-
+{%block tabla%}
 <script>
   $(document).ready( function () {
     $('#mydatatable').DataTable({
@@ -215,43 +215,7 @@
     });
   });
 </script>
-<script>
-  $(document).ready( function () {
-    $('#mydatatable2').DataTable({
-      "paging": true,
-      "language": {
-        "sProcessing":     "Procesando...",
-                    "sLengthMenu":     "Ver _MENU_",
-                    "sZeroRecords":    "No se encontraron resultados",
-                    "sEmptyTable":     "No hay resultados",
-                    "sInfo":           "Viendo _START_-_END_ de _TOTAL_.",
-                    "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                    "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                    "sInfoPostFix":    "",
-                    "sSearch":         "Buscar:",
-                    "sUrl":            "",
-                    "sInfoThousands":  ",",
-                    "sLoadingRecords": "Cargando...",
-                    "oPaginate": {
-                        "sFirst":    "Primero",
-                        "sLast":     "Último",
-                        "sNext":     "Siguiente",
-                        "sPrevious": "Anterior"
-                    },
-                    "oAria": {
-                        "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                    },
-                    "buttons": {
-                        "copy": "Copiar",
-                        "colvis": "Visibilidad"
-                    }
-    },
-      
-    });
-  });
-</script>
-
+{%endblock tabla%}
   {%endblock body%}
 </body>
 

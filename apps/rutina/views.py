@@ -1002,7 +1002,7 @@ def comprobarRevision(request):
 
 def idSesionSesion(objetos):
     for o in objetos:
-        if o.get('modelomodelo') == 1:
+        if o.get('modelo') == 1:
             o['modelo'] = 'Logentry'
         elif o.get('modelo') == 2:
             o['modelo'] = 'Permisos'
@@ -1079,12 +1079,12 @@ def auditoria(request):
 
     conexion2 = psycopg2.connect(database="sistema1", user="postgres", password="38774803")
     cursor2=conexion2.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    sql = "select event_type, datetime, content_type_id, user_id from easyaudit_crudevent ORDER BY datetime ASC"
+    sql = "select id, event_type, datetime, content_type_id, user_id from easyaudit_crudevent ORDER BY datetime DESC"
     cursor2.execute(sql)
     
     for fila in cursor2.fetchall():       
         diccionario = {
-            'accion':fila['event_type'], 'fecha':fila['datetime'], 'modelo':fila['content_type_id'], 'fecha':fila['datetime'], 'idUsuario':fila['user_id']}
+            'id':fila['id'],'accion':fila['event_type'], 'fecha':fila['datetime'], 'modelo':fila['content_type_id'], 'fecha':fila['datetime'], 'idUsuario':fila['user_id']}
         objetoss.append(diccionario)
     conexion2.close()
         
@@ -1106,10 +1106,39 @@ def auditoria(request):
             
     for o in objetoss:
         o['idUsuario'] = User.objects.get(id=o.get('idUsuario')).username
-            
+        
     objetos = idSesionSesion(objetoss)
+    
+    
+            
+            
     return render (request, 'rutina/auditoria.html', {'logs':logs, 'objetos':objetos})
 
+
+def detalleAuditoria(request):
+    id = request.GET['id']
+    print(id)
+    detalles =[]
+    dic ={}
+    conexion1 = psycopg2.connect(database="sistema1", user="postgres", password="38774803")
+    cursor1=conexion1.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    sql="select object_id, object_repr, content_type_id, datetime from easyaudit_crudevent where id="+id
+    cursor1.execute(sql)
+    
+    
+    for fila in cursor1.fetchall():       
+        diccionario = {
+            'idObjeto':fila['object_id'], 'objeto':fila['object_repr'], 'idModelo':fila['content_type_id'], 'fecha':str(fila['datetime'])}
+        dic = diccionario
+    conexion1.close()
+    
+    print(dic)
+    
+    return HttpResponse(
+                json.dumps(dic),
+                content_type="application/json")   
+ 
+    
     
 def verRutina(request, pk):
     rutina = Rutina.objects.get(id = pk)

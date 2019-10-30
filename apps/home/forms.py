@@ -61,7 +61,7 @@ class LoginForm(AuthenticationForm):
        self.fields['username'].widget.attrs['placeholder'] = 'Nombre de usuario'
        
        self.fields['password'].widget.attrs['class'] = 'form-control'
-       self.fields['password'].widget.attrs['class'] = 'Contraseña'
+       self.fields['password'].widget.attrs['placeholder'] = 'Contraseña'
        
 class AlumnoForm(forms.ModelForm):
     class Meta:
