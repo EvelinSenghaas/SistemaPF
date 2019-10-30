@@ -1000,11 +1000,70 @@ def comprobarRevision(request):
 
 
 
+def idSesionSesion(objetos):
+    for o in objetos:
+        if o.get('modelomodelo') == 1:
+            o['modelo'] = 'Logentry'
+        elif o.get('modelo') == 2:
+            o['modelo'] = 'Permisos'
+        elif o.get('modelo') == 3:
+            o['modelo'] = 'Grupos'
+        elif o.get('modelo') == 4:
+            o['modelo'] = 'Users'
+        elif o.get('modelo') == 5:
+            o['modelo'] = 'Content type'
+        elif o.get('modelo') == 6:
+            o['modelo'] = 'Sessions'
+        elif o.get('modelo') == 7:
+            o['modelo'] = 'Actividad'
+        elif o.get('modelo') == 8:
+            o['modelo'] = 'Detalle'
+        elif o.get('modelo') == 9:
+            o['modelo'] = 'Rutina'
+        elif o.get('modelo') == 10:
+            o['modelo'] = 'Alumno'
+        elif o.get('modelo') == 11:
+            o['modelo'] = 'Profesor'
+        elif o.get('modelo') == 12:
+            o['modelo'] = 'Usuario'
+        elif o.get('modelo') == 13:
+            o['modelo'] = 'Ficha alumno'
+        elif o.get('modelo') == 14:
+            o['modelo'] = 'Repeticion'
+        elif o.get('modelo') == 15:
+            o['modelo'] = 'Nivel'
+        elif o.get('modelo') == 16:
+            o['modelo'] = 'Disponibilidad'
+        elif o.get('modelo') == 17:
+            o['modelo'] = 'Dia'
+        elif o.get('modelo') == 18:
+            o['modelo'] = 'Disponibilidad profesor'
+        elif o.get('modelo') == 19:
+            o['modelo'] = 'Semana'
+        elif o.get('modelo') == 20:
+            o['modelo'] = 'Evaluacion nivel'
+        elif o.get('modelo') == 21:
+            o['modelo'] = 'Sesion'
+        elif o.get('modelo') == 22:
+            o['modelo'] = 'Revision'
+        elif o.get('modelo') == 23:
+            o['modelo'] = 'Logentry'
+        elif o.get('modelo') == 24:
+            o['modelo'] = 'Esfuerzo actividad'
+        elif o.get('modelo') == 25:
+            o['modelo'] = 'Crud event'
+        elif o.get('modelo') == 26:
+            o['modelo'] = 'Login event'
+        elif o.get('modelo') == 27:
+            o['modelo'] = 'Request event'
+            
+    return objetos
+    
 def auditoria(request):
     sesiones = []
     log = {}
     logs = []
-    objetos = []
+    objetoss = []
     conexion1 = psycopg2.connect(database="sistema1", user="postgres", password="38774803")
     cursor1=conexion1.cursor(cursor_factory=psycopg2.extras.DictCursor)
     sql="select id, login_type, username, datetime, remote_ip from easyaudit_loginevent"
@@ -1020,17 +1079,18 @@ def auditoria(request):
 
     conexion2 = psycopg2.connect(database="sistema1", user="postgres", password="38774803")
     cursor2=conexion2.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    sql = "select event_type, datetime, content_type_id, user_id from easyaudit_crudevent"
+    sql = "select event_type, datetime, content_type_id, user_id from easyaudit_crudevent ORDER BY datetime ASC"
     cursor2.execute(sql)
     
     for fila in cursor2.fetchall():       
         diccionario = {
             'accion':fila['event_type'], 'fecha':fila['datetime'], 'modelo':fila['content_type_id'], 'fecha':fila['datetime'], 'idUsuario':fila['user_id']}
-        objetos.append(diccionario)
+        objetoss.append(diccionario)
     conexion2.close()
         
+    
             
-    for o in objetos:
+    for o in objetoss:
         if o.get('accion') == 1:
             o['accion'] = 'Eliminación'
             
@@ -1040,7 +1100,14 @@ def auditoria(request):
         elif o['accion'] == 3:
             o['accion'] = 'Modificación'
             
-    
+    for o in objetoss:
+        if o.get('idUsuario') == None:
+            objetoss.remove(o)
+            
+    for o in objetoss:
+        o['idUsuario'] = User.objects.get(id=o.get('idUsuario')).username
+            
+    objetos = idSesionSesion(objetoss)
     return render (request, 'rutina/auditoria.html', {'logs':logs, 'objetos':objetos})
 
     

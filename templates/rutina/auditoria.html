@@ -19,7 +19,7 @@
                 </div>
             </div> 
             <br>
-          <table class="table table-striped" id="mydatatable2">
+          <table class="table table-striped" id="mydatatable2b">
             <thead class="card-header">
               <tr>
                 <th width="150">Operación</th>
@@ -82,10 +82,9 @@
     </div>
 {%endblock contenido%}
 
-<script src=" {% static 'js/jquery.dataTables.min.js' %}"></script>
-    <script>
-      $(document).ready( function () {
-        $('#mydatatable2').DataTable({
+<script>
+  $(document).ready( function () {
+        $('#mydatatable2b').DataTable({
           "paging": true,
           "language": {
             "sProcessing":     "Procesando...",
@@ -118,7 +117,8 @@
           
         });
       });
-    </script>
+</script>
+  
 
 {%block pie%}
 {%endblock pie%}
