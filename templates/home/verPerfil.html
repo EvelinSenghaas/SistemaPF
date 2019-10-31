@@ -35,12 +35,67 @@
                             }
                             $('#contenido').html(html);
                             console.log(html);
-                        }
+                        },
+                        
 
                     });
-                
+                    obtenerRevisionActividadesSesion(id);
                 }
         </script>
+        <script>
+            function obtenerRevisionActividadesSesion(id){
+                $.ajax({
+                    data : {'id' : id},
+                    url : '/rutinas/obtener_revision_sesion_ajax/', //El id que estoy guardando en data se va a enviar en esa url
+                    type : 'get',
+                    success : function(data){
+                        if (data['revision']){
+                            console.log('entra al if');
+                            var html2 = '<div class="card-header mt-1">'+
+                                            '<div class="row">'+
+                                                '<div class="col-8">'+
+                                                    '<b>Revision de la sesión</b>'+
+                                                '</div>'+
+                                            '</div>'+
+                                        '</div>'+
+                                        '<div class="list-group-item">'+'<div class="row">'+
+                                            '<div class="col-4">'
+                                                +'Evolución de peso'+
+                                            '</div>'+
+                                            '<div class="col-7">'
+                                                +'De '+'<b>'+data['pesoAnterior']+'Kg</b>'+' a <b>'+data['pesoRevision']+'Kg</b>'+
+                                            '</div>'+
+                                        '</div>'+
+                                        '</div>'+
+                                        '<div class="list-group-item">'+'<div class="row">'+
+                                            '<div class="col-4">'
+                                                +'Evolución de nivel'+
+                                            '</div>'+
+                                            '<div class="col-7">'
+                                                +'De '+'<b>'+data['nivelAnterior']+'</b>'+' a <b>'+data['nivelRevision']+'</b>'+
+                                            '</div>'+
+                                        '</div>'+
+                                        '</div>'+
+                                        '<div class="list-group-item">'+'<div class="row">'+
+                                            '<div class="col-4">'
+                                                +'Comentario'+
+                                            '</div>'+
+                                            '<div class="col-7">'
+                                                +data['comentario']+
+                                            '</div>'+
+                                        '</div>'+
+                                        '</div>'
+
+                            
+                            $('#revision').html(html2);
+                            console.log(html2);
+                        }
+                    },
+
+                });
+            
+            }
+    </script>
         <script>
                 var labelsMusculos = [];
                 var dataMusculos = [];
@@ -433,6 +488,8 @@
                                                               </div>
                                                         </div>
                                                         <div id="contenido"></div>
+                                                        <div id="revision"></div>
+
                                                            
                                                     </div>
                                                   <div class="modal-footer">
