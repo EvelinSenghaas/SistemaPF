@@ -945,7 +945,6 @@ def perfil(request, pk):
     
     return render (request, 'home/verPerfil.html', { 'alumno': alumno, 'mensaje':mensaje, 'ficha':ficha, 'edad':edad, 'disponibilidad':disponibilidad, 'sesiones':sesiones})
     
-    
 
 def obtenerActividadesSesion(request):
     actividades = EsfuerzoActividad.objects.filter(sesion_id=request.GET['id'])
