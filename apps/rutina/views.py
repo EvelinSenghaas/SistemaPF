@@ -350,6 +350,11 @@ def calcularCantidadActividades(alumno, auxActividades, sesionesPorNivel, sesion
         
 
 def actualizarFicha(request):
+    user = User.objects.get(username=str(request.user.username))
+    alumno = Alumno.objects.get(user_id=user.id)
+    print(alumno)
+    print(request.method)
+    
     if request.method == 'POST':
         print('ENTRO AL POST DE LA FUNCION ACTUALIZAR FICHA')
         peticion = request.POST.copy()
@@ -472,10 +477,102 @@ def actualizarFicha(request):
     else:
         print('get de la funcion correcta')
         mensaje = None
-        return render (request, 'rutina/actualizarFicha.html', {'mensaje':mensaje})  
+        
+        ultimaSesion = Sesion.objects.filter(alumno_id=alumno.id, rutina_id=alumno.rutina_id).latest()
+        
+        #Si la ultima sesion del alumno tiene una clase de revision
+        if (ultimaSesion.claseRevision):
+            #Si tiene una clase de revision controlo que haya actualizado su ficha
+            if(RevisionSesion.objects.filter(alumno_id=alumno.id,sesion_id=ultimaSesion.id).exists()):
+                ficha = True
+                #Si actualizo su ficha debo ver si selecciono el horario de la clase de revision
+                if(DisponibilidadProfesor.objects.filter(alumno_id=alumno.id).exists()):
+                    horario = True
+                else:
+                    horario = False
+                    print('Renderiza en el primero')
+                    print(ficha)
+                    print(horario)
+                    return render(request, 'rutina/actualizarFicha.html', {'ficha':ficha, 'horario':horario})
+            else:
+                ficha = False
+                horario = False
+                print('Renderiza en el segundo')
+                print(ficha)
+                print(horario)
+                return render(request, 'rutina/actualizarFicha.html', {'ficha':ficha, 'horario':horario})
+    
+    """ultimaSesion = Sesion.objects.filter(alumno_id=alumno.id, rutina_id=alumno.rutina_id).latest()
+        
+    #Si la ultima sesion del alumno tiene una clase de revision
+    if (ultimaSesion.claseRevision):
+        #Si tiene una clase de revision controlo que haya actualizado su ficha
+        if(RevisionSesion.objects.filter(alumno_id=alumno.id,sesion_id=ultimaSesion.id).exists()):
+            ficha = True
+            #Si actualizo su ficha debo ver si selecciono el horario de la clase de revision
+            if(DisponibilidadProfesor.objects.filter(alumno_id=alumno.id).exists()):
+                horario = True
+            else:
+                horario = False
+                print(horario)
+                print(ficha)
+                return render(request, 'rutina/actualizarFicha.html', {'ficha':ficha, 'horario':horario})
+        else:
+            ficha = False
+            horario = False
+    return render(request, 'rutina/actualizarFicha.html', {'ficha':ficha, 'horario':horario})"""
+            
+            
         
 
-
+#Esta funcion controla si el alumno completo la actualizacion de ficha y seleccion de horario o no
+def comprobarActualizacionFicha(request):
+    user = User.objects.get(id=request.GET['id'])
+    dic = {}
+    #Vemos si no es profesor
+    if (Profesor.objects.filter(user_id=user.id).exists()):
+        pass
+    else:
+        alumno = Alumno.objects.get(user_id=user.id)
+        
+        ultimaSesion = Sesion.objects.filter(alumno_id=alumno.id, rutina_id=alumno.rutina_id).latest()
+        print(ultimaSesion)
+        
+        #Si la ultima sesion del alumno tiene una clase de revision
+        if not (ultimaSesion.claseRevision):
+            #Si tiene una clase de revision controlo que haya actualizado su ficha
+            if(RevisionSesion.objects.filter(alumno_id=alumno.id,sesion_id=ultimaSesion.id).exists()):
+                ficha = True
+                #Si actualizo su ficha debo ver si selecciono el horario de la clase de revision
+                if(DisponibilidadProfesor.objects.filter(alumno_id=alumno.id).exists()):
+                    horario = False
+                else:
+                    horario = True
+            else:
+                ficha = False
+        else:
+            horario = False
+            ficha = False
+    
+    dic['horario'] = horario
+    dic['ficha'] = ficha
+    print(dic)
+    
+    return HttpResponse(
+                json.dumps(dic),
+                content_type="application/json")
+                    
+    
+    
+    """
+        vamos a obtener el alumno
+        obtenemos su ultima sesion
+        comprobamos que el alumno tenga una clase de revision
+        a partir de ahi se controla
+            que haya completado la ficha
+                que haya seleccionado el dia de la clase de revision
+        sino le vamos a redireccionar a donde corresponda
+    """ 
 
 def verClase(request, pk):
     user = User.objects.get(id=pk)
@@ -608,16 +705,22 @@ def verClase(request, pk):
                                     mensaje = "Gracias por entrenarte con nosotros, tu sesión ha terminado. Vuelve el "
                                     return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje})
                             else:
-                                if str(dia) == str(DisponibilidadProfesor.objects.get(alumno_id=alumno.id).semana_id.dia):
-                                    #La clase de hoy es una de revision
-                                    print('entra donde quieroo')
-                                    dispo = DisponibilidadProfesor.objects.get(alumno_id=alumno.id, ocupado=True)
-                                    mensaje = "Hoy te toca una clase dictada por " + str(alumno.profesor_id) + " desde las " +str(dispo.horario_inicio) + " hasta las " + str(dispo.horario_final) + "hs" 
-                                    return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje})
-                                
+                                if not (DisponibilidadProfesor.objects.filter(alumno_id=alumno.id).exists()):
+                                    ficha = False
+                                    horario = False
+                                    return redirect('/rutinas/actualizar_ficha/', {'ficha':ficha, 'horario':horario})
                                 else:
-                                    mensaje = "Hoy no es tu día de entrenamiento, vuelve el "
-                                    return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje}) 
+                                    if str(dia) == str(DisponibilidadProfesor.objects.get(alumno_id=alumno.id).semana_id.dia):
+                                        #La clase de hoy es una de revision
+                                        print('entra donde quieroo')
+                                        dispo = DisponibilidadProfesor.objects.get(alumno_id=alumno.id, ocupado=True)
+                                        mensaje = "Hoy te toca una clase dictada por " + str(alumno.profesor_id) + " desde las " +str(dispo.horario_inicio) + " hasta las " + str(dispo.horario_final) + "hs" 
+                                        return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje})
+                                    
+                                    else:
+                                        mensaje = "Hoy no es tu día de entrenamiento, vuelve el "
+                                        return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje}) 
+                                    
                             
                             
                                     

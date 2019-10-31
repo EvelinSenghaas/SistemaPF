@@ -5,11 +5,39 @@
 {%block imagen_principal%}
 {%endblock imagen_principal%}
 {%block contenido%}
+
+<script src="{% static 'js/jquery-3.4.1.js' %}"></script>
+
+<!-- <script>
+    function comprobarActualizacionFicha(id){
+        $.ajax({
+            data : {'id' : id},
+            url : '/rutinas/comprobar_actualizacion_ficha_ajax/', //El id que estoy guardando en data se va a enviar en esa url
+            type : 'get',
+            success : function(dic){    
+                if (dic['ficha'] == false){
+                    document.getElementById("formficha").style.display='block';
+                }
+                if (dic['horario'] == false){
+                    document.getElementById("formhorario").style.display='block';
+                }
+            }
+
+        });              
+    }
+</script>
+<script>
+    var id = "{{user.id}}"
+    $(document).ready( function () {
+        comprobarActualizacionFicha(id);
+    });
+</script> -->
 <body class="container mt-2" onload="mensaje();">
     <div class="card active">
             
-        {%if mensaje3 == None%}
-        <form method="POST">
+        {%if ficha != True%}
+        <div id="formficha" >
+        <form method="POST" >
         {% csrf_token %}
         <input type="hidden" name="clase" value="0">
         <div class="card-header alert-primary"><strong>Actualización de mis datos</strong></h6></div>
@@ -59,9 +87,12 @@
             </div>
         </div>
         </form>
-        {%else%}
+        </div>
+        {%endif%}
+        <div id="formhorario">
+        {%if horario != True%}
         <input type="hidden" id="mensaje" value="{{mensaje3}}">
-        <form method="POST">
+        <form method="POST" >
                 {% csrf_token %}
                 <input type="hidden" name="clase" value="1">
                 <div class="card-header alert-primary"><strong>Selección de horario</strong></h6></div>
@@ -111,6 +142,7 @@
                     </div>
                 </div>
                 </form>
+            </div>
         {%endif%}
 
     </div>
@@ -134,6 +166,7 @@
             }
         }
     </script>
+    
 {%endblock contenido%}
 {%block pie%}
 {%endblock pie%}

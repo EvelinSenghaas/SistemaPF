@@ -74,6 +74,25 @@
             });              
         }
     </script>
+
+    <!-- <script>
+        function comprobarActualizacionFicha(id){
+            $.ajax({
+                data : {'id' : id},
+                url : '/rutinas/comprobar_actualizacion_ficha_ajax/', //El id que estoy guardando en data se va a enviar en esa url
+                type : 'get',
+                success : function(dic){   
+                    if (dic['ficha'] == false){
+                        window.location = "http://localhost:8000/rutinas/actualizar_ficha/"
+                    }
+                    if (dic['horario'] == false){
+                        window.location = "http://localhost:8000/rutinas/actualizar_ficha/"
+                    }
+                }
+
+            });              
+        }
+    </script> -->
 <body class="container mt-2">
     <!-- Si el usuario entrena con un profesor -->
     {%if not alumno.entrenamiento_sistema%}
@@ -491,6 +510,11 @@
 
 <script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
 <script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- <script>
+    var id = "{{user.id}}"
+    comprobarActualizacionFicha(id);
+</script> -->
+
 {%endblock contenido%}
 {%block pie%}
 {%endblock pie%}
