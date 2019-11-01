@@ -13,6 +13,21 @@
         background: #BABABA;
     }
 </style>
+    <script src=" {% static 'js/rangeslider.min.js' %}"></script>
+    <script src=" {% static 'js/rangeslider.js' %}"></script>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src=" {% static 'js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'js/alertify.min.js' %}"></script>
+    <script src="{% static 'js/alertify.js' %}"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="{% static 'js/jquery-3.4.1.js' %}"></script>
+
+  <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+  <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+<script src="{% static 'js/jquery-3.4.1.js' %}"></script>
 <script>
         
         function mensajeChange() {
@@ -35,17 +50,25 @@
         function comprobarRevision(id){
             $.ajax({
                 data : {'id' : id},
-                url : '/comprobar_revision_ajax/', //El id que estoy guardando en data se va a enviar en esa url
+                url : '/rutinas/comprobar_revision_ajax/', //El id que estoy guardando en data se va a enviar en esa url
                 type : 'get',
-                success : function(data){
-                    if (data){
-                        var html = '<span class="badge badge-success">'+
-                                '<a href="#" data-toggle="modal" data-target=".bs-example-modal-lg22{{'+id+'}}" style="color:rgb(255, 255, 255);">'+'Revision'+'</a>'+
-                            '</span>'
+                success : function(dic){
+                    if (dic['estado']){
+
+                        var html = '<h5>'+
+                                        '<span class="badge badge-success">'+
+                                            '<a href="#" data-toggle="modal" data-target=".bs-example-modal-lg22'+id+'1" style="color:rgb(255, 255, 255);">Revision</a>'+
+                                        '</span>'+
+                                    '</h5>'
+                        var html2 = '<h5>'+
+                            '<span class="badge badge-success">'+
+                                '<a href="#" data-toggle="modal" data-target=".bs-example-modal-lg22'+id+'" style="color:rgb(255, 255, 255);">Revision</a>'+
+                            '</span>'+
+                        '</h5>'
+                            
                     }
                     $('#revision').html(html);
-                            console.log(html);
-                    alert(data);
+                    $('#revision2').html(html2);
                 }
 
             });              
@@ -119,12 +142,16 @@
                             <div class="col-4">
                                 <b>Horario</b>
                             </div>
-                            <div class="col-4">
+                            <div class="col-3">
                                 <b>Rutina</b>
                             </div>
                         </div>
                     </div>   
                     {% for alumno in alumnos %}
+                    <script>
+                        var id = "{{alumno.alumno_id.id}}"
+                        comprobarRevision(id);
+                    </script>
                     <div class="list-group-item">
                         <div class="row">
                             <div class="col-3">
@@ -133,29 +160,23 @@
                             <div class="col-4">
                                 De <b>{{alumno.horario_inicio}}</b> a <b>{{alumno.horario_final}}</b>hs
                             </div>
-                            <div class="col-4">
+                            <div class="col-3">
                                 {{alumno.alumno_id.rutina_id}}
                             </div>
-                            {%if alumno.alumno_id.entrenamiento_sistema%}
-                            <div class="auto">
-                                <h5>
-                                    <span class="badge badge-success">
-                                        <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg22{{alumno.alumno_id.rutina_id}}1" style="color:rgb(255, 255, 255);">Revision</a>
-                                    </span>
-                                </h5>
+                            <div class="auto" id="revision">
+                                
                             </div>
-                            {%endif%}
                         </div>
                     </div> 
                     <!-- Modal realizar revision -->
-                <div class="modal fade bs-example-modal-lg22{{alumno.alumno_id.rutina_id}}1" id="myModal22{{alumno.alumno_id.rutina_id}}1" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal fade bs-example-modal-lg22{{alumno.alumno_id.id}}1" id="myModal22{{alumno.alumno_id.id}}1" tabindex="-1" role="dialog" aria-hidden="true">
                         <form method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="alumno" value="{{alumno.alumno_id.id}}">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title" id="myModalLabel2{{alumno.alumno_id.rutina_id}}1">Terminar revisión</h4>
+                                    <h4 class="modal-title" id="myModalLabel2{{alumno.alumno_id.id}}1">Terminar revisión</h4>
                                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                                     </button>
                                     
@@ -175,6 +196,13 @@
                                                     {%endif%}
                                                 {%endfor%}
                                               </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row form-group">
+                                        <div class="col-4 col-md-4">Agregá un comentario
+                                        <br>
+                                        <textarea name="comentario" id="comentario" cols="35" rows="5" class="form-control"></textarea>
                                         </div>
                                     </div>
                                     
@@ -217,12 +245,16 @@
                         <div class="col-4">
                             <b>Horario</b>
                         </div>
-                        <div class="col-4">
+                        <div class="col-3">
                             <b>Rutina</b>
                         </div>
                     </div>
                 </div>   
                 {% for alumno in alumnosPendientes %}
+                <script>
+                    var id = "{{alumno.alumno_id.id}}"
+                    comprobarRevision(id);
+                </script>
                 <div class="list-group-item">
                     <div class="row">
                         <div class="col-3">
@@ -231,29 +263,23 @@
                         <div class="col-4">
                             De <b>{{alumno.horario_inicio}}</b> a <b>{{alumno.horario_final}}</b>hs
                         </div>
-                        <div class="col-4">
+                        <div class="col-3">
                             {{alumno.alumno_id.rutina_id}}
                         </div>
-                        {%if alumno.alumno_id.entrenamiento_sistema%}
-                        <div class="auto">
-                            <h5>
-                                <span class="badge badge-success">
-                                    <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg22{{alumno.alumno_id.rutina_id}}" style="color:rgb(255, 255, 255);">Revision</a>
-                                </span>
-                            </h5>
+                        <div class="auto" id="revision2">
+                            
                         </div>
-                        {%endif%}
                     </div>
                 </div> 
                 <!-- Modal realizar revision -->
-                <div class="modal fade bs-example-modal-lg22{{alumno.alumno_id.rutina_id}}" id="myModal22{{alumno.alumno_id.rutina_id}}" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal fade bs-example-modal-lg22{{alumno.alumno_id.id}}" id="myModal22{{alumno.alumno_id.id}}" tabindex="-1" role="dialog" aria-hidden="true">
                     <form method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="alumno" value="{{alumno.alumno_id.id}}">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" id="myModalLabel2{{alumno.alumno_id.rutina_id}}">Terminar revisión</h4>
+                                <h4 class="modal-title" id="myModalLabel2{{alumno.alumno_id.id}}">Terminar revisión</h4>
                                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                                 </button>
                                 
@@ -273,6 +299,12 @@
                                                 {%endif%}
                                             {%endfor%}
                                           </select>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-4 col-md-4">Agregá un comentario
+                                    <br>
+                                    <textarea name="comentario" id="comentario" cols="35" rows="5" class="form-control"></textarea>
                                     </div>
                                 </div>
                                 
@@ -368,7 +400,7 @@
                         <div class="row form-group">
                             <div class="col-5 col-md-5">Cuéntanos como te ha ido</div>
                             <div class="col-6 col-md-6">
-                                <textarea onkeyup="mensajeChange()" name="descripcion" id="mensaje" cols="35" rows="5" class="responsive"></textarea>
+                                <textarea onkeyup="mensajeChange()" name="descripcion" id="mensaje" cols="35" rows="5" class="form-control"></textarea>
                                 <br>
                                 <input class="form-check-input" type="checkbox" id="enviar" value="1" name="check" disabled>
                                 <label class="form-check-label" for="disabledFieldsetCheck">
@@ -457,9 +489,8 @@
     
 </body>
 
-<script src=" {% static 'js/rangeslider.min.js' %}"></script>
-<script src=" {% static 'js/rangeslider.js' %}"></script>
-
+<script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 {%endblock contenido%}
 {%block pie%}
 {%endblock pie%}

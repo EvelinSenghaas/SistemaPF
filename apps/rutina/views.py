@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Rutina, Actividad, Detalle, Nivel, Repeticion, EvaluacionNivel, Sesion, Revision, EsfuerzoActividad
+from .models import Rutina, Actividad, Detalle, Nivel, Repeticion, EvaluacionNivel, Sesion, Revision, EsfuerzoActividad, RevisionSesion
 from ..home.models import Alumno, FichaAlumno, Profesor, Semana, DisponibilidadProfesor
 from ..home.forms import AlumnoForm, FichaForm
 from .forms import DetalleForm, ActividadForm, RutinaForm, NivelForm, RepeticionForm, EvaluacionNivelForm
@@ -424,14 +424,31 @@ def actualizarFicha(request):
             nivel = calcularNivel(altura, circu, peso, actividad, sexo)
             nivel = nivel.capitalize()
             print(nivel)
+                        
+            
             
             if nivel != str(alumno.nivel_id.nombre):
-                Alumno.objects.filter(id=alumno.id).update(nivel_id=Nivel.objects.get(nombre=nivel))
-                FichaAlumno.objects.filter(alumno_id=alumno.id).update(peso = float(peso), circunferenciaMuneca = float(circu))
-                
                 sesion = Sesion.objects.filter(alumno_id=alumno.id).latest()
                 sesion.cantSesiones=0
                 sesion.save()
+                
+                #Primero debemos crear la Revision de la sesion con el nivel anterior
+                revisionSesion = RevisionSesion.objects.create(profesor_id=alumno.profesor_id, 
+                                                               alumno_id=alumno, 
+                                                               sesion_id=sesion, 
+                                                               nivelAnterior=alumno.nivel_id.nombre,
+                                                               nivelRevision=nivel, 
+                                                               pesoActual=FichaAlumno.objects.get(alumno_id=alumno.id).peso)
+                
+                
+                Alumno.objects.filter(id=alumno.id).update(nivel_id=Nivel.objects.get(nombre=nivel))
+                FichaAlumno.objects.filter(alumno_id=alumno.id).update(peso = float(peso), circunferenciaMuneca = float(circu))
+                
+                #Cargamos el peso de revision
+                revisionSesion.pesoRevision = FichaAlumno.objects.get(alumno_id=alumno.id).peso
+                revisionSesion.save()
+                
+                
                 #ACA DEBEMOS CAMBIAR A TRUE EL ATRIBUTO CLASE DE REVISION
                 mensaje3= "Subiste de nivel, ahora solo falta que tu profesor te evalúe. Para ello, debes elegir qué día queres tener una clase presencial"
                 disponibilidad = DisponibilidadProfesor.objects.filter(profesor_id=alumno.profesor_id, ocupado=False)
@@ -455,51 +472,7 @@ def actualizarFicha(request):
     else:
         print('get de la funcion correcta')
         mensaje = None
-        return render (request, 'rutina/actualizarFicha.html', {'mensaje':mensaje})
-    
-    
-        
-    """
-    print('Llego al limite de sesiones, se debe recalcular el nivel')
-                    #Obtenemos los datos necesarios para recalcular el nivel
-                    ficha = FichaAlumno.objects.get(alumno_id = alumno.id)
-                    altura = ficha.altura
-                    circu = ficha.circunferenciaMuneca
-                    peso = ficha.peso
-                    sexo = ficha.sexo
-                    
-                    
-                    x <= 2
-                        poco
-                    x >= 3
-                        mucho
-                    x = 0
-                        nada
-                    
-                    #Obtenemos cuanta actividad hace el alumno
-                    if len(alumno.semana_id) <= 2:
-                        actividad = "poco"
-                    if len(alumno.semana_id) >= 3:
-                        actividad = "mucho"
-                    if len(alumno.semana_id)  == 0:
-                        actividad = "nada"
-                    
-                    
-                    #Recalculamos el nivel
-                    nivel = calcularNivel(altura, circu, peso, actividad, sexo)
-                    nivel = nivel.capitalize()
-                    print(nivel)
-                    if nivel != str(alumno.nivel_id.nombre):
-                        Alumno.objects.filter(id=alumno.id).update(nivel_id=Nivel.objects.get(nombre=nivel))
-                        #ACA DEBEMOS CAMBIAR A TRUE EL ATRIBUTO CLASE DE REVISION
-                        mensaje2= "Subiste de nivel, ahora solo falta que tu profesor te evalúe"
-                    else:
-                        mensaje2= None
-                    
-                    
-                else:
-                    print('Todavia no llego al limite de sesiones')
-    """    
+        return render (request, 'rutina/actualizarFicha.html', {'mensaje':mensaje})  
         
 
 
@@ -870,16 +843,20 @@ def verClase(request, pk):
             print(peticion)
             alum = peticion.pop('alumno')
             alum = int(alum[0])
+            #Obtenemos el alumno al que se le realiza la revision
             alumno = Alumno.objects.get(id=alum)
             
-            
+            #Obtenemos el nivel que el profesor seleccionó
             nivel = peticion.pop('nivel')
             nivel = nivel[0]
             
+            #Obtenemos el comentario que el profesor agregó
+            comentario = peticion.pop('comentario')
+            comentario = comentario [0]
+            print(comentario)
+            
             if nivel == alumno.nivel_id:
-                #El profesor aprueba la condicion del alumno
-                
-                
+                #El profesor aprueba la condicion del alumno                
                 
                 #Le sacamos de la clase de revision
                 sesion = Sesion.objects.filter(alumno_id=alumno.id).latest()
@@ -891,6 +868,16 @@ def verClase(request, pk):
                 disponibilidad.alumno_id = None
                 disponibilidad.ocupado = False
                 disponibilidad.save()
+                
+                #Obtenemos el objeto sesion de revision mediante el alumno y la sesion
+                #Modificamos el objeto sesion de revision
+                """
+                    modificamos el nivel de revision
+                    agregamos el comentario
+                """
+                RevisionSesion.objects.filter(sesion_id=sesion.id, alumno_id=alumno.id).update(nivelRevision=Nivel.objects.get(id=nivel).nombre,comentario=comentario,revisado=True)
+                
+                
             else:
                 #El profesor no aprueba la condicion del alumno
                 
@@ -907,6 +894,16 @@ def verClase(request, pk):
                 disponibilidad.alumno_id = None
                 disponibilidad.ocupado = False
                 disponibilidad.save()
+                
+                #Obtenemos el objeto sesion de revision mediante el alumno y la sesion
+                #Modificamos el objeto sesion de revision
+                """
+                    modificamos el nivel de revision
+                    agregamos el comentario
+                """
+                RevisionSesion.objects.filter(sesion_id=sesion.id, alumno_id=alumno.id).update(nivelRevision=Nivel.objects.get(id=nivel).nombre,comentario=comentario,revisado=True)
+                
+                
             return redirect ('/rutinas/clases/'+str(alumno.profesor_id.user_id))
             
                 
@@ -961,7 +958,7 @@ def obtenerActividadesSesion(request):
                                      fields=('esfuerzoActividad', 'actividad_id', 'nombreActividad'))
     return HttpResponse(data, content_type='application/json')
     
-
+#Esta funcion se utiliza para obtener la cantidad de los musculos para el grafico de tipo radar que esta en el perfil de usuario
 def obtenerCantidadMusculos(request):
     alumno = Alumno.objects.get(id=request.GET['id'])
     sesiones = Sesion.objects.filter(alumno_id=alumno.id)
@@ -988,18 +985,25 @@ def obtenerCantidadMusculos(request):
 
 #Esta funcion se usa para sacar el boton de revision de la vista de clases
 def comprobarRevision(request):
-    alumno = Alumno.objects.get(id=request.GET['id'])
-    if (Sesion.objects.filter(alumno_id=alumno.id)):
+    dic = {}
+    id = request.GET['id']
+    print('id'+str(id))
+    alumno = Alumno.objects.get(id=id)
+    ultimaSesion = Sesion.objects.filter(alumno_id=alumno.id).latest()
+    print(ultimaSesion)
+    if (ultimaSesion.claseRevision):
         data = True
     else:
         data = False
-        
+    
+    dic['estado'] = data
+    print(dic)
     return HttpResponse(
-                json.dumps(data),
+                json.dumps(dic),
                 content_type="application/json")
 
 
-
+#Traduccion de modelos para auditoria
 def idSesionSesion(objetos):
     for o in objetos:
         if o.get('modelo') == 1:
@@ -1114,7 +1118,7 @@ def auditoria(request):
             
     return render (request, 'rutina/auditoria.html', {'logs':logs, 'objetos':objetos})
 
-
+#Esta funcion es para mostrar detalles de la auditoria cuando se selecciona un objeto
 def detalleAuditoria(request):
     id = request.GET['id']
     print(id)

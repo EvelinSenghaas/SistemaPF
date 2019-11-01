@@ -1,4 +1,4 @@
-from auditlog.registry import auditlog
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.apps import apps
@@ -140,6 +140,3 @@ class FichaAlumno (models.Model):
     
     def __str__(self):
         return 'Ficha '+self.alumno_id.nombre
-
-    
-auditlog.register(Alumno)

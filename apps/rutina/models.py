@@ -1,4 +1,4 @@
-from auditlog.registry import auditlog
+
 from django.db import models
 from django.db.models import *
 
@@ -154,5 +154,26 @@ class Revision(models.Model):
     
     def __str__ (self):
         return self.sesion_id.alumno_id.nombre + ', ' + self.sesion_id.alumno_id.apellido  + ' (' + str(self.fechaRevision) + ' )'
+
+
+class RevisionSesion(models.Model):
+    id = models.AutoField(primary_key = True)
+    fechaRevision = models.DateField('Fecha de revision', auto_now = True, auto_now_add = False, blank=True, null=True)
+    profesor_id = models.ForeignKey('home.Profesor', related_name='homePRS', on_delete=models.CASCADE)
+    alumno_id = models.ForeignKey('home.Alumno', related_name='homeARS', on_delete=models.CASCADE)
+    sesion_id = models.ForeignKey(Sesion, on_delete=models.CASCADE)
+    nivelAnterior = models.CharField(max_length = 60, blank = False, null = False, unique=True, verbose_name="Nivel anterior")
+    nivelRevision = models.CharField(max_length = 60, blank = False, null = False, unique=True, verbose_name="Nivel revision")
+    pesoActual = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name="Peso anterior")
+    pesoRevision = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name="Peso revision")
+    revisado = models.BooleanField(default=False)
+    comentario = models.TextField(blank = True, null = True)
     
-auditlog.register(Sesion)
+    class Meta:
+        verbose_name = 'Revision de sesion'
+        verbose_name_plural = 'Revisiones de sesion'
+        ordering = ['fechaRevision']
+        get_latest_by = "fechaRevision"
+    
+    def __str__ (self):
+        return self.sesion_id.alumno_id.nombre + ', ' + self.sesion_id.alumno_id.apellido  + ' (' + str(self.fechaRevision) + ' )'
