@@ -994,7 +994,7 @@ def perfil(request, pk):
         if Alumno.objects.get(user_id = pk).entrenamiento_sistema:
             print('entrena por sistema')
             alumno = Alumno.objects.get(user_id=pk)
-            print(alumno)
+            print(alumno.apellido)
             edad = alumno.edad(alumno.fecha_nac)
             ficha = FichaAlumno.objects.get(alumno_id=alumno.id)
             mensaje = None
@@ -1037,6 +1037,7 @@ def obtenerActividadesSesion(request):
 #Esta funcion se utiliza para mostrar la clase de revision asociada a una sesion en el perfil de usuario
 def obtenerRevisionActividadesSesion(request):
     sesion = Sesion.objects.get(id=request.GET['id'])
+    print(sesion.id)
     data = {}
     if (RevisionSesion.objects.filter(alumno_id=sesion.alumno_id.id, sesion_id=sesion.id).exists()):
         a = RevisionSesion.objects.get(alumno_id=sesion.alumno_id.id, sesion_id=sesion.id).pesoActual

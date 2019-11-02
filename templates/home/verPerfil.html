@@ -15,6 +15,7 @@
 {%block contenido%}
         <script>
                 function verActividades(id){
+                    console.log(id);
                     $.ajax({
                         data : {'id' : id},
                         url : '/rutinas/obtener_actividades_ajax/', //El id que estoy guardando en data se va a enviar en esa url
@@ -33,8 +34,11 @@
                                     '</div>'
                                 
                             }
+                            var html2 = ""
                             $('#contenido').html(html);
                             console.log(html);
+                            $('#revision').html(html2);
+                            console.log(html2);
                         },
                         
 
@@ -44,12 +48,13 @@
         </script>
         <script>
             function obtenerRevisionActividadesSesion(id){
+                
                 $.ajax({
                     data : {'id' : id},
                     url : '/rutinas/obtener_revision_sesion_ajax/', //El id que estoy guardando en data se va a enviar en esa url
                     type : 'get',
                     success : function(data){
-                        if (data['revision']){
+                        if (data['revision'] == true){
                             console.log('entra al if');
                             var html2 = '<div class="card-header mt-1">'+
                                             '<div class="row">'+
