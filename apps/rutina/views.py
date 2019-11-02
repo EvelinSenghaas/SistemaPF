@@ -1545,15 +1545,16 @@ def agregarActividad(request):
 
 
 def editarActividad(request, pk):
-    actividad = Actividad.objects.get(id = pk)
+    actividad1 = Actividad.objects.get(id = pk)
     repeticiones = Repeticion.objects.filter(actividad_id=pk)
     nivel = Nivel.objects.all() 
         
     if request.method == 'GET':
-        form = ActividadForm(instance = actividad)
+        form = ActividadForm(instance = actividad1)
+        print(actividad1.gif)
         form2 = RepeticionForm()
     else:
-        form = ActividadForm(request.POST, instance = actividad)
+        form = ActividadForm(request.POST, instance = actividad1)
         form2 = RepeticionForm(request.POST)
         
         peticion = request.POST.copy()
@@ -1584,8 +1585,12 @@ def editarActividad(request, pk):
         
         
         if form.is_valid() and form2.is_valid():
+            print(actividad1.gif)
             actividad = form.save(commit = False)
-            actividad.gif = request.FILES.get('archivo')
+            if request.FILES:
+                actividad.gif = request.FILES.get('archivo')
+            else:
+                actividad.gif = actividad1.gif
             actividad.detalle_id.set(detalles)
             actividad.save()
             form2.actividad_id = form
@@ -1601,7 +1606,7 @@ def editarActividad(request, pk):
             return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error}) 
             
         return redirect('/rutinas/actividades/') 
-    return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel})
+    return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel, 'actividad':actividad1})
             
 
 #ESTO NO SE USA    
