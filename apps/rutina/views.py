@@ -10,6 +10,7 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from apps.home.models import Profesor
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
 import operator
 from django.contrib.auth.models import Group
 from django.http import HttpResponse
@@ -1214,6 +1215,8 @@ def idSesionSesion(objetos):
             o['modelo'] = 'Login event'
         elif o.get('modelo') == 27:
             o['modelo'] = 'Request event'
+        elif o.get('modelo') == 28:
+            o['modelo'] = 'Revision sesion'
             
     return objetos
     
@@ -1242,7 +1245,9 @@ def auditoria(request):
     
     for fila in cursor2.fetchall():       
         diccionario = {
-            'id':fila['id'],'accion':fila['event_type'], 'fecha':fila['datetime'], 'modelo':fila['content_type_id'], 'fecha':fila['datetime'], 'idUsuario':fila['user_id']}
+            'id':fila['id'],'accion':fila['event_type'], 'fecha':fila['datetime'], 'modelo':fila['content_type_id'], 'fecha':fila['datetime'], 'idUsuario':fila['user_id']
+            }
+        
         objetoss.append(diccionario)
     conexion2.close()
         
@@ -1253,7 +1258,7 @@ def auditoria(request):
             o['accion'] = 'Eliminación'
             
         elif o['accion'] == 2:
-            o['accion'] = 'Actualización'
+            o['accion'] = 'Creación'
             
         elif o['accion'] == 3:
             o['accion'] = 'Modificación'
@@ -1265,12 +1270,20 @@ def auditoria(request):
     for o in objetoss:
         o['idUsuario'] = User.objects.get(id=o.get('idUsuario')).username
         
-    objetos = idSesionSesion(objetoss)
+    #objetos = idSesionSesion(objetoss)
     
+    objetos = objetoss
+    for o in objetos:
+        o['modelo'] = ContentType.objects.get(id=o.get('modelo')).model
+        o['modelo'] = o.get('modelo').capitalize()
+        
+    modelos = ContentType.objects.all()
+    for modelo in modelos:
+        modelo.model = modelo.model.capitalize()
     
             
             
-    return render (request, 'rutina/auditoria.html', {'logs':logs, 'objetos':objetos})
+    return render (request, 'rutina/auditoria.html', {'logs':logs, 'objetos':objetos, 'modelos':modelos})
 
 #Esta funcion es para mostrar detalles de la auditoria cuando se selecciona un objeto
 def detalleAuditoria(request):

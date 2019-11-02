@@ -549,6 +549,11 @@
             {%endfor%}
 
             <script>
+                    console.log(sesiones);
+                    console.log(esfuerzos);
+            </script>
+
+            <script>
                 var ctx = document.getElementById('lineChart').getContext("2d");           
                 var chart = new Chart(ctx, {
                     type: 'line',
@@ -638,11 +643,13 @@
                 radar_chart.data.datasets.forEach((dataset) => {
                     dataset.data = dataMusculos;
                 });
+
                 chart.data.labels = sesiones;
                 
                 chart.data.datasets.forEach((dataset) => {
                     dataset.data = esfuerzos;
                 });
+                
             </script>
 
 
@@ -812,4 +819,5 @@
       });
     });
   </script>
+  
   {%endblock scriptTabla%}

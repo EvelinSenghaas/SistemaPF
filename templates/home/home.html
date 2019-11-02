@@ -33,10 +33,12 @@
   <link href=" {% static 'css/themes/default.css' %}" rel="stylesheet">
   <link href=" {% static 'css/themes/default.min.css' %}" rel="stylesheet">
   
-  
+  <!-- Datatable -->
+  <link href=" {% static 'datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
 
 
 </head>
+<script src="{% static 'js/jquery-3.4.1.js' %}"></script>
 {%block javascript%}
 {%endblock javascript%}
 
@@ -176,8 +178,11 @@
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   <script src="{% static 'js/jquery-3.4.1.js' %}"></script>
 
-  <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
-  <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+  <!-- Datatables -->
+  <script src="{% static 'datatables/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+
 {%block tabla%}
 <script>
   $(document).ready( function () {

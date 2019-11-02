@@ -252,7 +252,7 @@
             {%for alumno in alumnos%}
               <tr>
                 <td><a href="/rutinas/ver_perfil/{{alumno.user_id}}">{{alumno.nombre}}, {{alumno.apellido}} </a></td>
-                <td>{{alumno.fecha_nac}}</td>
+                <td >{{alumno.fecha_nac}}</td>
                 <td><a href="/rutinas/ver_rutina/{{alumno.rutina_id.id}}">{{alumno.rutina_id}}</a></td>
                 {%if alumno.nivel_id == None%}
                 <td>Profesor a cargo</td>
@@ -399,6 +399,7 @@
                 colCount.push('*'); //Le pongo uno mas porque tengo un td oculto (el id)
 
                 //doc.content[0].table.widths = colCount;
+                
                 //Es equivalente a: 
                 doc.content[0].table.widths = [125 , 30 , 65 , 90 , 75 ];
 
