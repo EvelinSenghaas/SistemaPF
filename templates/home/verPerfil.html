@@ -150,9 +150,10 @@
                             <!-- END SIDEBAR USER TITLE -->
                             <!-- SIDEBAR BUTTONS -->
                             <div class="profile-userbuttons">
-                                <button type="button" class="btn btn-success btn-sm">Mensaje</button>
                                 {%if user.id == alumno.user_id%}
-                                <button type="button" class="btn btn-light btn-sm">Editar perfil</button>
+                                <a class="btn btn-light-sm" href="/rutinas/editar_perfil/{{user.id}}" role="button">Editar perfil</a>
+                                {%else%}
+                                <a class="btn btn-success btn-sm" href="#" role="button">Mensaje</a>
                                 {%endif%}
                             </div>
                             <!-- END SIDEBAR BUTTONS -->
