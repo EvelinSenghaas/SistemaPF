@@ -246,7 +246,7 @@
                                             <div class="row form-group">
                                                 <div class="col col-md-3">Nombre</div>
                                                 <div class="col-12 col-md-9">
-                                                    <input type="text" class="form-control" name="nombre" value="{{alumno.nombre}}">
+                                                    <input type="text" class="form-control" name="nombre" value="{{alumno.nombre}}" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -254,7 +254,7 @@
                                             <div class="row form-group">
                                                 <div class="col col-md-3">Apellido</div>
                                                 <div class="col-12 col-md-9">
-                                                    <input type="text" class="form-control" name="apellido" value="{{alumno.apellido}}">
+                                                    <input type="text" class="form-control" name="apellido" value="{{alumno.apellido}}" required>
                                                 </div>
                                             </div>
                                         </div>                                        
@@ -262,7 +262,7 @@
                                             <div class="row form-group">
                                                 <div class="col col-md-3">Correo electrónico</div>
                                                     <div class="col-12 col-md-9">
-                                                        <input type="email" class="form-control" name="email" value="{{user.email}}">
+                                                        <input type="email" class="form-control" name="email" value="{{user.email}}" required>
                                                         
                                                 </div>
                                             </div>
@@ -279,7 +279,7 @@
                                         <div class="row form-group">
                                             <div class="col col-md-3">Profesión</div>
                                                 <div class="col-12 col-md-9">
-                                                    <input type="text" class="form-control" name="profesion" value="{{ficha.profesion}}">
+                                                    <input type="text" class="form-control" name="profesion" value="{{ficha.profesion}}" required>
                                                 </div>
                                         </div>
                                     </div>
@@ -329,11 +329,11 @@
                                                         <div class="col col-md-3">Horarios</div>
                                                         <div class="col-12 col-md-9">
                                                                 <select class="browser-default custom-select"  name="dias" multiple>
-                                                                    {%for dia in dias%}
-                                                                    {%if dia in disponibilidad%}
-                                                                    <option value="{{dia.id}}" selected>{{dia}}</option>
+                                                                    {%for disp in disponibilidad%}
+                                                                    {%if disp in dias%}
+                                                                    <option value="{{disp.id}}" selected>{{disp}}</option>
                                                                     {%else%}
-                                                                    <option value="{{dia.id}}">{{dia}}</option>
+                                                                    <option value="{{disp.id}}">{{disp}}</option>
                                                                     {%endif%}
                                                                     {%endfor%}
                                                                 </select>

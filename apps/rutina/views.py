@@ -1045,7 +1045,8 @@ def editarPerfil(request, pk):
             return render (request, 'home/editarPerfil.html', {'alumno':alumno, 'ficha':ficha, 'disponibilidad':disponibilidad, 'dias':dias})
         else:
             #El alumno entrena con un profesor
-            disponibilidad = DisponibilidadProfesor.objects.all()
+            disponibilidad = DisponibilidadProfesor.objects.filter(profesor_id=profesor.id)
+            print(disponibilidad)
             dias = DisponibilidadProfesor.objects.filter(alumno_id=alumno.id)
             return render (request, 'home/editarPerfil.html', {'alumno':alumno, 'ficha':ficha, 'disponibilidad':disponibilidad, 'dias':dias})
     
@@ -1058,6 +1059,7 @@ def editarPerfil(request, pk):
         print(formulario)
         print('entra al post')
         if (formulario == 'sistema'):
+            #Formulario de entrenamiento por sistema
             print('entra a entrenamiento por sistema')
             dias = Semana.objects.all()
             disponibilidad = alumno.semana_id.all()
@@ -1067,8 +1069,7 @@ def editarPerfil(request, pk):
             try:
                 nombre = peticion.pop('nombre')
                 nombre = str(nombre[0])
-                if nombre != None:
-                    Alumno.objects.filter(id=alumno.id).update(nombre=nombre)
+                Alumno.objects.filter(id=alumno.id).update(nombre=nombre)
             except:
                 error = 'Error en el campo nombre'
                 return render (request, 'home/editarPerfil.html', {'alumno':alumno, 'ficha':ficha, 'disponibilidad':disponibilidad, 'dias':dias, 'error':error})
@@ -1138,7 +1139,81 @@ def editarPerfil(request, pk):
             
             
         else:
-            pass
+            #Formulario de entrenamiento con profesor
+            
+            error = None
+            #Nombre
+            try:
+                nombre = peticion.pop('nombre')
+                nombre = str(nombre[0])
+                Alumno.objects.filter(id=alumno.id).update(nombre=nombre)
+            except:
+                error = 'Error en el campo nombre'
+                return render (request, 'home/editarPerfil.html', {'alumno':alumno, 'ficha':ficha, 'disponibilidad':disponibilidad, 'dias':dias, 'error':error})
+            
+            #Apellido
+            try:
+                apellido = peticion.pop('apellido')
+                apellido = str(apellido[0])
+                Alumno.objects.filter(id=alumno.id).update(apellido=apellido)
+            except:
+                error = 'Error en el campo apellido'
+                return render (request, 'home/editarPerfil.html', {'alumno':alumno, 'ficha':ficha, 'disponibilidad':disponibilidad, 'dias':dias, 'error':error})
+            
+            #Email
+            try:
+                email = peticion.pop('email')
+                email = email[0]
+                Alumno.objects.filter(id=alumno.id).update(email=email)
+            except:
+                error = 'Error en el campo Correo electrónico'
+                return render (request, 'home/editarPerfil.html', {'alumno':alumno, 'ficha':ficha, 'disponibilidad':disponibilidad, 'dias':dias, 'error':error})
+            
+            #profesion
+            try:
+                profesion = peticion.pop('profesion')
+                profesion = str(profesion[0])
+                FichaAlumno.objects.filter(alumno_id=alumno.id).update(profesion=profesion)
+            except:
+                error = 'Error en el campo Profesion'
+                return render (request, 'home/editarPerfil.html', {'alumno':alumno, 'ficha':ficha, 'disponibilidad':disponibilidad, 'dias':dias, 'error':error})
+            
+            #sexo
+            sexo = peticion.pop('sexo')
+            sexo = str(sexo[0])
+            FichaAlumno.objects.filter(alumno_id=alumno.id).update(sexo=sexo)
+            
+            #Grupo sanguíneo
+            grupo_sanguineo = peticion.pop('grupo_sanguineo')
+            grupo_sanguineo = str(grupo_sanguineo[0])
+            FichaAlumno.objects.filter(alumno_id=alumno.id).update(grupo_sanguineo=grupo_sanguineo)
+            
+            #Disponibilidad
+            try:
+                diasSeleccionados = []
+                diasEntrenamientoAux = peticion.pop('dias')
+                for dias in diasEntrenamientoAux:
+                    diasSeleccionados.append(DisponibilidadProfesor.objects.get(id=dias))
+
+                diasAlumno = DisponibilidadProfesor.objects.filter(alumno_id=alumno.id)
+                list(diasAlumno)
+                
+                #Se borran todos los dias del alumno
+                for dia in diasAlumno:
+                    DisponibilidadProfesor.objects.filter(id=dia.id).update(ocupado=False,alumno_id=None)
+                
+                #Se le agregan los dias seleccionados
+                diasAlumno = DisponibilidadProfesor.objects.filter(alumno_id=alumno.id)
+                for dias in diasSeleccionados:
+                    if dias in diasAlumno:
+                        pass
+                    else:
+                        DisponibilidadProfesor.objects.filter(id=dias.id).update(ocupado=True,alumno_id=alumno.id)
+            except:
+                error = 'Error en la selección de horarios de entrenamiento'
+                return render (request, 'home/editarPerfil.html', {'alumno':alumno, 'ficha':ficha, 'disponibilidad':disponibilidad, 'dias':dias, 'error':error})
+            
+            
     return redirect('/rutinas/ver_perfil/'+str(alumno.user_id))
     
         
