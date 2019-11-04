@@ -11,7 +11,12 @@
                 <h2><strong>Rutinas</strong></h2>
                 <p>Hay cada una especial para ti</p>
             {%endblock titulo_imagen%}
-{%block contenido%}            
+{%block contenido%}       
+<script>
+
+</script>
+
+
 <body>
   <!-- Page Content -->
   <div class="container mt-2">
@@ -21,6 +26,115 @@
               </li>
               <li class="breadcrumb-item active">Listado de rutinas</li>
           </ol>
+    {%if identificador == 'alumno'%}
+    <!-- Es alumno y esta inscipto a una rutina -->
+    {%if alumno.rutina_id != None%}
+    <!-- Blog Post -->
+    {% for rutina in rutinas %}
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-6">
+            <a href="/rutinas/ver_rutina/{{rutina.id}}">
+              <img class="img-fluid rounded" src="{% static 'img/img_portada_rutina.jpg'%}" alt="">
+            </a>
+          </div>
+          <div class="col-lg-6">
+              <div class="float-right">
+                  {%if alumno.rutina_id == rutina%}
+                  <h4><span class="badge badge-success">Inscripto</span></h4>
+                  {%endif%}
+                </div>
+            <h2 class="card-title">{{rutina.nombre}}</h2>
+            <p class="card-text">{{rutina.descripcion}}</p>
+            {%if alumno.rutina_id == None%}
+            <a href="/rutinas/inscribir_rutina/{{user.id}}/{{rutina.id}}" class="btn btn-primary">Inscribirse</a>
+            {%endif%}
+            {%if alumno.rutina_id == rutina%}
+            <a class="btn btn-outline-danger" href="#" role="button">Darse de baja</a>
+            {%endif%}
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-muted">
+        <div class="row">
+          <div class="col-md-11 col-sm-11">Profesor: <strong>{{rutina.profesor_id}}</strong></div>
+          {% if perms.rutina.change_rutina and perms.rutina.delete_rutina%}
+            <div class="col-0">
+              <a class="btn btn-outline-secondary" href="editar_rutina/{{rutina.id}}">Editar</a>
+            </div>
+          {%endif%}
+        </div>
+    </div>
+    </div>
+    {%endfor%}
+    {%else%}
+    <!-- Es alumno pero no tiene rutina porque se dio de baja -->
+    {% for rutina in rutinas %}
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-6">
+            <a href="/rutinas/ver_rutina/{{rutina.id}}">
+              <img class="img-fluid rounded" src="{% static 'img/img_portada_rutina.jpg'%}" alt="">
+            </a>
+          </div>
+          <div class="col-lg-6">
+            <h2 class="card-title">{{rutina.nombre}}</h2>
+            <p class="card-text">{{rutina.descripcion}}</p>
+            <a href="/rutinas/inscribir_rutina/{{user.id}}/{{rutina.id}}" class="btn btn-primary">Inscribirse</a>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-muted">
+        <div class="row">
+          <div class="col-md-11 col-sm-11">Profesor: <strong>{{rutina.profesor_id}}</strong></div>
+          {% if perms.rutina.change_rutina and perms.rutina.delete_rutina%}
+            <div class="col-0">
+              <a class="btn btn-outline-secondary" href="editar_rutina/{{rutina.id}}">Editar</a>
+            </div>
+          {%endif%}
+        </div>
+    </div>
+    </div>
+    {%endfor%}
+    {%endif%}
+    {%endif%}
+
+
+    {%if identificador == 'profesor'%}
+    <!-- Es un profesor -->
+    <!-- Blog Post -->
+    {% for rutina in rutinas %}
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-6">
+            <a href="/rutinas/ver_rutina/{{rutina.id}}">
+              <img class="img-fluid rounded" src="{% static 'img/img_portada_rutina.jpg'%}" alt="">
+            </a>
+          </div>
+          <div class="col-lg-6">
+            <h2 class="card-title">{{rutina.nombre}}</h2>
+            <p class="card-text">{{rutina.descripcion}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-muted">
+        <div class="row">
+          <div class="col-md-11 col-sm-11">Profesor: <strong>{{rutina.profesor_id}}</strong></div>
+          {% if perms.rutina.change_rutina and perms.rutina.delete_rutina%}
+            <div class="col-0">
+              <a class="btn btn-outline-secondary" href="editar_rutina/{{rutina.id}}">Editar</a>
+            </div>
+          {%endif%}
+        </div>
+    </div>
+    </div>
+    {%endfor%}
+    {%endif%}
+    {%if identificador == 'usuario'%}
+    <!-- Es un usuario que acabó de registrarse -->
     <!-- Blog Post -->
     {% for rutina in rutinas %}
     <div class="card mb-4">
@@ -40,19 +154,17 @@
       </div>
       <div class="card-footer text-muted">
         <div class="row">
-          <div class="col-md-10 col-sm-10">Profesor: <strong>{{rutina.profesor_id}}</strong></div>
-          {% if perms.rutina.edit_rutina and perms.rutina.delete_rutina%}
+          <div class="col-md-11 col-sm-11">Profesor: <strong>{{rutina.profesor_id}}</strong></div>
+          {% if perms.rutina.change_rutina and perms.rutina.delete_rutina%}
             <div class="col-0">
               <a class="btn btn-outline-secondary" href="editar_rutina/{{rutina.id}}">Editar</a>
-            </div>
-            <div class="col-1">
-              <a class="btn btn-outline-danger" href="eliminar_rutina/{{rutina.id}}">Borrar</a>
             </div>
           {%endif%}
         </div>
     </div>
     </div>
     {%endfor%}
+    {%endif%}
   </div>
 
  

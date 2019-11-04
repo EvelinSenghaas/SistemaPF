@@ -50,6 +50,29 @@ class ListadoRutinas (PermissionRequiredMixin,ListView):
     template_name = 'rutina/rutinas.html'
     context_object_name = 'rutinas'
     queryset = Rutina.objects.filter(estado=True)
+    
+def listadoRutinas (request, pk):
+    user = User.objects.get(id=pk)
+    
+    if (Alumno.objects.filter(user_id=user.id).exists()):
+        alumno = Alumno.objects.get(user_id=user.id)
+        profesor = None
+        rutinas = Rutina.objects.filter(estado=True)
+        identificador = 'alumno'
+    elif (Profesor.objects.filter(user_id=user.id).exists()):
+        profesor = Profesor.objects.filter(user_id=user.id)
+        rutinas = Rutina.objects.filter(estado=True)
+        alumno = None
+        identificador = 'profesor'
+    elif (User.objects.filter(id=pk).exists()):
+        profesor = None
+        alumno = None
+        rutinas = Rutina.objects.filter(estado=True)
+        identificador = 'usuario'
+    return render (request, 'rutina/rutinas.html', {'alumno':alumno, 'profesor':profesor, 'rutinas':rutinas, 'identificador':identificador})
+    
+    
+    
 
 class ListadoActividades (PermissionRequiredMixin,ListView):
     permission_required = ('rutina.add_actividad')
@@ -1215,8 +1238,9 @@ def editarPerfil(request, pk):
             
             
     return redirect('/rutinas/ver_perfil/'+str(alumno.user_id))
+           
     
-        
+    
 
 def obtenerActividadesSesion(request):
     actividades = EsfuerzoActividad.objects.filter(sesion_id=request.GET['id'])

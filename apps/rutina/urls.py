@@ -1,9 +1,9 @@
 from django.urls import path, re_path
 from django.contrib.auth.decorators import login_required
-from .views import Rutinas, ListadoDetalles, ListadoRutinas, ListadoActividades, EditarRutina, editarActividad, EditarDetalle, eliminarActividad, AgregarRutina, AgregarDetalle, agregarActividad, eliminarRutina, verRutina, verActividad, agregarRutina, inscribirseRutina, perfil, verClase, eliminarDetalle, agregarEvaluacionNivel, listadoEvaluacionNivel, editarEvaluacionNivel, verRevisiones, actualizarFicha, obtenerActividadesSesion, obtenerCantidadMusculos, auditoria, comprobarRevision, detalleAuditoria, obtenerRevisionActividadesSesion, seleccionarHorarioClaseRevision, comprobarActualizacionFicha, editarPerfil
+from .views import Rutinas, ListadoDetalles, ListadoRutinas, ListadoActividades, EditarRutina, editarActividad, EditarDetalle, eliminarActividad, AgregarRutina, AgregarDetalle, agregarActividad, eliminarRutina, verRutina, verActividad, agregarRutina, inscribirseRutina, perfil, verClase, eliminarDetalle, agregarEvaluacionNivel, listadoEvaluacionNivel, editarEvaluacionNivel, verRevisiones, actualizarFicha, obtenerActividadesSesion, obtenerCantidadMusculos, auditoria, comprobarRevision, detalleAuditoria, obtenerRevisionActividadesSesion, seleccionarHorarioClaseRevision, comprobarActualizacionFicha, editarPerfil, listadoRutinas
 
 urlpatterns = [
-    path('',  login_required(ListadoRutinas.as_view()), name = 'rutinas'),
+    path('listado/<int:pk>',  login_required(listadoRutinas), name = 'rutinas'),
     path('actividades/',  login_required(ListadoActividades.as_view()), name = 'actividades'),
     
     path('agregar_detalle',login_required(AgregarDetalle.as_view(success_url="/rutinas/administrar_detalles/")), name = 'agregar_detalle'),
