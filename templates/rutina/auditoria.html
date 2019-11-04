@@ -121,14 +121,14 @@
               </div>
             </div>
 
-          <table class="table table-striped" id="mydatatable">
+          <table class="table table-striped" id="mydatatable3">
             <thead class="card-header">
               <tr>
                 <th width="150">Operación</th>
                 <th width="200">Modelo</th>
                 <th width="200">Usuario</th>
                 <th width="150">Fecha</th>
-                <th width="auto" class="noExport">Acción</th>
+                <th class="noExport">Acción</th>
               </tr>
             </thead>
             <tbody>
@@ -139,7 +139,7 @@
                 <td width="200">{{objeto.modelo}}</td>
                 <td width="200">{{objeto.idUsuario}}</td>
                 <td width="100">{{objeto.fecha}}</td>
-                <td width="100" align="center"><a href="#" onclick="verDetalles({{objeto.id}})" data-toggle="modal" data-target=".bs-example-modal-lg2"><img src="{%static 'img/activo.png'%}" alt=""></a></td>
+                <td width="100" align="center"><a href="#" onclick="verDetalles('{{objeto.id}}')" data-toggle="modal" data-target=".bs-example-modal-lg2"><img src="{%static 'img/activo.png'%}" alt=""></a></td>
             </tr>
             {%endif%}
             <!-- Modal para ver los detalles -->
@@ -238,7 +238,7 @@
     </div>
 {%endblock contenido%}
 
-{%block tabla%}
+
 <script type="text/javascript">
     document.getElementById("desde").max = new Date().toISOString().split("T")[0];
     document.getElementById("hasta").max = new Date().toISOString().split("T")[0];
@@ -256,9 +256,10 @@
       
   });
   });
-  
+
 </script>
 
+{%block scripts%}
     <!-- Datatable santy -->
     <script type="text/javascript" src="{% static '/js/datatables.min.js'%}"></script>
     <script type="text/javascript" src="{% static '/js/buttons.html5.min.js'%}"></script>
@@ -267,26 +268,32 @@
     <script type="text/javascript" src="{% static '/js/jszip.min.js'%}"></script>
     <script type="text/javascript" src="{% static '/js/pdfmake.min.js'%}"></script>
     <script type="text/javascript" src="{% static '/js/vfs_fonts.js'%}"></script>
-    
+{%endblock scripts%}
+
+
+
+{%block tabla%}
     <script>
       
       $(document).ready( function () {
         /*function actualizar(){
           document.getElementsByClassName('dt-buttons btn-group flex-wrap').style.display = 'inline-block';
         };*/
-        $('#mydatatable').DataTable({
+        $('#mydatatable3').DataTable({
           "paging": true,
-          "dom": 'fBrltip',
+          "dom": 'fBlrtip',
           "buttons": [{
             extend: 'pdfHtml5',
             className: 'btn btn-danger dt-right',
             text: 'Reporte',
-            filename: 'auditoria_pdf',
+            filename: 'reporte_pdf',
             orientation: 'portrait', //landscape
-            pageSize: 'A4', //A3 , A5 , A6 , legal , letter
+            pageSize: 'A4',
             exportOptions: {
-                columns: 'thead th:not(.noExport)'
-            },
+              "columns": 'thead th:not(.noExport)',
+              search: 'applied',
+              order: 'applied'
+             },
             
             customize: function(doc) {
                 //quitamos el titulo por defecto del pdfhtml5 eliminando el primer elemento del pdf que esta en el array content.
@@ -306,7 +313,7 @@
 
                 // Ahora establecemos los margenes: [left,top,right,bottom] o [horizontal,vertical]
                 // si ponemos solo un numero se establece ese mismo para todos los margenes
-                doc.pageMargins = [60, 150, 25, 30];
+                doc.pageMargins = [65, 150, 25, 55];
 
                 // Tamaño de fuente de todo el documento
                 doc.defaultStyle.fontSize = 10;
@@ -324,8 +331,8 @@
                 // A la derecha: algo xd
 
                 //El titulo lo saco de un input oculto para poder usar esta misma configuracion para reportes distintos, entonces cambia el titulo segun el reporte.
+                var auditor = "{{user.username}}";
                 var titulo = $('#titulo').val();
-                var auditor = "{{user.username}}"
                 doc['header']=(function() {
                   return {
                     columns: [
@@ -355,8 +362,21 @@
                 });
 
                 //Funcion que pone cada columna en tamaño *, para que se ajuste automagicamente. cuenta cada <td> del data table y genera array del tipo [*,*,*,..,n] y establece dicho array como width.
-                 //Es equivalente a: 
-                doc.content[0].table.widths = [95 , 130 , 70 , 110 , 75 ];
+                var colCount = new Array();
+                $("#mydatatable3").find('tbody tr:first-child td').each(function() {
+                    if ($(this).attr('colspan')) {
+                        for (var j = 1; j <= $(this).attr('colspan'); $j++) {
+                            colCount.push('*');
+                        }
+                    } else { colCount.push('*'); }
+                });
+                //console.log(colCount);
+                colCount.push('*'); //Le pongo uno mas porque tengo un td oculto (el id)
+
+                //doc.content[0].table.widths = colCount;
+                
+                //Es equivalente a: 
+                doc.content[0].table.widths = [95 , 130 , 65 , 115 , 75 ];
 
 
                 // Para personalizar el pie de pagina:
@@ -424,7 +444,6 @@
           
         });
         
-        actualizar();
 
       });
     </script>
@@ -470,7 +489,7 @@
 
 <script>
     $(document).ready(function() {
-      var table = $('#mydatatable').DataTable();
+      var table = $('#mydatatable3').DataTable();
   
     //un boton con id limpiar
       $('#limpiar').click(function(){
@@ -535,7 +554,7 @@
             var hasta = filtro4;
             console.log(hasta);
           }
-         
+         titulo = "Auditoría en general"
           if(filtro1 == "" && filtro2 == "" && filtro3 == "" && filtro4 == "" ){
             console.log('filtro 0');
             var titulo = "Auditoría en general";
@@ -742,7 +761,7 @@
             console.log('filtro 11');
             var titulo = "Auditoría del modelo "+filtro2+" desde "+filtro3;
             var filtradoTabla = function FuncionFiltrado(settings, data, dataIndex){
-                if  (modelo == data[2] && Date.parse(String(desde)) <= Date.parse(String(data[3]))){
+                if  (modelo == data[1] && Date.parse(String(desde)) <= Date.parse(String(data[3]))){
                     return true ;
                     
                 }else{
@@ -778,9 +797,9 @@
           }
           else if(filtro1 != "" && filtro2 == "" && filtro3 == "" && filtro4 != ""){
             console.log('filtro 12');
-            var titulo = "Auditoría de operaciones de "+filtro1+" hasta "+filtro4;
+            var titulo = "Auditoría en general hasta "+filtro4;
             var filtradoTabla = function FuncionFiltrado(settings, data, dataIndex){
-                if  (operacion == data[1] && Date.parse(String(hasta)) >= Date.parse(String(data[3]))){
+                if  (operacion == data[0] && Date.parse(String(hasta)) >= Date.parse(String(data[3]))){
                     return true ;
                     
                 }else{
@@ -798,7 +817,25 @@
             console.log('filtro 13');
             var titulo = "Auditoría de operaciones de "+filtro1+" hasta "+filtro4;
             var filtradoTabla = function FuncionFiltrado(settings, data, dataIndex){
-                if  (operacion == data[1] && modelo == data[2] && Date.parse(String(hasta)) >= Date.parse(String(data[3]))){
+                if  (operacion == data[0] && modelo == data[1] && Date.parse(String(hasta)) >= Date.parse(String(data[3]))){
+                    return true ;
+                    
+                }else{
+                    return false;
+                    
+                }
+            }
+
+            $.fn.dataTable.ext.search.push( filtradoTabla )
+
+            table.draw()
+
+          }
+          else if(filtro1 != "" && filtro2 == "" && filtro3 != "" && filtro4 != ""){
+            console.log('filtro 14');
+            var titulo = "Auditoría de operaciones de "+filtro1+" desde "+ filtro3+ "  hasta "+filtro4;
+            var filtradoTabla = function FuncionFiltrado(settings, data, dataIndex){
+                if  (operacion == data[0] && Date.parse(String(desde)) <= Date.parse(String(data[3])) && Date.parse(String(hasta)) >= Date.parse(String(data[3]))){
                     return true ;
                     
                 }else{

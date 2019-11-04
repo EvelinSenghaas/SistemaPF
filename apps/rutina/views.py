@@ -1649,10 +1649,8 @@ def agregarEvaluacionNivel(request, pk):
                 evaluacionNivel = form.save(commit=False)
                 evaluacionNivel.profesor_id = profesor
                 evaluacionNivel.save()
-                messages.success(request, 'Evaluación de nivel agregada con éxito.')
             else:
                 error = form.errors
-                messages.error(request, 'No se pudo cargar, por favor verifique los datos ingresados')
     else:
         form = EvaluacionNivelForm()
         return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form})
@@ -1687,7 +1685,6 @@ def editarEvaluacionNivel(request, pk):
                 if form.is_valid():
                     evaluacionNivel = form.save(commit=False)
                     evaluacionNivel.save()
-                    messages.success = (request,'La evaluacion de nivel se cargó con éxito.')
                 else:
                     error = form.errors
                     return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form, 'error':error})
