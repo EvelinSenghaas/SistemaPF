@@ -1007,6 +1007,33 @@ def verClase(request, pk):
                 
             return redirect ('/rutinas/clases/'+str(alumno.profesor_id.user_id))
             
+
+#Esta funcion se usa para ocultar el link Clases de la barra de navegacion si el usuario no esta inscripto a una rutina
+def ocultarClases(request):
+    user = User.objects.get(id=request.GET['id'])
+    data = {}
+    
+    if not(user.is_staff):
+        if (Alumno.objects.filter(user_id=user.id).exists()):
+            alumno = Alumno.objects.get(user_id=user.id)
+            if (alumno.rutina_id != None):
+                d = False
+                data['ocultar'] = d
+            else:
+                d = True
+                data['ocultar'] = d
+        elif (Profesor.objects.filter(user_id=user.id).exists()):
+            d = False
+            data['ocultar'] = d
+    else:
+        d = True
+        data['ocultar'] = d
+        
+    print(data['ocultar'])
+    
+    return HttpResponse(
+                json.dumps(data),
+                content_type="application/json")
                 
  
 def realizarRevision(request, pk):

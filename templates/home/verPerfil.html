@@ -310,7 +310,11 @@
                                                 <div class="row form-group">
                                                     <div class="col col-md-3"><strong>Rutina</strong></div>
                                                     <div class="col-12 col-md-9">
+                                                        {%if alumno.rutina_id == None%}
+                                                        <label style="color:rgb(130, 128, 128)">Sin rutina</label>
+                                                        {%else%}
                                                         <label style="color:rgb(130, 128, 128)">{{alumno.rutina_id}} </label>
+                                                        {%endif%}
                                                     </div>
                                                 </div>
                                             </div>
