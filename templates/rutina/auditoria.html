@@ -9,27 +9,41 @@
 
 <script>
     function verDetalles(id){
+      console.log(id);
+
         $.ajax({
             data : {'id' : id},
             url : '/rutinas/ver_detalles_ajax/', //El id que estoy guardando en data se va a enviar en esa url
             type : 'get',
-            success : function(dic){
-              Object.keys(dic).forEach(function(key) {
+            success : function(lista){
                 
-                var html1 = '<label id="idObjeto">'+dic['idObjeto']+'</label>'
-                $('#idObjeto').html(html1);
+                var html1 = '<label id="idObjeto">'+lista[0]+'</label>'
+                $('#idObjeto'+id+'').html(html1);
+                
 
-                var html2 = '<label id="objeto">'+dic['objeto']+'</label>'
-                $('#objeto').html(html2);
+                var html2 = '<label id="objeto">'+lista[1]+'</label>'
+                $('#objeto'+id+'').html(html2);
+                
 
-                var html3 = '<label id="idModelo">'+dic['idModelo']+'</label>'
-                $('#idModelo').html(html3);
+                var html3 = '<label id="idModelo">'+lista[2]+'</label>'
+                $('#idModelo'+id+'').html(html3);
+                
+                /*if (lista[3] == 'null'){
+                  var html4 = '<label id="cambios">No disponible en este objeto</label>'
+                  $('#cambios'+id+'').html(html4);
+                } else if(lista[3] != 'null'){
+                  var html4 = '<label id="cambios">'+lista[3]+'</label>'
+                  $('#cambios'+id+'').html(html4);
+                }*/
 
-                /*var html4 = '<label id="fecha">'+dic['fecha']+'</label>'
-                $('#fecha').html(html4);*/
-              })
+                console.log(html1);
+                console.log(html2);
+                console.log(html3);
+                console.log(html3);
+                
+              }
               
-            }
+              
 
         });              
     }
@@ -124,76 +138,86 @@
           <table class="table table-striped" id="mydatatable3">
             <thead class="card-header">
               <tr>
-                <th width="150">Operación</th>
-                <th width="200">Modelo</th>
-                <th width="200">Usuario</th>
-                <th width="150">Fecha</th>
-                <th class="noExport">Acción</th>
+                <th width="80">Operación</th>
+                <th width="120">Modelo</th>
+                <th width="70">Usuario</th>
+                <th width="100">Fecha</th>
+                <th width="auto">Objeto</th>
               </tr>
             </thead>
             <tbody>
             {%for objeto in objetos%}
             {%if objeto.accion != 5 and objeto.accion != 4 and objeto.modelo != 'Users'%}
             <tr class="fila">
-                <td width="150">{{objeto.accion}}</td>                
-                <td width="200">{{objeto.modelo}}</td>
-                <td width="200">{{objeto.idUsuario}}</td>
+                <td width="80">{{objeto.accion}}</td>                
+                <td width="120">{{objeto.modelo}}</td>
+                <td width="70">{{objeto.idUsuario}}</td>
                 <td width="100">{{objeto.fecha}}</td>
-                <td width="100" align="center"><a href="#" onclick="verDetalles('{{objeto.id}}')" data-toggle="modal" data-target=".bs-example-modal-lg2"><img src="{%static 'img/activo.png'%}" alt=""></a></td>
-            </tr>
-            {%endif%}
-            <!-- Modal para ver los detalles -->
-            <div class="modal fade bs-example-modal-lg2" id="myModal2" tabindex="-1" role="dialog" aria-hidden="true">
-              <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="myModalLabel">Detalles</h4>
-                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>                                                      
-                        </div>
-                        <div class="modal-body">
-                                    <div class="row">
+                <td width="auto">{{objeto.objeto}}</td>
+                <!-- Modal para ver los detalles -->
+            <div class="modal fade bs-example-modal-lg2{{objeto.id}}" id="myModal2{{objeto.id}}" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg{{objeto.id}}">
+                      <div class="modal-content">
+                          <div class="modal-header">
+                              <h4 class="modal-title" id="myModalLabel{{objeto.id}}">Detalles</h4>
+                              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>                                                      
+                          </div>
+                          <div class="modal-body">
+                                      <div class="row">
+                                          <div class="col-3">
+                                              <b>ID Objeto</b>
+                                          </div>
+                                          <div class="col-auto">
+                                              <label id="idObjeto{{objeto.id}}"></label>
+                                          </div>
+                                      </div>
+                                      <hr>
+                                      <div class="row">
                                         <div class="col-3">
-                                            <b>ID Objeto</b>
+                                            <b>Objeto</b>
                                         </div>
                                         <div class="col-auto">
-                                            <label id="idObjeto"></label>
+                                            <label id="objeto{{objeto.id}}"></label>
                                         </div>
                                     </div>
                                     <hr>
                                     <div class="row">
                                       <div class="col-3">
-                                          <b>Objeto</b>
+                                          <b>ID Modelo</b>
                                       </div>
                                       <div class="col-auto">
-                                          <label id="objeto"></label>
+                                          <label id="idModelo{{objeto.id}}"></label>
                                       </div>
                                   </div>
+                                  <!-- <hr>
+                                  <div class="row">
+                                    <div class="col-3">
+                                        <b>Cambios</b>
+                                    </div>
+                                    <div class="col-auto">
+                                        <label id="cambios{{objeto.id}}"></label>
+                                    </div>
+                                </div> -->
                                   <hr>
                                   <div class="row">
                                     <div class="col-3">
-                                        <b>ID Modelo</b>
+                                        <b>Fecha</b>
                                     </div>
                                     <div class="col-auto">
-                                        <label id="idModelo"></label>
+                                        <label id="fecha">{{objeto.fecha}}</label>
                                     </div>
                                 </div>
-                                <hr>
-                                <div class="row">
-                                  <div class="col-3">
-                                      <b>Fecha</b>
-                                  </div>
-                                  <div class="col-auto">
-                                      <label id="fecha">{{objeto.fecha}}</label>
-                                  </div>
-                              </div>
-                                 
-                          </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
-                          </div>
-                    </div>
-                </div>
-            </div>
+                                   
+                            </div>
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
+                            </div>
+                      </div>
+                  </div>
+              </div>
+            </tr>
+            {%endif%}
+            
             {%endfor%}
             </tbody>
           </table>
@@ -220,7 +244,7 @@
             </thead>
             <tbody>
             {%for log in logs%}
-              <tr>
+              <tr class="noExport">
                     {%if log.accion == 1%}
                     <td width="150">Logout</td>
                     {%else%}
@@ -258,7 +282,6 @@
   });
 
 </script>
-
 {%block scripts%}
     <!-- Datatable santy -->
     <script type="text/javascript" src="{% static '/js/datatables.min.js'%}"></script>
@@ -289,11 +312,7 @@
             filename: 'reporte_pdf',
             orientation: 'portrait', //landscape
             pageSize: 'A4',
-            exportOptions: {
-              "columns": 'thead th:not(.noExport)',
-              search: 'applied',
-              order: 'applied'
-             },
+            
             
             customize: function(doc) {
                 //quitamos el titulo por defecto del pdfhtml5 eliminando el primer elemento del pdf que esta en el array content.
@@ -376,7 +395,7 @@
                 //doc.content[0].table.widths = colCount;
                 
                 //Es equivalente a: 
-                doc.content[0].table.widths = [95 , 130 , 65 , 115 , 75 ];
+                doc.content[0].table.widths = [70 , 115 , 55 , 100 , 110 ];
 
 
                 // Para personalizar el pie de pagina:
@@ -446,6 +465,7 @@
         
 
       });
+      
     </script>
 
 <script>

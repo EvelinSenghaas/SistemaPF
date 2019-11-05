@@ -1,4 +1,4 @@
-
+from auditlog.registry import auditlog
 from django.db import models
 from django.db.models import *
 
@@ -177,3 +177,10 @@ class RevisionSesion(models.Model):
     
     def __str__ (self):
         return self.sesion_id.alumno_id.nombre + ', ' + self.sesion_id.alumno_id.apellido  + ' (' + str(self.fechaRevision) + ' )'
+    
+    
+auditlog.register(Sesion)
+auditlog.register(Rutina)
+auditlog.register(Actividad)
+auditlog.register(Detalle)
+auditlog.register(RevisionSesion)

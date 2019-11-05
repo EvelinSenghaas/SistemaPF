@@ -1445,7 +1445,7 @@ def auditoria(request):
     objetoss = []
     conexion1 = psycopg2.connect(database="sistema1", user="postgres", password="38774803")
     cursor1=conexion1.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    sql="select id, login_type, username, datetime, remote_ip from easyaudit_loginevent"
+    sql="select id,  login_type, username, datetime, remote_ip from easyaudit_loginevent"
     cursor1.execute(sql)
     
     
@@ -1458,17 +1458,16 @@ def auditoria(request):
 
     conexion2 = psycopg2.connect(database="sistema1", user="postgres", password="38774803")
     cursor2=conexion2.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    sql = "select id, event_type, datetime, content_type_id, user_id from easyaudit_crudevent ORDER BY datetime DESC"
+    sql = "select id, event_type, object_repr, datetime, content_type_id, user_id from easyaudit_crudevent ORDER BY datetime DESC"
     cursor2.execute(sql)
     
     for fila in cursor2.fetchall():       
         diccionario = {
-            'id':fila['id'],'accion':fila['event_type'], 'fecha':fila['datetime'], 'modelo':fila['content_type_id'], 'fecha':fila['datetime'], 'idUsuario':fila['user_id']
+            'id':fila['id'],'accion':fila['event_type'], 'fecha':fila['datetime'], 'modelo':fila['content_type_id'], 'fecha':fila['datetime'], 'idUsuario':fila['user_id'], 'objeto':fila['object_repr']
             }
         
         objetoss.append(diccionario)
-    conexion2.close()
-        
+    conexion2.close()    
     
             
     for o in objetoss:
@@ -1498,6 +1497,26 @@ def auditoria(request):
     modelos = ContentType.objects.all()
     for modelo in modelos:
         modelo.model = modelo.model.capitalize()
+        
+        
+    """#Prueba
+    diccionario2 ={}
+    obj = []
+    conexion3 = psycopg2.connect(database="sistema1", user="postgres", password="38774803")
+    cursor2=conexion3.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    sql = "select id, object_id, object_repr, action, changes, timestamp, actor_id, content_type_id from auditlog_logentry ORDER BY timestamp DESC"
+    cursor2.execute(sql)
+    
+    for fila in cursor2.fetchall():       
+        diccionario = {
+            'id':fila['id'],'accion':fila['action'], 'fecha':fila['timestamp'], 'modelo':fila['content_type_id'], 'cambios':fila['changes'], 'idUsuario':fila['actor_id'], 'objeto':fila['object_repr'], 'idObjeto':fila['object_id']
+            }
+        
+        obj.append(diccionario2)
+    conexion3.close()
+    
+    for dic in obj:
+        print(dic)"""
     
             
             
@@ -1511,20 +1530,26 @@ def detalleAuditoria(request):
     dic ={}
     conexion1 = psycopg2.connect(database="sistema1", user="postgres", password="38774803")
     cursor1=conexion1.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    sql="select object_id, object_repr, content_type_id, datetime from easyaudit_crudevent where id="+id
+    sql="select object_id, object_repr, content_type_id, changed_fields datetime from easyaudit_crudevent where id="+id
     cursor1.execute(sql)
-    
-    
-    for fila in cursor1.fetchall():       
-        diccionario = {
-            'idObjeto':fila['object_id'], 'objeto':fila['object_repr'], 'idModelo':fila['content_type_id'], 'fecha':str(fila['datetime'])}
-        dic = diccionario
+
+
+    lista = []
+    for e in cursor1.fetchone():
+        lista.append(e)
+        
+    """diccionario = {
+        'idObjeto':cursor1[0],
+            'objeto':cursor1[1],
+            'idModelo':cursor1[2],
+            'cambios':cursor1[3]
+            }
+    dic = diccionario"""
     conexion1.close()
-    
-    print(dic)
+    print(lista)
     
     return HttpResponse(
-                json.dumps(dic),
+                json.dumps(lista),
                 content_type="application/json")   
  
     
