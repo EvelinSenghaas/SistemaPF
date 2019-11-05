@@ -51,7 +51,7 @@
             <a href="/rutinas/inscribir_rutina/{{user.id}}/{{rutina.id}}" class="btn btn-primary">Inscribirse</a>
             {%endif%}
             {%if alumno.rutina_id == rutina%}
-            <a class="btn btn-outline-danger" href="#" role="button">Darse de baja</a>
+            <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg2{{rutina.id}}" class="btn btn-outline-danger" role="button">Darse de baja</a>
             {%endif%}
           </div>
         </div>
@@ -67,6 +67,29 @@
         </div>
     </div>
     </div>
+    <!-- Modal para darse de baja en una rutina -->
+    <div class="modal fade bs-example-modal-lg2{{rutina.id}}" id="myModal2{{rutina.id}}" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h4 class="modal-title" id="myModalLabel{{rutina.id}}">Darse de baja</h4>
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                      
+                  </div>
+                  <div class="modal-body">
+                      <h5>¿Seguro que desea darse de baja de la rutina <strong>{{rutina}}</strong>?</h5>
+                      
+                  </div>
+                  <div class="modal-footer">
+                      <a href="/rutinas/baja_rutina/{{user.id}}/{{rutina.id}}">
+                        <button type="button" class="btn btn-danger" >Confirmar</button>
+                      </a>
+                      <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+                    </div>
+  
+              </div>
+          </div>
+      </div>
     {%endfor%}
     {%else%}
     <!-- Es alumno pero no tiene rutina porque se dio de baja -->

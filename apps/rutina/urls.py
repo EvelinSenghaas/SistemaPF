@@ -1,6 +1,6 @@
 from django.urls import path, re_path
 from django.contrib.auth.decorators import login_required
-from .views import Rutinas, ListadoDetalles, ListadoRutinas, ListadoActividades, EditarRutina, editarActividad, EditarDetalle, eliminarActividad, AgregarRutina, AgregarDetalle, agregarActividad, eliminarRutina, verRutina, verActividad, agregarRutina, inscribirseRutina, perfil, verClase, eliminarDetalle, agregarEvaluacionNivel, listadoEvaluacionNivel, editarEvaluacionNivel, verRevisiones, actualizarFicha, obtenerActividadesSesion, obtenerCantidadMusculos, auditoria, comprobarRevision, detalleAuditoria, obtenerRevisionActividadesSesion, seleccionarHorarioClaseRevision, comprobarActualizacionFicha, editarPerfil, listadoRutinas, ocultarClases
+from .views import Rutinas, ListadoDetalles, ListadoRutinas, ListadoActividades, EditarRutina, editarActividad, EditarDetalle, eliminarActividad, AgregarRutina, AgregarDetalle, agregarActividad, eliminarRutina, verRutina, verActividad, agregarRutina, inscribirseRutina, perfil, verClase, eliminarDetalle, agregarEvaluacionNivel, listadoEvaluacionNivel, editarEvaluacionNivel, verRevisiones, actualizarFicha, obtenerActividadesSesion, obtenerCantidadMusculos, auditoria, comprobarRevision, detalleAuditoria, obtenerRevisionActividadesSesion, seleccionarHorarioClaseRevision, comprobarActualizacionFicha, editarPerfil, listadoRutinas, ocultarClases, bajaRutina
 
 urlpatterns = [
     path('listado/<int:pk>',  login_required(listadoRutinas), name = 'rutinas'),
@@ -21,6 +21,7 @@ urlpatterns = [
     path('eliminar_rutina/<int:pk>', login_required(eliminarRutina), name='eliminar_rutina'),    
     path('ver_rutina/<int:pk>', login_required(verRutina), name='ver_rutina'),
     path('administrar_rutinas/', login_required(Rutinas.as_view()), name='administrar_rutinas/'),
+    path('baja_rutina/<int:pk1>/<int:pk2>', login_required(bajaRutina), name='baja_rutina/'),
     
     path('inscribir_rutina/<int:pk1>/<int:pk2>', login_required(inscribirseRutina), name='inscribir_rutina/'), 
     
@@ -45,6 +46,7 @@ urlpatterns = [
     path('obtener_revision_sesion_ajax/', login_required(obtenerRevisionActividadesSesion), name='obtener_revision_sesion_ajax'),
     path('comprobar_actualizacion_ficha_ajax/', login_required(comprobarActualizacionFicha), name='comprobar_actualizacion_ficha_ajax'),
     path('ocultar_clases_ajax/', login_required(ocultarClases), name='ocultar_clases_ajax'),
+    
     
     path('auditoria/', login_required(auditoria), name='auditoria'),
     

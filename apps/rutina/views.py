@@ -663,7 +663,8 @@ def verClase(request, pk):
                                     auxActividades = list(actividades)
                                     list(actividadesRealizadas)
                                     for i in actividadesRealizadas:
-                                        auxActividades.remove(i)                   
+                                        if i in actividades:
+                                            auxActividades.remove(i)                   
                                     print('Actividades supuestamente filtradas\n'+str(auxActividades))
                                     
                                     
@@ -2030,10 +2031,17 @@ def inscribirseRutina(request, pk1, pk2):
             #Usted no se puede inscribir a la rutina     porque es un profesor
         elif (Alumno.objects.filter(user_id=user.id).exists()):
             alum = Alumno.objects.get(user_id=user.id)
-            if (alum.rutina_id.id == Rutina.objects.get(id = alum.rutina_id.id).id):
-                mensaje = "Usted esta inscipto a la rutina " + alum.rutina_id.nombre + ", por lo que primero debe darse de baja en la misma."
-                return render (request, 'rutina/errorInscribirseRutina.html', { 'rutina': rutina, 'alumno':alum, 'mensaje':mensaje})
-                #Usted no puede inscribirse a la rutina      porque pertenece a la rutina     
+            if (alum.rutina_id != None):
+                if (alum.rutina_id.id == Rutina.objects.get(id = alum.rutina_id.id).id):
+                    mensaje = "Usted esta inscipto a la rutina " + alum.rutina_id.nombre + ", por lo que primero debe darse de baja en la misma."
+                    return render (request, 'rutina/errorInscribirseRutina.html', { 'rutina': rutina, 'alumno':alum, 'mensaje':mensaje})
+                    #Usted no puede inscribirse a la rutina      porque pertenece a la rutina  
+            else:
+                print('es alumno y no tiene rutina')
+                Alumno.objects.filter(id=alum.id).update(rutina_id=Rutina.objects.get(id=rutina.id))
+                inscripcion = True
+                return redirect ('/rutinas/listado/'+str(user.id))
+           
         else:
             if request.method == 'POST':
                 fichaForm = FichaForm(request.POST)
@@ -2132,7 +2140,14 @@ sino
             sino le permito
 """
                 
+#Esta funcion es para darse de baja de una rutina
+def bajaRutina(request, pk1, pk2):
+    user = User.objects.get(id=pk1)
+    rutina = Rutina.objects.get(id=pk2)
+    alumno = Alumno.objects.get(user_id=user.id)
     
+    Alumno.objects.filter(id=alumno.id).update(rutina_id=None)
+    return redirect('/rutinas/listado/'+str(user.id))    
     
             
     

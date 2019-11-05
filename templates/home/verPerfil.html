@@ -460,7 +460,7 @@
                 
                                       <th width="120">Esfuerzo</th>
                                       <th width="500">Comentario</th>
-                                      <th width="0" align="center">Porcentaje</th>
+                                      <th width="auto">Rutina</th>
                                     </tr>
                                   </thead>
                                   <tbody>
@@ -471,12 +471,12 @@
                                         <td width="10">{{sesion.sesionesRealizadas}}</td>
                 
                                         <td width="150">
-                                                <a href="#" onclick="verActividades({{sesion.id}})" data-toggle="modal" data-target=".bs-example-modal-lg2">{{sesion.fechaSesion}} </a>    
+                                                <a href="#" onclick="verActividades('{{sesion.id}}')" data-toggle="modal" data-target=".bs-example-modal-lg2">{{sesion.fechaSesion}} </a>    
                                         </td>
                 
                                         <td width="120" >{{sesion.esfuerzoSesion}}/10</td>
                                         <td width="500">{{sesion.descripcion}}</td>
-                                        <td width="0" align="center"><h6><span class="badge badge-success">{{sesion.cantSesiones}}%</span></h6></td>
+                                        <td width="auto" >{{sesion.rutina_id}}</td>
                                     </tr>
                                     <!-- Modal para ver sesiones -->
                                     <div class="modal fade bs-example-modal-lg2" id="myModal2" tabindex="-1" role="dialog" aria-hidden="true">
