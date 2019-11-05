@@ -78,7 +78,7 @@ class Alumno(models.Model):
     email = models.EmailField(max_length = 70, blank = False, null = False)
     estado = models.BooleanField(default=True)
     entrenamiento_sistema = models.BooleanField(default=None, null=True)
-    rutina_id = models.ForeignKey('rutina.Rutina', related_name='rutina', on_delete=models.CASCADE, verbose_name="Rutina")
+    rutina_id = models.ForeignKey('rutina.Rutina', related_name='rutina', on_delete=models.CASCADE, verbose_name="Rutina", blank=True, null=True)
     profesor_id = models.ForeignKey(Profesor, on_delete=models.CASCADE, verbose_name="Profesor")
     nivel_id = models.ForeignKey('rutina.Nivel', related_name='rutina', on_delete=models.CASCADE, verbose_name="Nivel", null=True, blank=True)
     semana_id = models.ManyToManyField(Semana, verbose_name="Dias", blank=True)
@@ -142,8 +142,5 @@ class FichaAlumno (models.Model):
         return 'Ficha '+self.alumno_id.nombre
 
 
-auditlog.register(Alumno)
-auditlog.register(Profesor)
-auditlog.register(FichaAlumno)
-auditlog.register(DisponibilidadProfesor)
+
 
