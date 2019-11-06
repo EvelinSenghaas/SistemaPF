@@ -363,7 +363,7 @@ def actualizarFicha(request):
         clase = peticion.pop('clase')
         clase = clase[0]
         
-        if clase == '1':
+        """if clase == '1':
             print('ENTRA EN LA SELECCION DE HORARIO')
             try:
                 disp = peticion.pop('disponibilidad')
@@ -378,7 +378,7 @@ def actualizarFicha(request):
                 
                 
             DisponibilidadProfesor.objects.filter(id=int(disp)).update(alumno_id=alumno, ocupado=True)
-            return redirect('/rutinas/clases/'+str(alumno.user_id))
+            return redirect('/rutinas/clases/'+str(alumno.user_id))"""
         
         if clase == '0':    
             print('ENTRA EN LA ACTUALIZACION DE DATOS')
@@ -449,11 +449,8 @@ def actualizarFicha(request):
                 revisionSesion.save()
                 
                 
-                #ACA DEBEMOS CAMBIAR A TRUE EL ATRIBUTO CLASE DE REVISION
-                mensaje3= "Subiste de nivel, ahora solo falta que tu profesor te evalúe. Para ello, debes elegir qué día queres tener una clase presencial"
-                disponibilidad = DisponibilidadProfesor.objects.filter(profesor_id=alumno.profesor_id, ocupado=False)
-                print(disponibilidad)
-                return render(request, 'rutina/actualizarFicha.html', {'alumno':alumno, 'mensaje3': mensaje3, 'disponibilidad': disponibilidad})
+                
+                return redirect( '/rutinas/seleccionar_horario_clase_revision/', {'alumno':alumno})
                               
             else:
                 print('no cambio de nivel')
@@ -472,9 +469,70 @@ def actualizarFicha(request):
     else:
         print('get de la funcion correcta')
         mensaje = None
-        return render (request, 'rutina/actualizarFicha.html', {'mensaje':mensaje})  
+        return render (request, 'rutina/actualizarFicha.html', {'mensaje':mensaje}) 
+    
+    mensaje = None
+    return render (request, 'rutina/actualizarFicha.html', {'mensaje':mensaje})  
         
 
+def seleccionarHorarioClaseRevision(request):
+    if request.method == 'POST':
+        peticion = request.POST.copy()
+        print(peticion)
+        #Obtenemos el usuario y el alumno
+        us = peticion.pop('user')
+        us = us[0]
+        user = User.objects.get(id=us)
+        alumno = Alumno.objects.get(user_id=user.id)
+            
+        clase = peticion.pop('clase')
+        clase = clase[0]
+        
+        print('ENTRA EN LA SELECCION DE HORARIO')
+        try:
+            disp = peticion.pop('disponibilidad')
+            disp = disp[0]
+            int(disp)
+        except:
+            messages.error(request,'Necesitamos que selecciones un horario para tener tu clase presencial')
+            mensaje3= "dispo"
+            disponibilidad = DisponibilidadProfesor.objects.filter(profesor_id=alumno.profesor_id, ocupado=False)
+            print(disponibilidad)
+            return render(request, 'rutina/seleccionarClasePresencial.html', {'alumno':alumno, 'mensaje3': mensaje3, 'disponibilidad': disponibilidad})
+                
+                
+        DisponibilidadProfesor.objects.filter(id=int(disp)).update(alumno_id=alumno, ocupado=True)
+        return redirect('/rutinas/clases/'+str(alumno.user_id))
+    
+    else:
+        print('entra al else del get del horario')
+        u = request.user.username
+        user = User.objects.get(username=u)
+        alumno = Alumno.objects.get(user_id=user.id)
+        mensaje3= "Subiste de nivel, ahora solo falta que tu profesor te evalúe. Para ello, debes elegir qué día queres tener una clase presencial"
+        dis = DisponibilidadProfesor.objects.filter(profesor_id=alumno.profesor_id, ocupado=False)
+        disponibilidad = []
+
+        
+        now = datetime.now()
+        dia = now.strftime("%A")
+        dia = traducirDia(dia)
+        
+        horaActual = now.time()
+        print(horaActual)
+                
+        for d in dis:
+            if (d.semana_id.dia != dia):
+                disponibilidad.append(d)
+            else:
+                if (horaActual < d.horario_inicio):
+                    disponibilidad.append(d)
+                
+        
+        return render(request, 'rutina/seleccionarClasePresencial.html', {'alumno':alumno, 'mensaje3':mensaje3, 'disponibilidad':disponibilidad})
+    
+    
+    return redirect('/rutinas/clases/'+str(alumno.user_id))
 
 
 def verClase(request, pk):
@@ -553,7 +611,7 @@ def verClase(request, pk):
                 
                 i=0
                 while i < len(diasAlumno):
-                    print(str(dia) +' ' + str(diasAlumno[i].dia))
+                    print('Dia actual '+str(dia) +' - Dia alumno ' + str(diasAlumno[i].dia))
                     if str(dia) == str(diasAlumno[i].dia):
                         #Si entra aca es porque hoy SI es el dia de entrenamiento
                         mensaje = None
@@ -608,16 +666,22 @@ def verClase(request, pk):
                                     mensaje = "Gracias por entrenarte con nosotros, tu sesión ha terminado. Vuelve el "
                                     return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje})
                             else:
-                                if str(dia) == str(DisponibilidadProfesor.objects.get(alumno_id=alumno.id).semana_id.dia):
-                                    #La clase de hoy es una de revision
-                                    print('entra donde quieroo')
-                                    dispo = DisponibilidadProfesor.objects.get(alumno_id=alumno.id, ocupado=True)
-                                    mensaje = "Hoy te toca una clase dictada por " + str(alumno.profesor_id) + " desde las " +str(dispo.horario_inicio) + " hasta las " + str(dispo.horario_final) + "hs" 
-                                    return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje})
-                                
+                                if not (RevisionSesion.objects.filter(alumno_id=alumno.id, sesion_id=ultimaSesion.id).exists()):
+                                    return redirect('/rutinas/actualizar_ficha/')
                                 else:
-                                    mensaje = "Hoy no es tu día de entrenamiento, vuelve el "
-                                    return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje}) 
+                                    if not (DisponibilidadProfesor.objects.filter(alumno_id=alumno.id, ocupado=True).exists()):
+                                        return redirect('/rutinas/seleccionar_horario_clase_revision/')
+                                    else:
+                                        if str(dia) == str(DisponibilidadProfesor.objects.get(alumno_id=alumno.id).semana_id.dia):
+                                            #La clase de hoy es una de revision
+                                            print('entra donde quieroo')
+                                            dispo = DisponibilidadProfesor.objects.get(alumno_id=alumno.id, ocupado=True)
+                                            mensaje = "Hoy te toca una clase dictada por " + str(alumno.profesor_id) + " desde las " +str(dispo.horario_inicio) + " hasta las " + str(dispo.horario_final) + "hs" 
+                                            return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje})
+                                        
+                                        else:
+                                            mensaje = "Hoy no es tu día de entrenamiento, vuelve el "
+                                            return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje}) 
                             
                             
                                     
@@ -656,6 +720,19 @@ def verClase(request, pk):
                         mensaje = "Hoy no es tu día de entrenamiento, vuelve el "
                         return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje})  
                         break
+                    
+                    if (DisponibilidadProfesor.objects.filter(alumno_id=alumno.id, ocupado=True)):
+                        #Si entra aca es porque no tiene clase por sistema pero si presencial
+                        if str(dia) == str(DisponibilidadProfesor.objects.get(alumno_id=alumno.id).semana_id.dia):
+                            #La clase de hoy es una de revision
+                            print('entra donde quiero')
+                            dispo = DisponibilidadProfesor.objects.get(alumno_id=alumno.id, ocupado=True)
+                            mensaje = "Hoy te toca una clase dictada por " + str(alumno.profesor_id) + " desde las " +str(dispo.horario_inicio) + " hasta las " + str(dispo.horario_final) + "hs" 
+                            return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje})
+                                
+                        else:
+                            mensaje = "Hoy no es tu día de entrenamiento, vuelve el "
+                            return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje})
                     
                     i+=1
                         
@@ -1027,6 +1104,47 @@ def comprobarRevision(request):
     return HttpResponse(
                 json.dumps(dic),
                 content_type="application/json")
+
+
+#(NO SE USA) Esta funcion se usa para comprobar si el alumno completo la ficha al momento de querer hacer una clase (NO SE USA)
+def comprobarActualizacionFicha(request):
+    user = User.objects.get(id=request.GET['id'])
+    alumno = Alumno.objects.get(user_id=user.id)
+    dic = {}
+    
+    #Obtenemos su ultima sesion para ver si tiene una clase de revision
+    ultimaSesion = Sesion.objects.filter(alumno_id=alumno.id).latest()
+    
+    #Si tiene la clase de revision empiezan los controles
+    if (ultimaSesion.claseRevision):
+        d = True
+        dic['revision'] = d
+        #Guardamos que tiene una clase de revision y comprobamos si actualizo su ficha
+        if (RevisionSesion.objects.filter(alumno_id=alumno.id, sesion_id=ultimaSesion.id).exists()):
+            a = True
+            dic['datos'] = a
+            #Como ya actualizo su ficha, debemos comprobar que haya seleccionado un horario
+            if (DisponibilidadProfesor.objects.filter(alumno_id=alumno.id).exists()):
+                a = True
+                dic['horario'] = a
+            else:
+                #No selecciono el horario de la clase presencial
+                a = False
+                dic['horario'] = a
+                
+        else:
+            #No actualizo la ficha
+            a = False
+            dic['datos'] = a 
+            
+    else:
+        #No tiene revision
+        d = False
+        dic['revision'] = d
+        
+    return HttpResponse(
+                json.dumps(dic),
+                content_type="application/json") 
 
 
 #Traduccion de modelos para auditoria

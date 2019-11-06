@@ -32,7 +32,7 @@
         comprobarActualizacionFicha(id);
     });
 </script> -->
-<body class="container mt-2" onload="mensaje();">
+<body class="container mt-2" >
     <div class="card active">
             
         {%if ficha != True%}
@@ -89,61 +89,7 @@
         </form>
         </div>
         {%endif%}
-        <div id="formhorario">
-        {%if horario != True%}
-        <input type="hidden" id="mensaje" value="{{mensaje3}}">
-        <form method="POST" >
-                {% csrf_token %}
-                <input type="hidden" name="clase" value="1">
-                <div class="card-header alert-primary"><strong>Selección de horario</strong></h6></div>
-                    <div class="card-body card-block">
-                            {% if messages %}
-          
-                            {% for message in messages %}
-                            {% if message.tags == 'success'%}
-                            <ul class="alert alert-success alert-dismissible">
-                              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                              <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
-                            </ul> 
-                            {%endif%}
-                            {% if message.tags == 'error'%}
-                            <ul class="alert alert-danger alert-dismissible">
-                              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                              <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
-                            </ul> 
-                            {%endif%}
-                            {% endfor %}
-                        
-                          {% endif %}
-                        <div class="alert alert-light"> 
-                            <p>Selecciona el horario en el que queres tener la clase presencial</p>
-                        </div>
-                        <div class="form-group">
-                            <div class="row form-group">
-                                <div class="col col-md-3">Horarios</div>
-                                <div class="col-12 col-md-9">
-                                    <select name="disponibilidad" class="selectpicker" data-live-search="true">
-                                        <option selected>Selecciona un horario</option>
-                                        {%for disp in disponibilidad%}
-                                            <option value="{{disp.id}}">
-                                                {{disp}}
-                                            </option>
-                                        {%endfor%}
-                                    </select>     
-                                </div>
-                            </div>
-                        </div>
-
-                        <input type="hidden" name="user" value="{{user.id}}">
-                        <div class="float-right">
-                            <button type="submit" class="btn btn-primary">Confirmar</button>
-                        </div>   
-                        <br>    
-                    </div>
-                </div>
-                </form>
-            </div>
-        {%endif%}
+    
 
     </div>
 
@@ -157,7 +103,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 
 
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
         function mensaje(){
             var mensaje = $('#mensaje').val();
             compa = new String("Subiste de nivel, ahora solo falta que tu profesor te evalúe. Para ello, debes elegir qué día queres tener una clase presencial");
@@ -166,7 +112,7 @@
             }
         }
     </script>
-    
+     -->
 {%endblock contenido%}
 {%block pie%}
 {%endblock pie%}

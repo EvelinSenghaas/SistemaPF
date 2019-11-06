@@ -82,16 +82,22 @@
                 url : '/rutinas/comprobar_actualizacion_ficha_ajax/', //El id que estoy guardando en data se va a enviar en esa url
                 type : 'get',
                 success : function(dic){   
-                    if (dic['ficha'] == false){
-                        window.location = "http://localhost:8000/rutinas/actualizar_ficha/"
-                    }
-                    if (dic['horario'] == false){
-                        window.location = "http://localhost:8000/rutinas/actualizar_ficha/"
+                    if (dic['revision']){
+                        if (!dic['datos']){
+                            location.href="http://localhost:8000/rutinas/actualizar_ficha/";
+                        }
+                        if (!dic['horario']){
+                            location.href="http://localhost:8000/rutinas/seleccionar_horario_clase_revision/";
+                        }
                     }
                 }
 
             });              
         }
+    </script>
+    <script>
+        var id = "{{user.id}}"
+        comprobarActualizacionFicha(id);
     </script> -->
 <body class="container mt-2">
     <!-- Si el usuario entrena con un profesor -->
@@ -202,7 +208,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <div class="row form-group">
-                                        <div class="col-4 col-md-4">Selecciona el nivel de <strong>{{alumno.alumno_id.nombre}}</strong>
+                                        <div class="col-sm-4 col-md-4">Selecciona el nivel de <strong>{{alumno.alumno_id.nombre}}</strong>
                                         <br>
     
                                             <label style="color:rgb(130, 128, 128)"></label>
@@ -219,9 +225,9 @@
                                     </div>
 
                                     <div class="row form-group">
-                                        <div class="col-4 col-md-4">Agregá un comentario
+                                        <div class="col-sm-3 col-md-7">Agregá un comentario
                                         <br>
-                                        <textarea name="comentario" id="comentario" cols="35" rows="5" class="form-control"></textarea>
+                                        <textarea name="comentario" id="comentario" cols="32" rows="5" class="form-control"></textarea>
                                         </div>
                                     </div>
                                     
@@ -510,10 +516,7 @@
 
 <script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
 <script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-<!-- <script>
-    var id = "{{user.id}}"
-    comprobarActualizacionFicha(id);
-</script> -->
+
 
 {%endblock contenido%}
 {%block pie%}

@@ -1,6 +1,6 @@
 from django.urls import path, re_path
 from django.contrib.auth.decorators import login_required
-from .views import Rutinas, ListadoDetalles, ListadoRutinas, ListadoActividades, EditarRutina, editarActividad, EditarDetalle, eliminarActividad, AgregarRutina, AgregarDetalle, agregarActividad, eliminarRutina, verRutina, verActividad, agregarRutina, inscribirseRutina, perfil, verClase, eliminarDetalle, agregarEvaluacionNivel, listadoEvaluacionNivel, editarEvaluacionNivel, verRevisiones, actualizarFicha, obtenerActividadesSesion, obtenerCantidadMusculos, auditoria, comprobarRevision, detalleAuditoria, obtenerRevisionActividadesSesion
+from .views import Rutinas, ListadoDetalles, ListadoRutinas, ListadoActividades, EditarRutina, editarActividad, EditarDetalle, eliminarActividad, AgregarRutina, AgregarDetalle, agregarActividad, eliminarRutina, verRutina, verActividad, agregarRutina, inscribirseRutina, perfil, verClase, eliminarDetalle, agregarEvaluacionNivel, listadoEvaluacionNivel, editarEvaluacionNivel, verRevisiones, actualizarFicha, obtenerActividadesSesion, obtenerCantidadMusculos, auditoria, comprobarRevision, detalleAuditoria, obtenerRevisionActividadesSesion, seleccionarHorarioClaseRevision, comprobarActualizacionFicha
 
 urlpatterns = [
     path('',  login_required(ListadoRutinas.as_view()), name = 'rutinas'),
@@ -35,6 +35,7 @@ urlpatterns = [
     
     path('revisiones/<int:pk>', login_required(verRevisiones), name='revisiones'),
     path('actualizar_ficha/', login_required(actualizarFicha), name='actualizar_ficha'),
+    path('seleccionar_horario_clase_revision/', login_required(seleccionarHorarioClaseRevision), name='seleccionar_horario_clase_revision'),
     
     
     path('obtener_actividades_ajax/', login_required(obtenerActividadesSesion), name='obtener_actividades_ajax'),
@@ -42,6 +43,7 @@ urlpatterns = [
     path('comprobar_revision_ajax/', login_required(comprobarRevision), name='comprobar_revision_ajax'),
     path('ver_detalles_ajax/', login_required(detalleAuditoria), name='ver_detalles_ajax'),
     path('obtener_revision_sesion_ajax/', login_required(obtenerRevisionActividadesSesion), name='obtener_revision_sesion_ajax'),
+    path('comprobar_actualizacion_ficha_ajax/', login_required(comprobarActualizacionFicha), name='comprobar_actualizacion_ficha_ajax'),
     
     path('auditoria/', login_required(auditoria), name='auditoria'),
     
