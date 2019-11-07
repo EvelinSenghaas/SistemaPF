@@ -1127,6 +1127,16 @@ def comprobarActualizacionFicha(request):
             if (DisponibilidadProfesor.objects.filter(alumno_id=alumno.id).exists()):
                 a = True
                 dic['horario'] = a
+                
+                h = DisponibilidadProfesor.objects.get(alumno_id=alumno.id, profesor_id=alumno.profesor_id).profesor_id.nombre
+                dic['profe'] = str(h)
+                h = DisponibilidadProfesor.objects.get(alumno_id=alumno.id).semana_id.dia
+                dic['dia'] = str(h)
+                h = DisponibilidadProfesor.objects.get(alumno_id=alumno.id).horario_inicio
+                dic['inicio'] = h.strftime("%H:%M:%S")
+                h = DisponibilidadProfesor.objects.get(alumno_id=alumno.id).horario_final
+                dic['final'] = h.strftime("%H:%M:%S")
+                
             else:
                 #No selecciono el horario de la clase presencial
                 a = False

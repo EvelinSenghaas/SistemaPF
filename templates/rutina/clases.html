@@ -75,19 +75,23 @@
         }
     </script>
 
-    <!-- <script>
+    <script>
         function comprobarActualizacionFicha(id){
+            console.log('me llaman');
             $.ajax({
                 data : {'id' : id},
                 url : '/rutinas/comprobar_actualizacion_ficha_ajax/', //El id que estoy guardando en data se va a enviar en esa url
                 type : 'get',
                 success : function(dic){   
                     if (dic['revision']){
-                        if (!dic['datos']){
-                            location.href="http://localhost:8000/rutinas/actualizar_ficha/";
-                        }
-                        if (!dic['horario']){
-                            location.href="http://localhost:8000/rutinas/seleccionar_horario_clase_revision/";
+                        console.log('entra en el primer if');
+                        if (dic['datos'] && dic['horario']){
+                            console.log('entra en el segundo if');
+                            var html1 = "Recordatorio"
+                            $('#titulo').html(html1);
+
+                            var html2 = "Acordate que tenes una clase de revision con "+dic['profe']+" el <b>"+dic['dia']+ "</b> desde las <b>"+dic['inicio']+"</b> hasta las <b>"+dic['final']+"hs</b>"
+                            $('#mensaje').html(html2);
                         }
                     }
                 }
@@ -98,7 +102,7 @@
     <script>
         var id = "{{user.id}}"
         comprobarActualizacionFicha(id);
-    </script> -->
+    </script>
 <body class="container mt-2">
     <!-- Si el usuario entrena con un profesor -->
     {%if not alumno.entrenamiento_sistema%}
@@ -503,8 +507,8 @@
     {%else%}
     <!-- Si no es dia de entrenamiento -->
     <div class="alert alert-info" role="alert">
-        <h4 class="alert-heading">¡Te mereces un descanso!</h4>
-        <p>{{mensaje}}</p>
+        <h4 class="alert-heading" id="titulo">¡Te mereces un descanso!</h4>
+        <p id="mensaje">{{mensaje}}</p>
         <hr>
         <p class="mb-0"><strong><a href="/home/">Volver</a></strong></p>
     </div>
