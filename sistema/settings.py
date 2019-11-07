@@ -28,7 +28,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -40,10 +39,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.rutina',
     'apps.home',
+    'apps.chat',
     'sweetify',
     'rolepermissions',
     'auditlog',
     'easyaudit',
+    'django_messages',
+    'directmessages',
+
+    
 ]
 
 MIDDLEWARE = [
@@ -75,6 +79,11 @@ TEMPLATES = [
         },
     },
 ]
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+
+    'django_messages.context_processors.inbox',
+)
 
 WSGI_APPLICATION = 'sistema.wsgi.application'
 

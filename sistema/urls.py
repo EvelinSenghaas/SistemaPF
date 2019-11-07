@@ -18,6 +18,7 @@ from django.urls import path, include
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import logout_then_login
 from apps.home.views import Home, Login, registro, logoutUsuario, PaginaInicial
+from django_messages.views import inbox
 
 
 from django.conf import settings
@@ -33,6 +34,10 @@ urlpatterns = [
     path('registro/', registro,  name = 'registro'),
     path('logout/', login_required(logoutUsuario), name='logout'),
     path('', PaginaInicial.as_view(),  name = 'pag_inicial'),
+    #path(r"^messages/", include("pinax.messages.urls", namespace="pinax_messages")),
+    #path(r'^messages/', include('django_messages.urls')),
+    path('chat/', include(('apps.chat.urls','chat')), name = 'chat'),
+    
 ]
 
 if settings.DEBUG:
