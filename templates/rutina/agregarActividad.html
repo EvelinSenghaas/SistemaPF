@@ -6,6 +6,7 @@
 {%endblock imagen_principal%}
 
 {%block contenido%}
+
 <body class="container mt-2">
         <div class="card">
             <div class="card-header alert-primary"><strong>Administracion de Actividad</strong></div>
@@ -74,7 +75,10 @@
                                     <div class="col col-md-9">
                                         <div class="checkbox">
                                             {%for n in nivel%}
-                                                {{form2.nivel_id}}{{form2.repeticionesMinimas}}
+                                            <div class="row">
+                                                {{form2.nivel_id}}
+                                                {{form2.repeticionesMinimas}}
+                                            </div>
                                             <br>
                                             {%endfor%}
                                          </div>

@@ -1966,7 +1966,7 @@ def agregarActividad(request):
                    
         if len(unico) < 3:
             error = form.errors
-            error2 = "No puede seleccionar dos niveles iguales."
+            error2 = "No puede seleccionar niveles iguales"
             return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error, 'error2':error2})
         
         if form.is_valid() and form2.is_valid():
@@ -2032,7 +2032,7 @@ def editarActividad(request, pk):
                    
         if len(unico) < 3:
             error = form.errors
-            error2 = "No puede seleccionar dos niveles iguales."
+            error2 = "No puede seleccionar niveles iguales"
             return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error, 'error2':error2})
         
         

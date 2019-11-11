@@ -76,9 +76,9 @@ class RepeticionForm (forms.ModelForm):
         fields = ['repeticionesMinimas', 'nivel_id']
         widgets = {
             'repeticionesMinimas' : forms.NumberInput(
-                attrs = { 'class':'form-control'}
+                attrs = { 'class':'form-control col-2 ', 'style':'margin-left:4%', 'placeholder':'Repeticiones'}
                 ), 'nivel_id' : forms.Select(
-                attrs = { 'class':'form-class'}
+                attrs = { 'class':'custom-select col-3', 'style':'margin-left:2%',}
                 ),
         }
         
