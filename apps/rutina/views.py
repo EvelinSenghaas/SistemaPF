@@ -1750,7 +1750,6 @@ def auditoria(request):
     modelos = ContentType.objects.all()
     for modelo in modelos:
         modelo.model = modelo.model.capitalize()
-        
 
 
     
