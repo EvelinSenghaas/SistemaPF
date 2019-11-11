@@ -49,7 +49,7 @@ class ListadoRutinas (PermissionRequiredMixin,ListView):
     permission_required = ('rutina.view_rutina')
     template_name = 'rutina/rutinas.html'
     context_object_name = 'rutinas'
-    queryset = Rutina.objects.filter(estado=True)
+    queryset = Rutina.objects.all()
     
 def listadoRutinas (request, pk):
     user = User.objects.get(id=pk)
@@ -2157,7 +2157,9 @@ def eliminarRutina(request, pk):
         messages.success(request, "El estado de la rutina se cambió correctamente.")
         rutina.estado = not(rutina.estado)
         rutina.save()
-        return redirect('/rutinas/administrar_rutinas')
+        
+    rutinas = Rutina.objects.all()
+    return render(request,'rutina/administrarRutinas.html', {'rutinas':rutinas})
     
 
 def eliminarActividad(request, pk):

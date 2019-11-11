@@ -84,13 +84,16 @@
 
                   {% if perms.rutina.change_rutina and perms.rutina.delete_rutina%}
                     <td width="100">
+                        
+                        
+                        {%if rutina.estado == True%}
                         <a  href="/rutinas/editar_rutina/{{rutina.id}}"><img src="{%static 'img/edit.png'%}"></a>
-
-                        {%if rutina.estado%}
                         <!-- <a href="/rutinas/eliminar_rutina/{{rutina.id}}"><img src="{%static 'img/activo.png'%}" alt=""></a> -->
                         <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg2{{rutina.id}}">
                                 <img src="{%static 'img/activo.png'%}" alt=""></a>
-                        {%else%}
+                        {%endif%}
+                        {%if rutina.estado == False%}
+                        <a  href="/rutinas/editar_rutina/{{rutina.id}}"><img src="{%static 'img/edit.png'%}"></a>
                         <!-- <a href="/rutinas/eliminar_rutina/{{rutina.id}}"><img src="{%static 'img/inactivo.png'%}" alt=""></a> -->
                         <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg2{{rutina.id}}">
                                 <img src="{%static 'img/inactivo.png'%}" alt=""></a>
