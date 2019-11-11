@@ -110,7 +110,7 @@ def calcularNivel(altura, circu, peso, actividad, sexo):
     print(altura)
     
     if sexo == 'M':
-        contextura = (float(altura*100)/float(circu))
+        contextura = ((float(altura)*100)/float(circu))
         if contextura > 10.4:
             nombreContextura = "pequeña"
         if 9.6 <= contextura <= 10.4:
@@ -2264,11 +2264,26 @@ def inscribirseRutina(request, pk1, pk2):
                 entrenamiento = peticion.pop('entrenamiento')
                 entrenamiento = entrenamiento[0]
                 
-                altura = peticion.pop('altura')
-                altura = altura[0]
+                try:
+                    altura = peticion.pop('altura')
+                    altura = altura[0]
+                    float(altura)
+                except:
+                    error = "\n Debe ingresar correctamente su altura, recuerde que debe usar puntos y no comas"
+                    print(error)
+                    dias = Semana.objects.all()
+                    return render (request, 'rutina/inscribirseRutina.html', {'ficha':fichaForm, 'alumno':alumnoForm, 'rutina':rutina, 'disponibilidad':disponibilidad, 'dias':dias, 'error':error})
                 
-                peso = peticion.pop('peso')
-                peso = peso[0]
+                try:
+                    peso = peticion.pop('peso')
+                    peso = peso[0]
+                    float(peso)
+                except:
+                    error = "\n Debe ingresar correctamente su peso, recuerde que debe usar puntos y no comas"
+                    print(error)
+                    dias = Semana.objects.all()
+                    return render (request, 'rutina/inscribirseRutina.html', {'ficha':fichaForm, 'alumno':alumnoForm, 'rutina':rutina, 'disponibilidad':disponibilidad, 'dias':dias, 'error':error})
+                
                 
                 if entrenamiento == "profesor":
                     try:
@@ -2283,7 +2298,7 @@ def inscribirseRutina(request, pk1, pk2):
                     try:
                         dias = peticion.pop('dias')
                     except:
-                        
+                        dias = Semana.objects.all()
                         error = "\n Debe seleccionar los dias y horarios en los que desea entrenar."
                         return render (request, 'rutina/inscribirseRutina.html', {'ficha':fichaForm, 'alumno':alumnoForm, 'rutina':rutina, 'disponibilidad':disponibilidad, 'dias':dias, 'error':error})
                 
@@ -2292,16 +2307,29 @@ def inscribirseRutina(request, pk1, pk2):
                 if entrenamiento == "sistema":
                     actividad = peticion.pop('actividad')
                     actividad = actividad[0]
-                    circu = peticion.pop('circu')
-                    circu = circu[0]
+                    
+                    try:
+                        circu = peticion.pop('circu')
+                        circu = circu[0]
+                        float(circu)
+                    except:
+                        error = "\n Debe ingresar correctamente la circunferencia de su muñeca, recuerde que debe usar puntos y no comas"
+                        print(error)
+                        dias = Semana.objects.all()
+                        return render (request, 'rutina/inscribirseRutina.html', {'ficha':fichaForm, 'alumno':alumnoForm, 'rutina':rutina, 'disponibilidad':disponibilidad, 'dias':dias, 'error':error})
                 
                 sexo = peticion.pop('sexo')
                 sexo = sexo[0]
                 
-                
-                
+                #Obtengo la fecha de hoy
+                today = date.today()
                 if fichaForm.is_valid() and alumnoForm.is_valid():
                     alumno = alumnoForm.save(commit=False)
+                    if alumno.fecha_nac > today:
+                        error = "\n Su fecha de nacimiento no puede ser mayor a la actual"
+                        print(error)
+                        dias = Semana.objects.all()
+                        return render (request, 'rutina/inscribirseRutina.html', {'ficha':fichaForm, 'alumno':alumnoForm, 'rutina':rutina, 'disponibilidad':disponibilidad, 'dias':dias, 'error':error})
                     ficha = fichaForm.save(commit=False)
                     alumno.user = user
                     alumno.rutina_id = rutina
@@ -2337,6 +2365,12 @@ def inscribirseRutina(request, pk1, pk2):
                     ficha.alumno_id = alumno
                     ficha.save()
                     return render (request, 'rutina/inscripcionExitosa.html', {'alumno':Alumno.objects.get(user_id=user.id), 'rutina':rutina})
+                
+                else:
+                    error = fichaForm.errors
+                    print(error)
+                    dias = Semana.objects.all()
+                    return render (request, 'rutina/inscribirseRutina.html', {'ficha':fichaForm, 'alumno':alumnoForm, 'rutina':rutina, 'disponibilidad':disponibilidad, 'dias':dias, 'error':error})
             else:
                 fichaForm = FichaForm()
                 alumnoForm = AlumnoForm()

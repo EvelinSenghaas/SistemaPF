@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.apps import apps
 from datetime import date
 
-
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 
@@ -125,11 +125,20 @@ class DisponibilidadProfesor(models.Model):
 
 class FichaAlumno (models.Model):
     id = models.AutoField(primary_key=True, null=False)
-    peso = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=False)
+    peso = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=False, validators=[
+            MaxValueValidator(400),
+            MinValueValidator(20)
+        ])
     sexo = models.CharField(max_length = 1, blank = False, null = True)
-    altura = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=False)
+    altura = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=False, validators=[
+            MinValueValidator(1),
+            MaxValueValidator(3),
+        ])
     grupo_sanguineo = models.CharField(max_length = 2, blank = False, null = False)
-    circunferenciaMuneca = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    circunferenciaMuneca = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, validators=[
+            MinValueValidator(5),
+            MaxValueValidator(200),
+        ])
     profesion = models.CharField(max_length = 40, blank = False, null = True)
     alumno_id = models.OneToOneField(Alumno, on_delete=models.CASCADE)
     
