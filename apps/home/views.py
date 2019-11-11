@@ -570,9 +570,7 @@ def registro(request):
             user.save()
             return redirect ('/home')
         else:
-            for msg in form.error_messages:
-                messages.error(request, f"{msg}: {form.error_messages[msg]}")
-            error = form.error_messages
+            error = form.errors
                 
             return render(request, 'registro.html', context={'form': form, 'error':error})            
 
