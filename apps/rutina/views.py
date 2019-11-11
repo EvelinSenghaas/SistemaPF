@@ -586,34 +586,51 @@ def verClase(request, pk):
                     diasAlumno.append(Semana.objects.get(dia=disp.semana_id))
                 
                 diasAlumno = sorted(diasAlumno, key=lambda diasAlumno: diasAlumno.numero)
+                
+                
+                lista_nueva = []
+                for i in diasAlumno:
+                    if i not in lista_nueva:
+                        lista_nueva.append(i)
+                
+                diasAlumno = lista_nueva
+                print('dias alumno')
                 print(diasAlumno)
                 
                 clase=None
                 i=0
-                while i< len(diasAlumno):    
+                while i < len(diasAlumno):    
+                    print(diasAlumno[i].dia)
                     if dia == diasAlumno[i].dia:
+                        print('Entra porque es '+str(diasAlumno[i].dia))
                         mensaje = None
-                        hora_inicio = DisponibilidadProfesor.objects.get(alumno_id=alumno.id, semana_id=diasAlumno[i]).horario_inicio
-                        hora_final = DisponibilidadProfesor.objects.get(alumno_id=alumno.id, semana_id=diasAlumno[i]).horario_final
+                        dispoAlumno = DisponibilidadProfesor.objects.filter(alumno_id=alumno.id, semana_id__dia=diasAlumno[i])
                         
-                        if now.time() < hora_inicio:
-                            clase = "Tienes una clase con " + str(alumno.profesor_id)  + " hoy desde las " + hora_inicio.strftime("%H:%M") + " hasta las " + hora_final.strftime("%H:%M") +"hs."
+                        for d in dispoAlumno:
+                            print(d)
+                            
+                        for disp in dispoAlumno:
+                            if now.time() < disp.horario_inicio:
+                                clase = "Tenes una clase con " + str(alumno.profesor_id)  + " hoy desde las " + disp.horario_inicio.strftime("%H:%M") + " hasta las " + disp.horario_final.strftime("%H:%M") +"hs."
+                                mensaje = None
+                                return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje, 'disponibilidad':disponibilidad, 'clase':clase, 'profesor':profesor}) 
+                            
+                            if  disp.horario_inicio <= now.time() <= disp.horario_final:
+                                clase = "La clase con " + str(alumno.profesor_id)  + " esta en curso. "
+                                mensaje = None
+                                return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje, 'disponibilidad':disponibilidad, 'clase':clase, 'profesor':profesor}) 
+                            
+                            if now.time() > disp.horario_final:
+                                clase = None
+                                mensaje = "Tu clase con " + str(alumno.profesor_id) + " ya ha terminado."
+                        i += 1
+                    i += 1  
+ 
                         
-                        if  hora_inicio <= now.time() <= hora_final:
-                            clase = "La clase con " + str(alumno.profesor_id)  + " esta en curso. "
-                        
-                        if now.time() > hora_final:
-                            clase = None
-                            mensaje = "Tu clase con " + str(alumno.profesor_id) + " ya ha terminado."
-                            break
-                        break
-                         
-                    else:
-                        mensaje = "Hoy no es día de entrenamiento, debes esperar a tu próxima clase"
+                return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje, 'disponibilidad':disponibilidad, 'clase':clase, 'profesor':profesor})                  
                     
-                    i+=1
-                        
-                return render (request, 'rutina/clases.html', {'alumno':alumno, "mensaje":mensaje, 'disponibilidad':disponibilidad, 'clase':clase, 'profesor':profesor})
+                
+                    
         
         #Si entrena por el sistema    
         else:
@@ -1100,7 +1117,7 @@ def perfil(request, pk):
                 voy a crear tres listas, una por cada nivel. Donde voy a guardar todas las sesiones de ese nivel
                 por cada lista de sesiones por nivel, voy a comparar aquellas actividades que se repitieron y voy a guardar el esfuerzo de cada una
             """
-            listaActividades = set()
+            """listaActividades = set()
             print(listaActividades)
             listaPrincipiante = []
             auxiPrincipiante = []
@@ -1231,7 +1248,7 @@ def perfil(request, pk):
             
             print(' ')
             print('diccionario')
-            print(dataAvanzado)
+            print(dataAvanzado)"""
             
             print(listaActividades)
             
@@ -1256,7 +1273,7 @@ def perfil(request, pk):
         mensaje = "El alumno no existe"
         return redirect('/home/')
     
-    return render (request, 'home/verPerfil.html', { 'alumno': alumno, 'mensaje':mensaje, 'ficha':ficha, 'edad':edad, 'disponibilidad':disponibilidad, 'sesiones':sesiones, 'dataPrincipiante':dataPrincipiante, 'dataIntermedio':dataIntermedio, 'dataAvanzado':dataAvanzado, 'listaActividades':listaActividades})
+    return render (request, 'home/verPerfil.html', { 'alumno': alumno, 'mensaje':mensaje, 'ficha':ficha, 'edad':edad, 'disponibilidad':disponibilidad, 'sesiones':sesiones})
     
 #Esta funcion va destinada solamente al alumno
 def editarPerfil(request, pk):
@@ -1544,44 +1561,53 @@ def comprobarActualizacionFicha(request):
     dic = {}
     
     #Obtenemos su ultima sesion para ver si tiene una clase de revision
-    ultimaSesion = Sesion.objects.filter(alumno_id=alumno.id).latest()
-    
-    #Si tiene la clase de revision empiezan los controles
-    if (ultimaSesion.claseRevision):
-        d = True
-        dic['revision'] = d
-        #Guardamos que tiene una clase de revision y comprobamos si actualizo su ficha
-        if (RevisionSesion.objects.filter(alumno_id=alumno.id, sesion_id=ultimaSesion.id).exists()):
-            a = True
-            dic['datos'] = a
-            #Como ya actualizo su ficha, debemos comprobar que haya seleccionado un horario
-            if (DisponibilidadProfesor.objects.filter(alumno_id=alumno.id).exists()):
+    if (Sesion.objects.filter(alumno_id=alumno.id).exists()):
+        ultimaSesion = Sesion.objects.filter(alumno_id=alumno.id).latest()
+        
+        #Si tiene la clase de revision empiezan los controles
+        if (ultimaSesion.claseRevision):
+            d = True
+            dic['revision'] = d
+            #Guardamos que tiene una clase de revision y comprobamos si actualizo su ficha
+            if (RevisionSesion.objects.filter(alumno_id=alumno.id, sesion_id=ultimaSesion.id).exists()):
                 a = True
-                dic['horario'] = a
-                
-                h = DisponibilidadProfesor.objects.get(alumno_id=alumno.id, profesor_id=alumno.profesor_id).profesor_id.nombre
-                dic['profe'] = str(h)
-                h = DisponibilidadProfesor.objects.get(alumno_id=alumno.id).semana_id.dia
-                dic['dia'] = str(h)
-                h = DisponibilidadProfesor.objects.get(alumno_id=alumno.id).horario_inicio
-                dic['inicio'] = h.strftime("%H:%M:%S")
-                h = DisponibilidadProfesor.objects.get(alumno_id=alumno.id).horario_final
-                dic['final'] = h.strftime("%H:%M:%S")
-                
+                dic['datos'] = a
+                #Como ya actualizo su ficha, debemos comprobar que haya seleccionado un horario
+                if (DisponibilidadProfesor.objects.filter(alumno_id=alumno.id).exists()):
+                    a = True
+                    dic['horario'] = a
+                    
+                    h = DisponibilidadProfesor.objects.get(alumno_id=alumno.id, profesor_id=alumno.profesor_id).profesor_id.nombre
+                    dic['profe'] = str(h)
+                    h = DisponibilidadProfesor.objects.get(alumno_id=alumno.id).semana_id.dia
+                    dic['dia'] = str(h)
+                    h = DisponibilidadProfesor.objects.get(alumno_id=alumno.id).horario_inicio
+                    dic['inicio'] = h.strftime("%H:%M:%S")
+                    h = DisponibilidadProfesor.objects.get(alumno_id=alumno.id).horario_final
+                    dic['final'] = h.strftime("%H:%M:%S")
+                    
+                else:
+                    #No selecciono el horario de la clase presencial
+                    a = False
+                    dic['horario'] = a
+                    
             else:
-                #No selecciono el horario de la clase presencial
+                #No actualizo la ficha
                 a = False
-                dic['horario'] = a
+                dic['datos'] = a 
                 
         else:
-            #No actualizo la ficha
-            a = False
-            dic['datos'] = a 
-            
+            #No tiene revision
+            d = False
+            dic['revision'] = d
+        
     else:
         #No tiene revision
         d = False
         dic['revision'] = d
+        
+    
+    
         
     return HttpResponse(
                 json.dumps(dic),
