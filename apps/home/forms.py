@@ -118,10 +118,10 @@ class DisponibilidadForm(forms.ModelForm):
             'horario_inicio' : 'Horario de inicio',}
         widgets = {
             'horario_inicio' : forms.TimeInput(
-                attrs = { 'class':'form-control', 'placeholder':'Formato (hh:mm)'}
+                attrs = { 'class':'form-control', 'placeholder':'Formato (hh:mm:ss)'}
                 ),
             'horario_final' : forms.TimeInput(
-                attrs = { 'class':'form-control', 'placeholder':'Formato (hh:mm)'}
+                attrs = { 'class':'form-control', 'placeholder':'Formato (hh:mm:ss)'}
                 )}
     
     

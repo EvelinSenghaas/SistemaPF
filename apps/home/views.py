@@ -59,16 +59,14 @@ class EditarDisponibilidad(PermissionRequiredMixin,UpdateView):
 def editarDisponibilidad(request, pk):
     disponibilidad = DisponibilidadProfesor.objects.get(id=pk)
     profesor = Profesor.objects.get(id=disponibilidad.profesor_id.id)
-    dias = Semana.objects.all()
     print(profesor)
     
     if request.method == 'GET':
         form = DisponibilidadForm(instance = disponibilidad) 
         print()
-        dias = Semana.objects.exclude(dia=disponibilidad.semana_id) 
         diaSelec = disponibilidad.semana_id
         mensaje = None
-        return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'diaSelec':diaSelec, 'mensaje':mensaje})
+        return render(request, 'rutina/agregarDisponibilidad.html',{'form':form,'diaSelec':diaSelec, 'mensaje':mensaje})
     else:
         peticion = request.POST.copy()
         print(peticion)
@@ -101,11 +99,32 @@ def editarDisponibilidad(request, pk):
         print(hora_final)
         
         #Controlamos que no exista esa disponibilidad
-        for d in dias:
+        if len(dias) > 1:
+            mensaje = "No puede seleccionar más de un día"
+            return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'diaSelec':diaSelec, 'mensaje':mensaje})
+                
+        """for d in dias:
             print(d)
             if (DisponibilidadProfesor.objects.filter(semana_id=Semana.objects.get(dia=d).id, horario_inicio=hora_inicio, horario_final=hora_final).exists()):
-                mensaje = "La disponibilidad ingresada ya existe."
-                return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'diaSelec':diaSelec, 'mensaje':mensaje})
+                dias.remove(d)"""
+        
+        if (hora_final<hora_inicio or hora_final==hora_inicio):
+            mensaje = "El horario final no puede ser menor o igual al horario de inicio."
+            return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'mensaje':mensaje})        
+        else:
+            if len(dias)>1:
+                
+                for d in dias:
+                    print(d)
+                    if (DisponibilidadProfesor.objects.filter(semana_id=Semana.objects.get(dia=d).id, horario_inicio=hora_inicio, horario_final=hora_final).exists()):
+                        dias.remove(d)
+            else:
+                if (
+                    DisponibilidadProfesor.objects.filter(semana_id=Semana.objects.get(dia=dias[0]).id, horario_inicio__lt=hora_inicio, horario_final__gt=hora_final).exists()):
+                    mensaje = "La disponibilidad ingresada esta ocupada"
+                    return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'mensaje':mensaje})
+                
+        
         
         if form.is_valid():
             form = form.save()
@@ -646,10 +665,32 @@ def agregarDisponibilidad(request, pk):
             return render(request, 'rutina/agregarDisponibilidad.html',{'form':form,'mensaje':mensaje})
         
         
-        #Controlamos que no exista esa disponibilidad
+        """#Controlamos que no exista esa disponibilidad
         for d in dias:
             print(d)
             if (DisponibilidadProfesor.objects.filter(semana_id=Semana.objects.get(dia=d).id, horario_inicio=hora_inicio, horario_final=hora_final).exists()):
+                mensaje = "La disponibilidad ingresada ya existe."
+                return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'mensaje':mensaje})"""
+        
+        if len(dias)>1:
+            for d in dias:
+                print(d)
+                if (DisponibilidadProfesor.objects.filter(semana_id=Semana.objects.get(dia=d).id, horario_inicio=hora_inicio, horario_final=hora_final).exists()):
+                    dias.remove(d)
+        else:
+            if (
+                DisponibilidadProfesor.objects.filter(semana_id=Semana.objects.get(dia=dias[0]).id, horario_inicio=hora_inicio, horario_final=hora_final).exists()
+                or
+                DisponibilidadProfesor.objects.filter(semana_id=Semana.objects.get(dia=dias[0]).id, horario_inicio__lt=hora_inicio, horario_final__gt=hora_final).exists()):
+                mensaje = "La disponibilidad ingresada ya existe."
+                return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'mensaje':mensaje})
+                
+        for d in dias:
+            print(d)
+            if (
+            DisponibilidadProfesor.objects.filter(semana_id=Semana.objects.get(dia=d).id, horario_inicio=hora_inicio, horario_final=hora_final).exists() 
+            or 
+            DisponibilidadProfesor.objects.filter(semana_id=Semana.objects.get(dia=dias[0]).id, horario_inicio__lt=hora_inicio, horario_final__gt=hora_final).exists()):
                 mensaje = "La disponibilidad ingresada ya existe."
                 return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'mensaje':mensaje})
         
@@ -680,6 +721,6 @@ def agregarDisponibilidad(request, pk):
     else:
         form = DisponibilidadForm()
         mensaje = None
-        return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'mensaje':mensaje})
+        return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'mensaje':mensaje, 'dias':dias})
     
     return redirect ('/home/administracion/')
