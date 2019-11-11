@@ -99,6 +99,14 @@
             });              
         }
     </script>
+
+    <script>
+        function cargarBadge(val2){
+            var val = $('#formControlRange'+val2).val();
+            $('#indicador'+val2).html(val);
+        }
+    </script>
+
     <script>
         var id = "{{user.id}}"
         comprobarActualizacionFicha(id);
@@ -420,8 +428,9 @@
                             <div class="col-5 col-md-5">¿Cuánto te costó <strong>{{repeticion.actividad_id.nombre}}</strong>?</div>
                             <div class="col-6 col-md-6">
                                 <label style="color:rgb(130, 128, 128)"></label>
-                                <input name="esfuerzo" type="range" class="custom-range w-75" id="formControlRange" value="0"  min="1" max="10" step="1">  
+                                <input name="esfuerzo" type="range" class="custom-range w-75" id="formControlRange{{repeticion.id}}" value="0"  min="1" max="10" step="1" onchange="cargarBadge('{{repeticion.id}}')">
                                 <input type="hidden" name="actividad_id" value="{{repeticion.actividad_id.id}}">
+                                <span class="badge badge-primary" id="indicador{{repeticion.id}}" style="vertical-align: super; margin-left: 1%;">1</span>
                             </div>
                         </div>
                         {%endfor%}
