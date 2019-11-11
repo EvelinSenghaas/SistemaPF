@@ -44,7 +44,6 @@
 
 <script>
     function ocultarClase(id){
-      console.log('me llaman');
       $.ajax({
           data : {'id' : id},
           url : '/rutinas/ocultar_clases_ajax/', //El id que estoy guardando en data se va a enviar en esa url
@@ -60,6 +59,25 @@
       });              
     }
 </script>
+<script>
+  function ocultarMensajes(id){
+    $.ajax({
+        data : {'id' : id},
+        url : '/chat/ocultar_mensajes_ajax/', //El id que estoy guardando en data se va a enviar en esa url
+        type : 'get',
+        success : function(data){
+            if (data['ocultar'] == false){
+              var html =  '<li class="nav-item">'+
+                            '<a class="nav-link" href="/chat/inbox/'+id+'/'+data['profesor_id']+'">Mensajes</a>'+
+                          '</li>'
+              $('#mensajes').html(html);
+            }
+            
+        }
+
+    });              
+  }
+</script>
 
 <body>
   {%block body%}
@@ -69,6 +87,7 @@
   <script>
     var id = "{{user.id}}"
     ocultarClase(id);
+    ocultarMensajes(id);
   </script>
   <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
@@ -91,6 +110,9 @@
           <li class="nav-item">
             <a class="nav-link" href="/rutinas/listado/{{user.id}}">Rutinas</a>
           </li>
+          <div id="mensajes">
+            
+          </div>
           {% if perms.rutina.change_actividad and perms.rutina.delete_actividad and perms.rutina.change_rutina and perms.rutina.delete_rutina and not user.is_staff%}
           <li class="nav-item">
             <a class="nav-link" href="/rutinas/revisiones/{{user.id}}">Revisiones</a>

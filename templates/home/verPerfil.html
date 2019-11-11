@@ -273,7 +273,7 @@
                                 {%if user.id == alumno.user_id%}
                                 <a class="btn btn-light-sm" href="/rutinas/editar_perfil/{{user.id}}" role="button">Editar perfil</a>
                                 {%else%}
-                                <a class="btn btn-success btn-sm" href="#" role="button">Mensaje</a>
+                                <a class="btn btn-success btn-sm" href="/chat/inbox/{{user.id}}/{{alumno.user_id}}" role="button">Mensaje</a>
                                 {%endif%}
                             </div>
                             <!-- END SIDEBAR BUTTONS -->

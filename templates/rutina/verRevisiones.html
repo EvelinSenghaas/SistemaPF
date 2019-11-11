@@ -72,13 +72,17 @@
           <tbody>
           {%for revision in revisiones%}
             <tr>
-                <td width="150">{{revision.sesion_id.alumno_id.nombre}}, {{revision.sesion_id.alumno_id.apellido}}</td>
+                <td width="150"><a href="/rutinas/ver_perfil/{{revision.sesion_id.alumno_id.user_id}}">{{revision.sesion_id.alumno_id.nombre}}, {{revision.sesion_id.alumno_id.apellido}}</a></td>
 
                 <td width="130">{{revision.sesion_id.fechaSesion}}</td>
 
                 <td width="500">{{revision.sesion_id.descripcion}}</td>
 
-                <td width="auto" ><button type="button" class="btn btn-success btn-sm">Mensaje</button></td>
+                <td width="auto" >
+                  <a class="btn btn-success btn-sm" href="/chat/inbox/{{user.id}}/{{revision.sesion_id.alumno_id.user_id}}" role="button"
+                  > <span style="color:rgb(255, 255, 255)";>Mensaje</span>
+                  </a>
+                </td>
             </tr>
             <div class="modal fade bs-example-modal-lg2{{disp.id}}" id="myModal2{{disp.id}}" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-lg">

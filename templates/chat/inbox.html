@@ -148,6 +148,25 @@
       overflow-y: auto;
     }
 </style>
+<script>
+  function ocultarMensajes(id){
+    $.ajax({
+        data : {'id' : id},
+        url : '/chat/ocultar_mensajes_ajax/', //El id que estoy guardando en data se va a enviar en esa url
+        type : 'get',
+        success : function(data){
+            if (data['ocultar'] == false){
+              var html =  '<li class="nav-item">'+
+                            '<a class="nav-link" href="/chat/inbox/'+id+'/'+data['profesor_id']+'">Mensajes</a>'+
+                          '</li>'
+              $('#mensajes').html(html);
+            }
+            
+        }
+
+    });              
+  }
+</script>
 
 <script>
     function verConversacion(idEmisor, idReceptor){
@@ -290,11 +309,31 @@
     }
 </script>
 
+<script>
+        
+  function mensajeChange() {
+    console.log("change");
+    const mensaje = document.getElementById("mensaje");
+    const boton = document.getElementById("enviar");
+    console.log(boton)
+    
+    if (mensaje.value.trim() !== "") {
+      console.log("Se muestra")
+      boton.removeAttribute('disabled')
+    } else {
+      console.log('se oculta');
+      boton.setAttribute('disabled', "true");
+    }
+  }
+  
+</script>
+
 
 <body>
     <script>
         var id = "{{user.id}}"
         ocultarClase(id);
+        ocultarMensajes(id);
       </script>
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
@@ -317,6 +356,9 @@
               <li class="nav-item">
                 <a class="nav-link" href="/rutinas/listado/{{user.id}}">Rutinas</a>
               </li>
+              <div id="mensajes">
+            
+              </div>
               {% if perms.rutina.change_actividad and perms.rutina.delete_actividad and perms.rutina.change_rutina and perms.rutina.delete_rutina and not user.is_staff%}
               <li class="nav-item">
                 <a class="nav-link" href="/rutinas/revisiones/{{user.id}}">Revisiones</a>
@@ -394,8 +436,8 @@
           </div>
           <div class="type_msg">
             <div class="input_msg_write">
-              <input type="text" class="write_msg" placeholder="Escribe un mensaje" id="mensaje"/>
-              <button class="msg_send_btn" type="button" onclick="enviarMensaje('{{emisor.user_id}}','{{receptor.user_id}}')"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+              <input type="text" class="write_msg" placeholder="Escribe un mensaje" id="mensaje" onkeyup="mensajeChange()"/>
+              <button class="msg_send_btn" type="button" onclick="enviarMensaje('{{emisor.user_id}}','{{receptor.user_id}}')" id="enviar" disabled><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
             </div>
           </div>
         </div>

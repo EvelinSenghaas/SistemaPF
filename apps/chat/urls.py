@@ -1,7 +1,7 @@
 from django.urls import path, re_path
 from django.contrib.auth.decorators import login_required
 
-from .views import escribirMensaje, inbox, verConversacion, enviarMensaje, obtenerUltimosMensajes, vistoMensaje
+from .views import escribirMensaje, inbox, verConversacion, enviarMensaje, obtenerUltimosMensajes, vistoMensaje, ocultarMensajes
 
 
 urlpatterns = [
@@ -11,5 +11,6 @@ urlpatterns = [
     path('enviar_mensaje_ajax/', enviarMensaje, name='enviar_mensaje_ajax'),
     path('obtener_ultimos_mensajes_ajax/', obtenerUltimosMensajes, name='obtener_ultimos_mensajes_ajax'),
     path('visto_mensaje_ajax/', vistoMensaje, name='visto_mensaje_ajax'),
+    path('ocultar_mensajes_ajax/', ocultarMensajes, name='ocultar_mensajes_ajax'),
     
 ]    

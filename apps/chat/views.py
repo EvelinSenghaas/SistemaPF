@@ -3,7 +3,7 @@ from directmessages.apps import Inbox
 from directmessages.models import Message
 from django.http import HttpResponseRedirect, HttpResponse
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
     
 from django.contrib.auth.models import User
 from ..home.models import Alumno, FichaAlumno, Profesor, Semana, DisponibilidadProfesor
@@ -72,11 +72,13 @@ def verConversacion (request):
     conversacion = []
     dic = {}
     for conver in conversacionAux:
+        ahora = conver.sent_at
+        ahora = ahora - timedelta(hours=3)
         dic = {
         'content': conver.content,
         'sender': conver.sender.id,
         'recipient': conver.recipient.id,
-        'sent_at': str(conver.sent_at.strftime('%d/%b/%Y - %H:%M')),
+        'sent_at': str(ahora.strftime('%d %b. %Y %H:%M')),
         'idMensaje': str(conver.id)
         }
         conversacion.append(dic)
@@ -92,13 +94,14 @@ def enviarMensaje(request):
     userEmisor = User.objects.get(id=request.GET.get('idEmisor', None))
     mensaje = str(request.GET.get('mensaje', None))
     
-    mensaje = Inbox.send_message(userEmisor, userReceptor, mensaje)
-    
-    dic = {}
-    
-    dic['idReceptor'] = str(userReceptor.id)
-    dic['idEmisor'] = str(userReceptor.id)
-    dic['mensaje'] = str(mensaje)
+    if mensaje != '':
+        mensaje = Inbox.send_message(userEmisor, userReceptor, mensaje)
+        
+        dic = {}
+        
+        dic['idReceptor'] = str(userReceptor.id)
+        dic['idEmisor'] = str(userReceptor.id)
+        dic['mensaje'] = str(mensaje)
     
     
     return HttpResponse(
@@ -114,11 +117,13 @@ def obtenerUltimosMensajes(request):
     mensajesNoLeidos = []
     dic = {}
     for msj in mensajesNoLeidosAux:
+        ahora = msj.sent_at
+        ahora = ahora - timedelta(hours=3)
         dic = {
         'content': msj.content,
         'sender': msj.sender.id,
         'recipient': msj.recipient.id,
-        'sent_at': str(msj.sent_at.strftime('%d/%b/%Y - %H:%M')),
+        'sent_at': str(ahora.strftime('%d %b. %Y %H:%M')),
         'idMensaje': str(msj.id)
         }
         mensajesNoLeidos.append(dic)
@@ -137,6 +142,34 @@ def vistoMensaje(request):
     Inbox.read_message(mensaje.id)
     
     print(mensaje)
+    return HttpResponse(
+                json.dumps(data),
+                content_type="application/json")
+    
+    
+def ocultarMensajes(request):
+    user = User.objects.get(id=request.GET['id'])
+    data = {}
+    
+    if not(user.is_staff):
+        if (Alumno.objects.filter(user_id=user.id).exists()):
+            alumno = Alumno.objects.get(user_id=user.id)
+            data['profesor_id'] = str(alumno.profesor_id.user_id)
+            d = False
+            data['ocultar'] = d
+        elif (Profesor.objects.filter(user_id=user.id).exists()):
+            profesor = Profesor.objects.get(user_id=user.id)
+            data['profesor_id'] = profesor.user_id
+            d = True
+            data['ocultar'] = d
+    else:
+        p = None
+        data['profesor_id'] = p
+        d = True
+        data['ocultar'] = d
+        
+    print(data['ocultar'])
+    
     return HttpResponse(
                 json.dumps(data),
                 content_type="application/json")
