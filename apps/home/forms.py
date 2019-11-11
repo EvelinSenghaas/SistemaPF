@@ -27,18 +27,19 @@ class NewUserForm(UserCreationForm):
                 attrs = { 'class':'form-control', 'placeholder': 'Ingrese su correo electrónico'}
                 ),
             'password1' : forms.PasswordInput(
-                attrs = { 'class':'form-control', 'id':'exampleInputPassword1', 'placeholder': 'Ingrese su contraseña'}
+                attrs = { 'class':'form-control', 'placeholder': 'Ingrese su contraseña'}
                 ),
             'password2' : forms.PasswordInput(
                 attrs = { 'class':'form-control', 'placeholder': 'Repita su contraseña'}
                 ),
             'first_name' : forms.TextInput(
-                attrs = { 'class':'form-control', 'placeholder': 'Ingrese sus nombres'}
+                attrs = { 'class':'form-control', 'placeholder': 'Ingrese sus nombres', 'required': True, 'pattern':'[A-Za-z ]+'}
                 ),
             'last_name' : forms.TextInput(
-                attrs = { 'class':'form-control', 'placeholder': 'Ingrese sus apellidos'}
+                attrs = { 'class':'form-control', 'placeholder': 'Ingrese sus apellidos', 'required': True, 'pattern':'[A-Za-z ]+'}
                 ),
         }
+    
         
         
         
