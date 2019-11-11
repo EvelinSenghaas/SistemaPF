@@ -10,10 +10,10 @@ class DetalleForm (forms.ModelForm):
         }
         widgets = {
             'categoria' : forms.TextInput(
-                attrs = { 'class':'form-control', 'placeholder': 'Ingrese el tren'}
+                attrs = { 'class':'form-control', 'placeholder': 'Ingrese el tren', 'pattern':'[A-Za-z ]+'}
                 ), 'musculo' : forms.TextInput(
                     attrs = {
-                        'class' : 'form-control', 'placeholder': 'Ingrese el musculo'
+                        'class' : 'form-control', 'placeholder': 'Ingrese el musculo', 'pattern':'[A-Za-z ]+'
                     }
                 )
         }
