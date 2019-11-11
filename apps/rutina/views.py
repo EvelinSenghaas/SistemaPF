@@ -1102,7 +1102,9 @@ def evolucionActividad(request):
 
 def perfil(request, pk):
     if (Alumno.objects.filter(user_id=pk).exists()):
+        listaActividades = []
         if Alumno.objects.get(user_id = pk).entrenamiento_sistema:
+            listaActividades = []
             print('entrena por sistema')
             alumno = Alumno.objects.get(user_id=pk)
             print(alumno.apellido)
@@ -1118,140 +1120,141 @@ def perfil(request, pk):
                 voy a crear tres listas, una por cada nivel. Donde voy a guardar todas las sesiones de ese nivel
                 por cada lista de sesiones por nivel, voy a comparar aquellas actividades que se repitieron y voy a guardar el esfuerzo de cada una
             """
-            """listaActividades = set()
-            print(listaActividades)
-            listaPrincipiante = []
-            auxiPrincipiante = []
-            listaIntermedio = []
-            auxiIntermedio = []
-            listaAvanzado = []
-            auxiAvanzado = []
-            
-            dataPrincipiante = {}
-            dataIntermedio = {}
-            dataAvanzado = {}
-            
-            aux = EsfuerzoActividad.objects.filter(alumno_id=alumno.id, nivel_id="Principiante")
-            aux2 = EsfuerzoActividad.objects.filter(alumno_id=alumno.id, nivel_id="Intermedio")
-            aux3 = EsfuerzoActividad.objects.filter(alumno_id=alumno.id, nivel_id="Avanzado")
-            
-            auxListaPrincipiante =[]
-            for x in aux:
-                auxListaPrincipiante.append(x)
-            
-            #-------------------------------Principiante--------------------------------------------------
-            print('')
-            print('Principiante')
-            for x in auxListaPrincipiante:
-                print(x)
-            i = 0
-            j = 1
-            while (i < len(auxListaPrincipiante)):
+            if (Sesion.objects.filter(alumno_id=alumno.id).exists()):
+                listaActividades = set()
+                print(listaActividades)
+                listaPrincipiante = []
                 auxiPrincipiante = []
-                elem = auxListaPrincipiante[i]
-                j = j + i
-                if (j < len(auxListaPrincipiante)):
-                    while (j < len(auxListaPrincipiante)):
-                        if (elem.actividad_id.nombre == auxListaPrincipiante[j].actividad_id.nombre):
-                            if not elem in listaPrincipiante:
-                                listaPrincipiante.append(elem)
-                                auxiPrincipiante.append(elem)
-                            listaPrincipiante.append(auxListaPrincipiante[j])
-                            auxiPrincipiante.append(auxListaPrincipiante[j])
-                            dataPrincipiante['data'] = auxiPrincipiante
-                            dataPrincipiante['label'] = str(elem.actividad_id.nombre)
-                            listaActividades.add(str(elem.actividad_id.nombre))
-                            j +=1
-                        else:
-                            j += 1
-                j = 1
-                i += 1
-                
-            print('lista')
-            print(listaPrincipiante)
-            
-            print(' ')
-            print('diccionario')
-            print(dataPrincipiante)
-            
-            #-----------------------------------Intermedio---------------------------------------------------------------
-            auxListaIntermedio =[]
-            for x in aux2:
-                auxListaIntermedio.append(x)
-            
-            print('')
-            print('Intermedio')
-            for x in auxListaIntermedio:
-                print(x)
-            i = 0
-            j = 1
-            while (i < len(auxListaIntermedio)):
+                listaIntermedio = []
                 auxiIntermedio = []
-                elem = auxListaIntermedio[i]
-                j = j + i
-                if (j < len(auxListaIntermedio)):
-                    while (j < len(auxListaIntermedio)):
-                        if (elem.actividad_id.nombre == auxListaIntermedio[j].actividad_id.nombre):
-                            if not elem in listaIntermedio:
-                                listaIntermedio.append(elem)
-                                auxiIntermedio.append(elem)
-                            listaIntermedio.append(auxListaIntermedio[j])
-                            auxiIntermedio.append(auxListaIntermedio[j])
-                            dataIntermedio[str(elem.actividad_id.nombre)] = auxiIntermedio
-                            listaActividades.add(str(elem.actividad_id.nombre))
-                            j +=1
-                        else:
-                            j += 1
-                j = 1
-                i += 1
-                
-            print('lista')
-            print(listaIntermedio)
-            
-            print(' ')
-            print('diccionario')
-            print(dataIntermedio)
-            
-            
-            #-------------------------------------------Avanzado-----------------------------------------------------------
-            auxListaAvanzado =[]
-            for x in aux3:
-                auxListaAvanzado.append(x)
-            
-            print('')
-            print('Avanzado')
-            for x in auxListaAvanzado:
-                print(x)
-            i = 0
-            j = 1
-            while (i < len(auxListaAvanzado)):
+                listaAvanzado = []
                 auxiAvanzado = []
-                elem = auxListaAvanzado[i]
-                j = j + i
-                if (j < len(auxListaAvanzado)):
-                    while (j < len(auxListaAvanzado)):
-                        if (elem.actividad_id.nombre == auxListaAvanzado[j].actividad_id.nombre):
-                            if not elem in listaAvanzado:
-                                listaAvanzado.append(elem)
-                                auxiAvanzado.append(elem)
-                            listaAvanzado.append(auxListaAvanzado[j])
-                            auxiAvanzado.append(auxListaAvanzado[j])
-                            dataAvanzado[str(elem.actividad_id.nombre)] = auxiAvanzado
-                            listaActividades.add(str(elem.actividad_id.nombre))
-                            j +=1
-                        else:
-                            j += 1
-                j = 1
-                i += 1
                 
-            print('lista')
-            print(listaAvanzado)
-            
-            print(' ')
-            print('diccionario')
-            print(dataAvanzado)"""
-            
-            print(listaActividades)
+                dataPrincipiante = {}
+                dataIntermedio = {}
+                dataAvanzado = {}
+                
+                aux = EsfuerzoActividad.objects.filter(alumno_id=alumno.id, nivel_id="Principiante")
+                aux2 = EsfuerzoActividad.objects.filter(alumno_id=alumno.id, nivel_id="Intermedio")
+                aux3 = EsfuerzoActividad.objects.filter(alumno_id=alumno.id, nivel_id="Avanzado")
+                
+                auxListaPrincipiante =[]
+                for x in aux:
+                    auxListaPrincipiante.append(x)
+                
+                #-------------------------------Principiante--------------------------------------------------
+                print('')
+                print('Principiante')
+                for x in auxListaPrincipiante:
+                    print(x)
+                i = 0
+                j = 1
+                while (i < len(auxListaPrincipiante)):
+                    auxiPrincipiante = []
+                    elem = auxListaPrincipiante[i]
+                    j = j + i
+                    if (j < len(auxListaPrincipiante)):
+                        while (j < len(auxListaPrincipiante)):
+                            if (elem.actividad_id.nombre == auxListaPrincipiante[j].actividad_id.nombre):
+                                if not elem in listaPrincipiante:
+                                    listaPrincipiante.append(elem)
+                                    auxiPrincipiante.append(elem)
+                                listaPrincipiante.append(auxListaPrincipiante[j])
+                                auxiPrincipiante.append(auxListaPrincipiante[j])
+                                dataPrincipiante['data'] = auxiPrincipiante
+                                dataPrincipiante['label'] = str(elem.actividad_id.nombre)
+                                listaActividades.add(str(elem.actividad_id.nombre))
+                                j +=1
+                            else:
+                                j += 1
+                    j = 1
+                    i += 1
+                    
+                print('lista')
+                print(listaPrincipiante)
+                
+                print(' ')
+                print('diccionario')
+                print(dataPrincipiante)
+                
+                #-----------------------------------Intermedio---------------------------------------------------------------
+                auxListaIntermedio =[]
+                for x in aux2:
+                    auxListaIntermedio.append(x)
+                
+                print('')
+                print('Intermedio')
+                for x in auxListaIntermedio:
+                    print(x)
+                i = 0
+                j = 1
+                while (i < len(auxListaIntermedio)):
+                    auxiIntermedio = []
+                    elem = auxListaIntermedio[i]
+                    j = j + i
+                    if (j < len(auxListaIntermedio)):
+                        while (j < len(auxListaIntermedio)):
+                            if (elem.actividad_id.nombre == auxListaIntermedio[j].actividad_id.nombre):
+                                if not elem in listaIntermedio:
+                                    listaIntermedio.append(elem)
+                                    auxiIntermedio.append(elem)
+                                listaIntermedio.append(auxListaIntermedio[j])
+                                auxiIntermedio.append(auxListaIntermedio[j])
+                                dataIntermedio[str(elem.actividad_id.nombre)] = auxiIntermedio
+                                listaActividades.add(str(elem.actividad_id.nombre))
+                                j +=1
+                            else:
+                                j += 1
+                    j = 1
+                    i += 1
+                    
+                print('lista')
+                print(listaIntermedio)
+                
+                print(' ')
+                print('diccionario')
+                print(dataIntermedio)
+                
+                
+                #-------------------------------------------Avanzado-----------------------------------------------------------
+                auxListaAvanzado =[]
+                for x in aux3:
+                    auxListaAvanzado.append(x)
+                
+                print('')
+                print('Avanzado')
+                for x in auxListaAvanzado:
+                    print(x)
+                i = 0
+                j = 1
+                while (i < len(auxListaAvanzado)):
+                    auxiAvanzado = []
+                    elem = auxListaAvanzado[i]
+                    j = j + i
+                    if (j < len(auxListaAvanzado)):
+                        while (j < len(auxListaAvanzado)):
+                            if (elem.actividad_id.nombre == auxListaAvanzado[j].actividad_id.nombre):
+                                if not elem in listaAvanzado:
+                                    listaAvanzado.append(elem)
+                                    auxiAvanzado.append(elem)
+                                listaAvanzado.append(auxListaAvanzado[j])
+                                auxiAvanzado.append(auxListaAvanzado[j])
+                                dataAvanzado[str(elem.actividad_id.nombre)] = auxiAvanzado
+                                listaActividades.add(str(elem.actividad_id.nombre))
+                                j +=1
+                            else:
+                                j += 1
+                    j = 1
+                    i += 1
+                    
+                print('lista')
+                print(listaAvanzado)
+                
+                print(' ')
+                print('diccionario')
+                print(dataAvanzado)
+                
+                print(listaActividades)
             
             try:
                 sesiones = Sesion.objects.filter(alumno_id=alumno.id)
@@ -1274,7 +1277,10 @@ def perfil(request, pk):
         mensaje = "El alumno no existe"
         return redirect('/home/')
     
-    return render (request, 'home/verPerfil.html', { 'alumno': alumno, 'mensaje':mensaje, 'ficha':ficha, 'edad':edad, 'disponibilidad':disponibilidad, 'sesiones':sesiones})
+    if listaActividades == []:
+        return render (request, 'home/verPerfil.html', { 'alumno': alumno, 'mensaje':mensaje, 'ficha':ficha, 'edad':edad, 'disponibilidad':disponibilidad, 'sesiones':sesiones})
+    else:
+        return render (request, 'home/verPerfil.html', { 'alumno': alumno, 'mensaje':mensaje, 'ficha':ficha, 'edad':edad, 'disponibilidad':disponibilidad, 'sesiones':sesiones, 'listaActividades':listaActividades})
     
 #Esta funcion va destinada solamente al alumno
 def editarPerfil(request, pk):
