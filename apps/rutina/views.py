@@ -1717,13 +1717,13 @@ def auditoria(request):
             
     for o in objetoss:
         if o.get('accion') == 1:
-            o['accion'] = 'Eliminación'
-            
-        elif o['accion'] == 2:
             o['accion'] = 'Creación'
             
-        elif o['accion'] == 3:
+        elif o['accion'] == 2:
             o['accion'] = 'Modificación'
+            
+        elif o['accion'] == 3:
+            o['accion'] = 'Eliminación'
             
     for o in objetoss:
         if o.get('idUsuario') == None:
@@ -1738,10 +1738,22 @@ def auditoria(request):
     for o in objetos:
         o['modelo'] = ContentType.objects.get(id=o.get('modelo')).model
         o['modelo'] = o.get('modelo').capitalize()
+    
+    for o in objetos:
+        if o.get('modelo') == 'User':
+            objetos.remove(o)
+    
+    for o in objetos:
+        if o.get('idUsuario') == 'admin':
+            objetos.remove(o)
         
     modelos = ContentType.objects.all()
     for modelo in modelos:
         modelo.model = modelo.model.capitalize()
+        
+
+
+    
         
         
     """#Prueba
