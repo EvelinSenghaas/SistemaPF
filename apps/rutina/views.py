@@ -597,7 +597,8 @@ def verClase(request, pk):
                 print('dias alumno')
                 print(diasAlumno)
                 
-                clase=None
+                clase = None
+                mensaje = "Hoy no es dia de entrenamiento"
                 i=0
                 while i < len(diasAlumno):    
                     print(diasAlumno[i].dia)
