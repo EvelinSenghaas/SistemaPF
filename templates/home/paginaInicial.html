@@ -17,7 +17,7 @@
     <!-- Navigation -->
   <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
-          <a class="navbar-brand" href="">FitRou</a>
+          <a class="navbar-brand" href=""><img src="{% static 'img/fitrou_logo.png'%}" width="110px" height="auto"></a>
           <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -34,23 +34,9 @@
           </div>
         </div>
     </nav>   
-      
-      <header>
-            <div id="carouselExampleIndicators" class="carousel slide mt-1" data-ride="carousel">
-              <ol class="carousel-indicators"></ol>
-              <div class="carousel-inner" role="listbox">
-                <!-- Slide One - Set the background image for this slide in the line below -->
-                <div class="carousel-item active" style="background-image: url('http://placehold.it/1900x1080')">
-                  {%block imagen%}
-                  <img src="{% static 'img/mc_gregor.jpg'%}" class="img-fluid" alt="Responsive image by Bootstrap">
-                  {%endblock imagen%}
-                  <div class="carousel-caption d-none d-md-block">
-                    {%block titulo_imagen%}
-                    <h2><strong>Bienvenido a FitRou</strong></h2>
-                    <p>Un sitio para poder entrenar a tu forma</p>
-                    {%endblock titulo_imagen%}
-                  </div>
-                </div>
+
+        <header class="py-5 bg-image-full" style=" height:500px; width:2000px; background-image: url('{% static "img/mc_gregor.jpg"%}')";>
+    
         </header>
 </body>
 <!-- Bootstrap core JavaScript -->

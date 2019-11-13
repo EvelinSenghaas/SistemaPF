@@ -91,7 +91,7 @@
   </script>
   <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
-      <a class="navbar-brand" href="/home">FitRou</a>
+      <a class="" href="/home"><img src="{% static 'img/fitrou_logo.png'%}" width="110px" height="auto"></a>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -162,22 +162,8 @@
   </div>  -->
     
   {%block imagen_principal%}
-  <header>
-    <div id="carouselExampleIndicators" class="carousel slide mt-1" data-ride="carousel" alt="header SU">
-      <ol class="carousel-indicators"></ol>
-      <div class="carousel-inner" role="listbox">
-        <!-- Slide One - Set the background image for this slide in the line below -->
-        <div class="carousel-item active" style="background-image: url('http://placehold.it/1900x1080')" alt="header SU">
-          {%block imagen%}
-          <img src="{% static 'img/img_home.jpg'%}" class="img-fluid" alt="header SU">
-          {%endblock imagen%}
-          <div class="carousel-caption d-none d-md-block">
-            {%block titulo_imagen%}
-            <h2><strong>FitRou</strong></h2>
-            <p>Mantente en forma estés donde estés</p>
-            {%endblock titulo_imagen%}
-          </div>
-        </div>
+  <header class="py-5 bg-image-full" style=" height:300px; width:2000px; background-image: url('{% static "img/img_header.jpg"%}')";>
+    
   </header>
   {%endblock imagen_principal%}
 
@@ -185,7 +171,7 @@
   <!-- Page Content -->
   <div class="container">
 
-    <h1 class="my-4">Bienvenido a FitRou</h1>
+    <h1 class="my-4">Bienvenido</h1>
 
     <!-- Marketing Icons Section -->
     <div class="row">
