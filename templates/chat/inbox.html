@@ -436,7 +436,7 @@
           </div>
           <div class="type_msg">
             <div class="input_msg_write">
-              <input type="text" class="write_msg" placeholder="Escribe un mensaje" id="mensaje" onkeyup="mensajeChange()" maxlength="256"/>
+              <input type="text" class="write_msg" placeholder="Escribe un mensaje" id="mensaje" onkeyup="mensajeChange()" maxlength="128"/>
               <button class="msg_send_btn" type="button" onclick="enviarMensaje('{{emisor.user_id}}','{{receptor.user_id}}')" id="enviar" disabled><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
             </div>
           </div>

@@ -162,7 +162,10 @@
   </div>  -->
     
   {%block imagen_principal%}
-  <header class="py-5 bg-image-full" style=" height:300px; width:100%; background-image: url('{% static "img/img_header.jpg"%}')";>
+  <header class="py-5 bg-image-full" style=" height:300px; width:100%; background-attachment: fixed;
+  background-position: top center;
+  background-size: cover;
+  position: relative; background-image: url('{% static "img/img_header.jpg"%}')";>
     
   </header>
   {%endblock imagen_principal%}
