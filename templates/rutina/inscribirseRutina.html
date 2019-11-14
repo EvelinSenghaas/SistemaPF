@@ -149,8 +149,10 @@
                                 </div>
                             <div class="form-group">
                                 <div class="row form-group">
-                                    <div class="col col-md-3">{{alumno.fecha_nac.label}}</div>
-                                    <div class="col-12 col-md-9">{{alumno.fecha_nac}}</div>
+                                    <div class="col col-md-3">Fecha de nacimiento</div>
+                                    <div class="col-12 col-md-9">
+                                        <input type="date" class="form-control" style="width: 200px;" name="fecha_nac" id="fecha_nac">
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -160,19 +162,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="row form-group">
-                                    <div class="col col-md-3">{{ficha.grupo_sanguineo.label}}</div>
-                                        <div class="col-12 col-md-9">
-                                            <select class="browser-default custom-select" name="grupo_sanguineo">
-                                                <option value="A">A</option>
-                                                <option value="B">B</option>
-                                                <option value="AB">AB</option>
-                                                <option value="O">O</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                             <!-- Datos de los horarios -->
@@ -270,8 +259,10 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="row form-group">
-                                                <div class="col col-md-3">{{alumno.fecha_nac.label}}</div>
-                                                <div class="col-12 col-md-9">{{alumno.fecha_nac}}</div>
+                                                <div class="col col-md-3">Fecha de nacimiento</div>
+                                                <div class="col-12 col-md-9">
+                                                    <input type="date" class="form-control" style="width: 200px;" name="fecha_nac" id="fecha_nac">
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -281,19 +272,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <div class="row form-group">
-                                                <div class="col col-md-3">{{ficha.grupo_sanguineo.label}}</div>
-                                                    <div class="col-12 col-md-9">
-                                                        <select class="browser-default custom-select" name="grupo_sanguineo">
-                                                            <option value="A">A</option>
-                                                            <option value="B">B</option>
-                                                            <option value="AB">AB</option>
-                                                            <option value="O">O</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                         
                                     </div>
@@ -341,6 +319,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+<script type="text/javascript">
+    document.getElementById("fecha_nac").max = new Date().toISOString().split("T")[0];
+</script>
 
 {%endblock contenido%}
 {%block pie%}{%endblock pie%}

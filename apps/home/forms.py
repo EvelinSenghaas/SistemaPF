@@ -94,7 +94,7 @@ class AlumnoForm(forms.ModelForm):
 class FichaForm(forms.ModelForm):
     class Meta:
         model = FichaAlumno
-        fields = ['peso', 'sexo', 'altura', 'grupo_sanguineo', 'profesion']
+        fields = ['peso', 'sexo', 'altura', 'profesion']
         labels = {
             'peso' : 'Peso', 'sexo': 'Sexo', 'altura': 'Altura', 'grupo_sanguineo': 'Grupo sanguíneo', 'profesion': '¿A qué te dedicas?',
             }
