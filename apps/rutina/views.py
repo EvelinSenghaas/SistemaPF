@@ -2005,13 +2005,20 @@ def agregarActividad(request):
         print(nivel_id)
         
         
-
+        for x in rep_min:
+            if x == '':
+                error = "\n Debe cargar las repeticiones para todos los niveles"
+                return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error})
+        
         try:
             avanzado = rep_min[0]
+            int(avanzado)
             intermedio = rep_min[1]
+            int(intermedio)
             principiante = rep_min[2]
+            int(principiante)
         except:
-            error = "\n Debe cargar las repeticiones para todos los niveles"
+            error = "\n Por favor ingrese correctamente las repeticiones por nivel, tenga en cuenta que deben ser un numero entero"
             return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error})
         
         if avanzado > intermedio:
@@ -2100,14 +2107,21 @@ def editarActividad(request, pk):
         
         print(nivel_id)
         
-        
+        for x in rep_min:
+            if x == '':
+                error = "\n Debe cargar las repeticiones para todos los niveles"
+                return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error})
+            
 
         try:
             avanzado = rep_min[0]
+            int(avanzado)
             intermedio = rep_min[1]
+            int(intermedio)
             principiante = rep_min[2]
+            int(principiante)
         except:
-            error = "\n Debe cargar las repeticiones para todos los niveles"
+            error = "\n Por favor ingrese correctamente las repeticiones por nivel, tenga en cuenta que deben ser un numero entero"
             return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error})
         
         if avanzado > intermedio:

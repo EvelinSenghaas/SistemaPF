@@ -27,7 +27,7 @@ class ActividadForm (forms.ModelForm):
         }
         widgets = {
             'nombre' : forms.TextInput(
-                attrs = { 'class':'form-control', 'placeholder': 'Ingrese el nombre de la actividad'}
+                attrs = { 'class':'form-control', 'placeholder': 'Ingrese el nombre de la actividad', 'pattern':'[A-Za-z ]+'}
                 ), 'descripcion' : forms.Textarea(
                     attrs = {
                         'class' : 'form-control', 'placeholder': 'Ingrese la descripcion de la actividad'
