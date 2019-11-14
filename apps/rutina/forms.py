@@ -73,10 +73,10 @@ class NivelForm (forms.ModelForm):
 class RepeticionForm (forms.ModelForm):
     class Meta:
         model = Repeticion
-        fields = ['repeticionesMinimas', 'nivel_id']
+        fields = []
         widgets = {
             'repeticionesMinimas' : forms.NumberInput(
-                attrs = { 'class':'form-control col-2 ', 'style':'margin-left:4%', 'placeholder':'Repeticiones'}
+                attrs = { 'class':'form-control col-3 ', 'placeholder':'Repeticiones mínimas'}
                 ), 'nivel_id' : forms.Select(
                 attrs = { 'class':'custom-select col-3', 'style':'margin-left:2%',}
                 ),

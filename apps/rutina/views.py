@@ -1986,8 +1986,6 @@ def agregarActividad(request):
         print(peticion)
         
         
-        nivel_id = peticion.pop('nivel_id')
-        
         
         try:
             detalles = peticion.pop('detalle_id')
@@ -1997,9 +1995,41 @@ def agregarActividad(request):
         
         
         
-        rep_min = peticion.pop('repeticionesMinimas')
+        try:
+            nivel_id = peticion.pop('nivel')
+            rep_min = peticion.pop('repeticionesMinimas')
+        except:
+            error = "\n Error al ingresar las repeticiones por nivel"
+            return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error})
         
-        print(rep_min)
+        print(nivel_id)
+        
+        
+
+        try:
+            avanzado = rep_min[0]
+            intermedio = rep_min[1]
+            principiante = rep_min[2]
+        except:
+            error = "\n Debe cargar las repeticiones para todos los niveles"
+            return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error})
+        
+        if avanzado > intermedio:
+            if avanzado > principiante:
+                pass
+            else:
+                error = "\n Las repeticiones para el nivel Principiante no pueden ser mayores que para el nivel Avanzado"
+                return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error})
+        else:
+            error = "\n Las repeticiones para el nivel Intermedio no pueden ser mayores que para el nivel Avanzado"
+            return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error})
+        
+        if intermedio > principiante:
+            pass
+        else:
+            error = "\n Las repeticiones para el nivel Principiante no pueden ser mayores que para el nivel Intermedio"
+            return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error})
+        
         
         unico = []
 
@@ -2061,15 +2091,43 @@ def editarActividad(request, pk):
             error = "\n Debe seleccionar los detalles"
             return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error})
         
-        
-        nivel_id = peticion.pop('nivel_id')
-        rep_min = peticion.pop('repeticionesMinimas')
+        try:
+            nivel_id = peticion.pop('nivel')
+            rep_min = peticion.pop('repeticionesMinimas')
+        except:
+            error = "\n Error al ingresar las repeticiones por nivel"
+            return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error})
         
         print(nivel_id)
         
-        unico = []
-
         
+
+        try:
+            avanzado = rep_min[0]
+            intermedio = rep_min[1]
+            principiante = rep_min[2]
+        except:
+            error = "\n Debe cargar las repeticiones para todos los niveles"
+            return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error})
+        
+        if avanzado > intermedio:
+            if avanzado > principiante:
+                pass
+            else:
+                error = "\n Las repeticiones para el nivel Principiante no pueden ser mayores que para el nivel Avanzado"
+                return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error})
+        else:
+            error = "\n Las repeticiones para el nivel Intermedio no pueden ser mayores que para el nivel Avanzado"
+            return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error})
+        
+        if intermedio > principiante:
+            pass
+        else:
+            error = "\n Las repeticiones para el nivel Principiante no pueden ser mayores que para el nivel Intermedio"
+            return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error})
+        
+        
+        unico = []
         for x in nivel_id:
             if x not in unico:
                 unico.append(x)
@@ -2252,7 +2310,7 @@ def inscribirseRutina(request, pk1, pk2):
     if (user.is_staff):
         mensaje = "Usted pertenece al staff, por lo que no puede inscribirse a una rutina"
         return render (request, 'rutina/errorInscribirseRutina.html', { 'rutina': rutina, 'mensaje':mensaje})
-        #Usted no puede inscribirse a la rutina     porque es un administrador
+        #Usted no puede inscribirse a la rutina porque es un administrador
     else:
         if (Profesor.objects.filter(user_id=user.id).exists()):
             profesor = Profesor.objects.get(user_id = user.id)
