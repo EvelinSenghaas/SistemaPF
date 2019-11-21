@@ -1,4 +1,3 @@
-
 {% load staticfiles%}
 {% load staticfiles%}
 
@@ -6,254 +5,305 @@
 {% sweetify %}
 
 <head>
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
-        <!-- Bootstrap core CSS -->
-      <link href=" {% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-    
-      <!-- Custom styles for this template -->
-      <link href="{% static 'css/modern-business.css' %}" rel="stylesheet">
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    
-        <title>Disponibilidad</title>
-        
-        <!-- Datatable -->
-        <link href=" {% static 'datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap core CSS -->
+  <link href=" {% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/modern-business.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <title>Disponibilidad</title>
+
+  <!-- Datatable -->
+  <link href=" {% static 'datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
 
 </head>
 <script src="{% static 'js/jquery-3.4.1.js' %}"></script>
 <script>
-    function ocultarClase(id){
-      console.log('me llaman');
-      $.ajax({
-          data : {'id' : id},
-          url : '/rutinas/ocultar_clases_ajax/', //El id que estoy guardando en data se va a enviar en esa url
-          type : 'get',
-          success : function(data){
-              if (data['ocultar'] == false){
-                var html = '<a class="nav-link" href="/rutinas/clases/'+id+'">Clases</a>'
-                $('#clases').html(html);
-              }
-              
-          }
+  function ocultarClase(id) {
+    console.log('me llaman');
+    $.ajax({
+      data: { 'id': id },
+      url: '/rutinas/ocultar_clases_ajax/', //El id que estoy guardando en data se va a enviar en esa url
+      type: 'get',
+      success: function (data) {
+        if (data['ocultar'] == false) {
+          var html = '<a class="nav-link" href="/rutinas/clases/' + id + '">Clases</a>'
+          $('#clases').html(html);
+        }
 
-      });              
-    }
+      }
+
+    });
+  }
 </script>
+<script>
+  function ocultarMensajes(id) {
+    var id_profesor = "{{user.id}}"
+    $.ajax({
+      data: { 'id': id },
+      url: '/chat/ocultar_mensajes_ajax/', //El id que estoy guardando en data se va a enviar en esa url
+      type: 'get',
+      success: function (data) {
+        if (data['ocultar'] == false) {
+          if (data['profesor'] == true) {
+            var html = '<li class="nav-item">' +
+              '<a class="nav-link" href="/chat/inbox_profesor/' + id_profesor + '">Mensajes</a>' +
+              '</li>'
+            $('#mensajes').html(html);
+          } else {
+            var html = '<li class="nav-item">' +
+              '<a class="nav-link" href="/chat/inbox/' + id + '/' + data['profesor_id'] + '">Mensajes</a>' +
+              '</li>'
+            $('#mensajes').html(html);
+          }
+        }
+
+      }
+
+    });
+  }
+</script>
+
 <body>
-    <!-- Navigation -->
-    <script>
-        var id = "{{user.id}}"
-        ocultarClase(id);
-      </script>
-  <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <div class="container">
-          <a class="navbar-brand" href="/home"><img src="{% static 'img/fitrou_logo.png'%}" width="100px" height="auto"></a>
-          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-              {%if perms.rutina.view_actividad and not user.is_staff%}
-              <div id="clases">
-              
-                </div>
-              {%endif%}
-              <li class="nav-item">
-                  <a class="nav-link" href="/rutinas/listado/{{user.id}}">Rutinas</a>
-              </li>
-              {% if perms.rutina.change_actividad and perms.rutina.delete_actividad and perms.rutina.change_rutina and perms.rutina.delete_rutina and not user.is_staff%}
-              <li class="nav-item">
-                <a class="nav-link" href="/rutinas/revisiones/{{user.id}}">Revisiones</a>
-              </li>
-              {%endif%}
-              {%if perms.home.view_alumno and not user.is_staff%}
-              <li class="nav-item">
-                <a class="nav-link" href="/home/listado_alumnos/{{user.id}}">Mis alumnos</a>
-              </li>
-              {%endif%}
-              {% if perms.rutina.edit_actividad or perms.rutina.delete_actividad or perms.rutina.edit_rutina or perms.rutina.delete_rutina%}
-              <li class="nav-item">
-                  <a class="nav-link" href="/home/administracion">Administrar</a>
-              </li>
-              {%endif%}
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{user.username}}</a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
-                  {%if perms.rutina.view_actividad%}
-                  <a class="dropdown-item" href="">Perfil</a>
-                  {%endif%}
-                  <a class="dropdown-item" href="{%url 'logout'%}">Salir</a>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-    <section class="container mt-3">
-        {% if messages %}
-        
-            {% for message in messages %}
-            {% if message.tags == 'success'%}
-            <ul class="alert alert-success alert-dismissible">
-              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-              <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
-            </ul> 
-            {%endif%}
-            {% if message.tags == 'error'%}
-            <ul class="alert alert-danger alert-dismissible">
-              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-              <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
-            </ul> 
-            {%endif%}
-            {% endfor %}
-           
-      {% endif %}
-
-            <div class="list-group-item active">
-                <div class="row">
-                    <div class="col col-sm-11 col-md-11 col-lg-11">
-                        <a href="javascript:history.back()"><h5><img src="{% static 'img/back_blanco.png'%}"></a>Lista de disponibilidad</h5></div>
-                    {% if perms.home.add_disponibilidadprofesor and not user.is_staff%}
-                    <div class="col col-sm-1 col-md-1 col-lg-1">
-                        <a class="btn btn-light" href="/home/agregar_disponibilidad/{{user.id}}" src="">
-                        <img src="{% static 'img/img_agregar_rutina.png'%}" alt=""></a>
-                    </div>
-                    {%endif%}
-                </div>
-            </div>
-            <div class="mt-2">
-                <table class="table table-striped" id="mydatatable">
-                  <thead class="card-header">
-                    <tr>
-                      <th width="210">Dia</th>
-
-                      <th width="auto">Horarios</th>
-                      <th width="auto">Estado</th>
-
-                      <th>Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  {%for disp in disponibilidad%}
-                    <tr>
-                      <td width="210">{{disp.semana_id}}</td>
-
-                      <td width="auto"> De <b>{{disp.horario_inicio}}</b> a <b>{{disp.horario_final}}</b> </td>
-                      
-                      {%if disp.alumno_id != None%}
-                      <td width="auto"><h5><span class="badge badge-secondary">Ocupado por {{disp.alumno_id}}</span></h5></td>
-                      {%else%}
-                      <td><h5><span class="badge badge-success">Libre</span></h5></td>
-                      {%endif%}
-
-                      {% if perms.home.change_disponibilidadprofesor and perms.home.delete_disponibilidadprofesor%}
-                        <td>
-                            <a  href="/home/editar_disponibilidad/{{disp.id}}"><img src="{%static 'img/edit.png'%}"></a>
-
-                            <!-- <a href="/home/eliminar_disponibilidad/{{disp.id}}"><img src="{%static 'img/delete.png'%}" alt=""></a> -->
-                            <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg2{{disp.id}}">
-                              <img src="{%static 'img/delete.png'%}" alt="">
-                        </td>
-                        {%endif%}
-                    </tr>
-                    <div class="modal fade bs-example-modal-lg2{{disp.id}}" id="myModal2{{disp.id}}" tabindex="-1" role="dialog" aria-hidden="true">
-                      <div class="modal-dialog modal-lg">
-                          <div class="modal-content">
-                              <div class="modal-header">
-                                  <h4 class="modal-title" id="myModalLabel{{disp.id}}">Confirmar eliminación</h4>
-                                  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                                  </button>
-                                  
-                              </div>
-                              <div class="modal-body">
-                                  <h5>¿Seguro que desea eliminar <strong>{{actividad.nombre}}</strong>?</h5>
-                                  
-                              </div>
-                              <div class="modal-footer">
-                                  <a href="/home/eliminar_disponibilidad/{{disp.id}}">
-                                    <button type="button" class="btn btn-danger" >Confirmar</button>
-                                  </a>
-                                  <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-                                </div>
-              
-                          </div>
-                      </div>
-                  </div>
-                  {%endfor%}
-                  </tbody>
-                </table>
-            </div>
-        
-    </section>
-{%block scripts%}
- <!-- Bootstrap core JavaScript -->
- <script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
- <script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-
- <!-- Bootstrap core JavaScript -->
- <script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
- <script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
- <script src=" {% static 'js/jquery.dataTables.min.js' %}"></script>
-
-   <!-- Optional JavaScript -->
-   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-   <!-- Datatables -->
-   <script src="{% static 'datatables/jquery.dataTables.min.js' %}"></script>
-   <script src="{% static 'datatables/dataTables.bootstrap4.min.js' %}"></script>
-{%endblock scripts%}
-{%block tabla%}
-    <script>
-      $(document).ready( function () {
-        $('#mydatatable').DataTable({
-          "paging": true,
-          "language": {
-            "sProcessing":     "Procesando...",
-                        "sLengthMenu":     "Ver _MENU_",
-                        "sZeroRecords":    "No se encontraron resultados",
-                        "sEmptyTable":     "No hay resultados",
-                        "sInfo":           "Viendo _START_-_END_ de _TOTAL_.",
-                        "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                        "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                        "sInfoPostFix":    "",
-                        "sSearch":         "Buscar:",
-                        "sUrl":            "",
-                        "sInfoThousands":  ",",
-                        "sLoadingRecords": "Cargando...",
-                        "oPaginate": {
-                            "sFirst":    "Primero",
-                            "sLast":     "Último",
-                            "sNext":     "Siguiente",
-                            "sPrevious": "Anterior"
-                        },
-                        "oAria": {
-                            "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                        },
-                        "buttons": {
-                            "copy": "Copiar",
-                            "colvis": "Visibilidad"
-                        }
-        },
-          
-        });
-      });
-    </script>
-{%endblock tabla%}
-    <script>
-      $(document).ready(function(){
-          $('#delete').click(function(){
-              $('#delModal').modal('show');
-          });
-      });
+  <!-- Navigation -->
+  <script>
+    var id = "{{user.id}}"
+    ocultarClase(id);
+    ocultarMensajes(id);
   </script>
-    <br>
+  <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="/home"><img src="{% static 'img/fitrou_logo.png'%}" width="100px" height="auto"></a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+        data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          {%if perms.rutina.view_actividad and not user.is_staff%}
+          <div id="clases">
+
+          </div>
+          {%endif%}
+          <li class="nav-item">
+            <a class="nav-link" href="/rutinas/listado/{{user.id}}">Rutinas</a>
+          </li>
+          <div id="mensajes">
+
+          </div>
+          {% if perms.rutina.change_actividad and perms.rutina.delete_actividad and perms.rutina.change_rutina and perms.rutina.delete_rutina and not user.is_staff%}
+          <li class="nav-item">
+            <a class="nav-link" href="/rutinas/revisiones/{{user.id}}">Revisiones</a>
+          </li>
+          {%endif%}
+          {%if perms.home.view_alumno and not user.is_staff%}
+          <li class="nav-item">
+            <a class="nav-link" href="/home/listado_alumnos/{{user.id}}">Mis alumnos</a>
+          </li>
+          {%endif%}
+          {% if perms.rutina.edit_actividad or perms.rutina.delete_actividad or perms.rutina.edit_rutina or perms.rutina.delete_rutina%}
+          <li class="nav-item">
+            <a class="nav-link" href="/home/administracion">Administrar</a>
+          </li>
+          {%endif%}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">{{user.username}}</a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
+              {%if perms.rutina.view_actividad%}
+              <a class="dropdown-item" href="">Perfil</a>
+              {%endif%}
+              <a class="dropdown-item" href="{%url 'logout'%}">Salir</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <section class="container mt-3">
+    {% if messages %}
+
+    {% for message in messages %}
+    {% if message.tags == 'success'%}
+    <ul class="alert alert-success alert-dismissible">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <p {% if message.tags %} class="{{ message.tags }}" {% endif %}><strong>{{ message }}</strong></p>
+    </ul>
+    {%endif%}
+    {% if message.tags == 'error'%}
+    <ul class="alert alert-danger alert-dismissible">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <p {% if message.tags %} class="{{ message.tags }}" {% endif %}><strong>{{ message }}</strong></p>
+    </ul>
+    {%endif%}
+    {% endfor %}
+
+    {% endif %}
+
+    <div class="list-group-item active">
+      <div class="row">
+        <div class="col col-sm-11 col-md-11 col-lg-11">
+          <a href="javascript:history.back()">
+            <h5><img src="{% static 'img/back_blanco.png'%}">
+          </a>Lista de disponibilidad</h5>
+        </div>
+        {% if perms.home.add_disponibilidadprofesor and not user.is_staff%}
+        <div class="col col-sm-1 col-md-1 col-lg-1">
+          <a class="btn btn-light" href="/home/agregar_disponibilidad/{{user.id}}" src="">
+            <img src="{% static 'img/img_agregar_rutina.png'%}" alt=""></a>
+        </div>
+        {%endif%}
+      </div>
+    </div>
+    <div class="mt-2">
+      <table class="table table-striped" id="mydatatable">
+        <thead class="card-header">
+          <tr>
+            <th width="210">Dia</th>
+
+            <th width="auto">Horarios</th>
+            <th width="auto">Estado</th>
+
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%for disp in disponibilidad%}
+          <tr>
+            <td width="210">{{disp.semana_id}}</td>
+
+            <td width="auto"> De <b>{{disp.horario_inicio}}</b> a <b>{{disp.horario_final}}</b> </td>
+
+            {%if disp.alumno_id != None%}
+            <td width="auto">
+              <h5><span class="badge badge-secondary">Ocupado por {{disp.alumno_id}}</span></h5>
+            </td>
+            {%else%}
+            <td>
+              <h5><span class="badge badge-success">Libre</span></h5>
+            </td>
+            {%endif%}
+
+            {% if perms.home.change_disponibilidadprofesor and perms.home.delete_disponibilidadprofesor%}
+            <td>
+              <a href="/home/editar_disponibilidad/{{disp.id}}"><img src="{%static 'img/edit.png'%}"></a>
+
+              <!-- <a href="/home/eliminar_disponibilidad/{{disp.id}}"><img src="{%static 'img/delete.png'%}" alt=""></a> -->
+              <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg2{{disp.id}}">
+                <img src="{%static 'img/delete.png'%}" alt="">
+            </td>
+            {%endif%}
+          </tr>
+          <div class="modal fade bs-example-modal-lg2{{disp.id}}" id="myModal2{{disp.id}}" tabindex="-1" role="dialog"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="myModalLabel{{disp.id}}">Confirmar eliminación</h4>
+                  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                  </button>
+
+                </div>
+                <div class="modal-body">
+                  <h5>¿Seguro que desea eliminar <strong>{{actividad.nombre}}</strong>?</h5>
+
+                </div>
+                <div class="modal-footer">
+                  <a href="/home/eliminar_disponibilidad/{{disp.id}}">
+                    <button type="button" class="btn btn-danger">Confirmar</button>
+                  </a>
+                  <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          {%endfor%}
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+  {%block scripts%}
+  <!-- Bootstrap core JavaScript -->
+  <script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src=" {% static 'js/jquery.dataTables.min.js' %}"></script>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+  <!-- Datatables -->
+  <script src="{% static 'datatables/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'datatables/dataTables.bootstrap4.min.js' %}"></script>
+  {%endblock scripts%}
+  {%block tabla%}
+  <script>
+    $(document).ready(function () {
+      $('#mydatatable').DataTable({
+        "paging": true,
+        "language": {
+          "sProcessing": "Procesando...",
+          "sLengthMenu": "Ver _MENU_",
+          "sZeroRecords": "No se encontraron resultados",
+          "sEmptyTable": "No hay resultados",
+          "sInfo": "Viendo _START_-_END_ de _TOTAL_.",
+          "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+          "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+          "sInfoPostFix": "",
+          "sSearch": "Buscar:",
+          "sUrl": "",
+          "sInfoThousands": ",",
+          "sLoadingRecords": "Cargando...",
+          "oPaginate": {
+            "sFirst": "Primero",
+            "sLast": "Último",
+            "sNext": "Siguiente",
+            "sPrevious": "Anterior"
+          },
+          "oAria": {
+            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+          },
+          "buttons": {
+            "copy": "Copiar",
+            "colvis": "Visibilidad"
+          }
+        },
+
+      });
+    });
+  </script>
+  {%endblock tabla%}
+  <script>
+    $(document).ready(function () {
+      $('#delete').click(function () {
+        $('#delModal').modal('show');
+      });
+    });
+  </script>
+  <br>
 </body>

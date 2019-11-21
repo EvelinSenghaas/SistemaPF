@@ -41,6 +41,22 @@ def inbox(request, pk1, pk2):
         print(ultimoMensaje)
         return render (request, 'chat/inbox.html', {'emisor':emisor, 'receptor':receptor, 'mensajesNoLeidos':mensajesNoLeidos, 'ultimoMensaje':ultimoMensaje})
 
+
+def inboxProfesor(request, pk):
+    pass
+    user = User.objects.get(id=pk)
+    if not (Profesor.objects.filter(user_id=user.id).exists()):
+        return redirect('/home')
+    else:
+        profesor = Profesor.objects.get(user_id=user.id)
+        mensajes = []
+        alumnos = Alumno.objects.filter(profesor_id=profesor.id)
+        for alumno in alumnos:
+            if (Message.objects.filter(sender=User.objects.get(id=alumno.user_id), recipient=user.id).exists()):
+                mensajes.append(Message.objects.filter(sender=User.objects.get(id=alumno.user_id), recipient=user.id).latest('sent_at'))
+        print(mensajes)              
+        return render (request, 'chat/inbox_profesor.html', {'mensajes':mensajes})
+        pass
     
 def escribirMensaje(request):
     if request.method == 'POST':
@@ -157,16 +173,22 @@ def ocultarMensajes(request):
             data['profesor_id'] = str(alumno.profesor_id.user_id)
             d = False
             data['ocultar'] = d
+            p = False
+            data['profesor'] = p
         elif (Profesor.objects.filter(user_id=user.id).exists()):
             profesor = Profesor.objects.get(user_id=user.id)
             data['profesor_id'] = profesor.user_id
-            d = True
+            d = False
             data['ocultar'] = d
+            p = True
+            data['profesor'] = p
     else:
         p = None
         data['profesor_id'] = p
         d = True
         data['ocultar'] = d
+        p = False
+        data['profesor'] = p
         
     print(data['ocultar'])
     

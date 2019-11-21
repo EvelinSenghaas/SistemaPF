@@ -80,50 +80,20 @@ def editarDisponibilidad(request, pk):
             
         diaSelec = disponibilidad.semana_id
         
+        hora_inicio = peticion.pop('horario_inicio')
+        hora_inicio = hora_inicio[0]
+        hora_final = peticion.pop('horario_final')
+        hora_final = hora_final[0]
         
         
-        try:
-            inicio = peticion.pop('horario_inicio')
-            hora_inicio = datetime.strptime(inicio[0], "%H:%M:%S").time()
-               
-            final = peticion.pop('horario_final')
-            hora_final = datetime.strptime(final[0], "%H:%M:%S").time()
-        except:
-            mensaje = "Por favor ingrese correctamente el horario en el formato especificado (HH:MM:SS)"
-            disp = disponibilidad.id
-            return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'diaSelec':diaSelec, 'mensaje':mensaje, 'disp':disp}) 
-        
-        
-        print(hora_inicio)
-        #print(disponibilidad.horario_inicio)
-        print(hora_final)
-        
-        #Controlamos que no exista esa disponibilidad
-        if len(dias) > 1:
-            mensaje = "No puede seleccionar más de un día"
-            return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'diaSelec':diaSelec, 'mensaje':mensaje})
-                
-        """for d in dias:
-            print(d)
-            if (DisponibilidadProfesor.objects.filter(semana_id=Semana.objects.get(dia=d).id, horario_inicio=hora_inicio, horario_final=hora_final).exists()):
-                dias.remove(d)"""
-        
-        if (hora_final<hora_inicio or hora_final==hora_inicio):
-            mensaje = "El horario final no puede ser menor o igual al horario de inicio."
-            return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'mensaje':mensaje})        
-        else:
-            if len(dias)>1:
-                
-                for d in dias:
-                    print(d)
-                    if (DisponibilidadProfesor.objects.filter(semana_id=Semana.objects.get(dia=d).id, horario_inicio=hora_inicio, horario_final=hora_final).exists()):
-                        dias.remove(d)
-            else:
-                if (
-                    DisponibilidadProfesor.objects.filter(semana_id=Semana.objects.get(dia=dias[0]).id, horario_inicio__lt=hora_inicio, horario_final__gt=hora_final).exists()):
-                    mensaje = "La disponibilidad ingresada esta ocupada"
-                    return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'mensaje':mensaje})
-                
+        #Realizamos los controles
+        DisponibilidadProfesor.objects.filter(id=disponibilidad.id).delete()
+        for dia in dias:
+            if (
+                DisponibilidadProfesor.objects.filter(semana_id=Semana.objects.get(dia=dia).id, horario_inicio__lt=hora_final, horario_final__gt=hora_inicio).exists()
+                ):
+                mensaje = "La disponibilidad ingresada para el "+str(dia)+ " de las "+ str(hora_inicio)+" hasta las "+ str(hora_final)+"hs esta ocupada"
+                return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'mensaje':mensaje})
         
         
         if form.is_valid():
@@ -652,7 +622,7 @@ def agregarDisponibilidad(request, pk):
             mensaje = "No ha seleccionado los dias"
             return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'mensaje':mensaje}) 
         
-        try:
+        """try:
             inicio = peticion.pop('horario_inicio')
             hora_inicio = datetime.strptime(inicio[0], "%H:%M:%S").time()
                
@@ -660,7 +630,15 @@ def agregarDisponibilidad(request, pk):
             hora_final = datetime.strptime(final[0], "%H:%M:%S").time()
         except:
             mensaje = "Por favor ingrese correctamente el horario en el formato especificado (HH:MM:SS)"
-            return render(request, 'rutina/agregarDisponibilidad.html',{'form':form,'mensaje':mensaje})
+            return render(request, 'rutina/agregarDisponibilidad.html',{'form':form,'mensaje':mensaje})"""
+        
+        hora_inicio = peticion.pop('horario_inicio')
+        hora_inicio = hora_inicio[0]
+        hora_final = peticion.pop('horario_final')
+        hora_final = hora_final[0]
+        
+        print(hora_inicio)
+        
         
         
         """#Controlamos que no exista esa disponibilidad
@@ -670,7 +648,7 @@ def agregarDisponibilidad(request, pk):
                 mensaje = "La disponibilidad ingresada ya existe."
                 return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'mensaje':mensaje})"""
         
-        if len(dias)>1:
+        """if len(dias)>1:
             for d in dias:
                 print(d)
                 if (DisponibilidadProfesor.objects.filter(semana_id=Semana.objects.get(dia=d).id, horario_inicio=hora_inicio, horario_final=hora_final).exists()):
@@ -681,16 +659,14 @@ def agregarDisponibilidad(request, pk):
                 or
                 DisponibilidadProfesor.objects.filter(semana_id=Semana.objects.get(dia=dias[0]).id, horario_inicio__lt=hora_inicio, horario_final__gt=hora_final).exists()):
                 mensaje = "La disponibilidad ingresada ya existe."
+                return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'mensaje':mensaje})"""
+                
+        #Realizamos los controles
+        for dia in dias:
+            if (DisponibilidadProfesor.objects.filter(semana_id=Semana.objects.get(dia=dia).id, horario_inicio__lt=hora_final, horario_final__gt=hora_inicio).exists()):
+                mensaje = "La disponibilidad ingresada para el "+str(dia)+ " de las "+ str(hora_inicio)+" hasta las "+ str(hora_final)+"hs esta ocupada"
                 return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'mensaje':mensaje})
                 
-        for d in dias:
-            print(d)
-            if (
-            DisponibilidadProfesor.objects.filter(semana_id=Semana.objects.get(dia=d).id, horario_inicio=hora_inicio, horario_final=hora_final).exists() 
-            or 
-            DisponibilidadProfesor.objects.filter(semana_id=Semana.objects.get(dia=dias[0]).id, horario_inicio__lt=hora_inicio, horario_final__gt=hora_final).exists()):
-                mensaje = "La disponibilidad ingresada ya existe."
-                return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'mensaje':mensaje})
         
         if form.is_valid():
             error = None

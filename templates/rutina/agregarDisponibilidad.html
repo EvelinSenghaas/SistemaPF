@@ -35,11 +35,11 @@
                             <div class="col col-md-3">Horario</div>
                             <div class="col-3 col-md-3">
                                 <label style="color:rgb(130, 128, 128)">Desde</label>
-                                {{form.horario_inicio}}
+                                <input type="time" name="horario_inicio" id="desde" class="form-control" value="{{form.horario_inicio.value}}">
                             </div>
                             <div class="col-3 col-md-3">
                                 <label style="color:rgb(130, 128, 128)">Hasta</label> 
-                                {{form.horario_final}}
+                                <input type="time" name="horario_final" id="hasta" class="form-control" value="{{form.horario_final.value}}">
                                 <br>
                         </div>
                         </div>
@@ -79,6 +79,22 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+<script>
+  $(document).ready( function () {
+    $("#desde").change(function(){
+        var fecha = $(this).val();
+        document.getElementById("hasta").min = fecha; 
+    });
+    $("#hasta").change(function(){
+      var fecha = $(this).val();
+      document.getElementById("desde").max = fecha;
+      
+  });
+  });
+
+</script>
+
 
 {%endblock contenido%}
 {%block pie%}
