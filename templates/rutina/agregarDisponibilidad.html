@@ -11,22 +11,19 @@
     
     <div class="card">
         <div class="card-header alert-primary"><strong>Administracion de Disponibilidad</strong></div>
-            <div class="card-body card-block">  
+            <div class="card-body card-block"> 
+                {%if error != None or mensaje != None%} 
                     {%if error != None%}
                     <div class="alert alert-danger" role="alert">
-                        <h4 class="alert-heading">Error</h4>
                             {{error}}
                     </div>
                     {%endif%}
                     {%if mensaje != None%}
                     <div class="alert alert-danger" role="alert">
-                        <h4 class="alert-heading">Error</h4>
                             {{mensaje}}
-                            <hr>
-                            <a href="javascript:history.back()"> Volver</a>
                     </div>
                     {%endif%}
-                    {%if mensaje == None%}
+                {%endif%}
                 <form method="POST">
                     {% csrf_token %}
                     
@@ -35,11 +32,11 @@
                             <div class="col col-md-3">Horario</div>
                             <div class="col-3 col-md-3">
                                 <label style="color:rgb(130, 128, 128)">Desde</label>
-                                <input type="time" name="horario_inicio" id="desde" class="form-control" value="{{form.horario_inicio.value}}">
+                                <input type="time" name="horario_inicio" id="desde" class="form-control" value="{{form.horario_inicio.value}}" required>
                             </div>
                             <div class="col-3 col-md-3">
                                 <label style="color:rgb(130, 128, 128)">Hasta</label> 
-                                <input type="time" name="horario_final" id="hasta" class="form-control" value="{{form.horario_final.value}}">
+                                <input type="time" name="horario_final" id="hasta" class="form-control" value="{{form.horario_final.value}}" required>
                                 <br>
                         </div>
                         </div>
@@ -65,7 +62,6 @@
                             <button type="submit" class="btn btn-primary">Agregar</button>
                         </div>
                     </div>
-    {%endif%}
                 </form>
             </div>
         </div> 

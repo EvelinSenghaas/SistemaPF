@@ -68,15 +68,18 @@ def editarDisponibilidad(request, pk):
         mensaje = None
         return render(request, 'rutina/agregarDisponibilidad.html',{'form':form,'diaSelec':diaSelec, 'mensaje':mensaje})
     else:
+        diaSelec = disponibilidad.semana_id
         peticion = request.POST.copy()
         print(peticion)
         
         form = DisponibilidadForm(request.POST, instance = disponibilidad)
         try:
             dias = peticion.pop('dias')
+            print(dias)
+            DisponibilidadProfesor.objects.filter(semana_id=Semana.objects.get(dia=dias[0]).id)
         except:
             mensaje = "No ha seleccionado los dias."
-            return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'mensaje':mensaje}) 
+            return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'diaSelec':diaSelec, 'mensaje':mensaje}) 
             
         diaSelec = disponibilidad.semana_id
         
@@ -87,13 +90,14 @@ def editarDisponibilidad(request, pk):
         
         
         #Realizamos los controles
-        DisponibilidadProfesor.objects.filter(id=disponibilidad.id).delete()
         for dia in dias:
-            if (
-                DisponibilidadProfesor.objects.filter(semana_id=Semana.objects.get(dia=dia).id, horario_inicio__lt=hora_final, horario_final__gt=hora_inicio).exists()
-                ):
-                mensaje = "La disponibilidad ingresada para el "+str(dia)+ " de las "+ str(hora_inicio)+" hasta las "+ str(hora_final)+"hs esta ocupada"
-                return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'mensaje':mensaje})
+            if DisponibilidadProfesor.objects.filter(id=pk).exists():
+                print('entraa')
+                if (
+                    DisponibilidadProfesor.objects.filter(semana_id=Semana.objects.get(dia=dia).id, horario_inicio__lt=hora_final, horario_final__gt=hora_inicio).exclude(id=pk).exists()
+                    ):
+                    mensaje = "La disponibilidad ingresada para el "+str(dia)+ " de las "+ str(hora_inicio)+" hasta las "+ str(hora_final)+"hs esta ocupada"
+                    return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'diaSelec':diaSelec, 'mensaje':mensaje}) 
         
         
         if form.is_valid():
@@ -120,7 +124,7 @@ def editarDisponibilidad(request, pk):
                     messages.success(request, "Disponibilidad modificada con éxito.")
                 else:
                     mensaje = "El horario final no puede ser menor al horario de inicio."
-                    return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'diaSelec':diaSelec, 'mensaje':mensaje}) 
+                    return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'diaSelec':diaSelec, 'mensaje':mensaje}) 
             else:
                 if (hora_inicio<hora_final):
                     i=0
@@ -143,13 +147,13 @@ def editarDisponibilidad(request, pk):
                     messages.success(request, "Disponibilidad modificada con éxito.")
                 else:
                     mensaje = "El horario final no puede ser menor al horario de inicio."
-                    return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'diaSelec':diaSelec, 'mensaje':mensaje})
+                    return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'diaSelec':diaSelec, 'mensaje':mensaje})
                 
                 
         else:
             error = form.errors
             mensaje = None
-            return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'diaSelec':diaSelec, 'mensaje':mensaje}) 
+            return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'diaSelec':diaSelec, 'mensaje':mensaje}) 
             
 
     
@@ -609,6 +613,7 @@ def agregarDisponibilidad(request, pk):
     else:
         profesor = Profesor.objects.get(user_id=pk)
         dias = Semana.objects.all()
+        dias2 = Semana.objects.all()
     
     
     if request.method == 'POST':
@@ -620,7 +625,7 @@ def agregarDisponibilidad(request, pk):
             dias = peticion.pop('dias')
         except:
             mensaje = "No ha seleccionado los dias"
-            return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'mensaje':mensaje}) 
+            return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'mensaje':mensaje}) 
         
         """try:
             inicio = peticion.pop('horario_inicio')
@@ -665,7 +670,7 @@ def agregarDisponibilidad(request, pk):
         for dia in dias:
             if (DisponibilidadProfesor.objects.filter(semana_id=Semana.objects.get(dia=dia).id, horario_inicio__lt=hora_final, horario_final__gt=hora_inicio).exists()):
                 mensaje = "La disponibilidad ingresada para el "+str(dia)+ " de las "+ str(hora_inicio)+" hasta las "+ str(hora_final)+"hs esta ocupada"
-                return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'mensaje':mensaje})
+                return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias2, 'mensaje':mensaje}) 
                 
         
         if form.is_valid():
@@ -684,12 +689,12 @@ def agregarDisponibilidad(request, pk):
                 return render(request, 'rutina/administrarDisponibilidad.html', {'disponibilidad':disponibilidad})
             else:
                 mensaje = "El horario final no puede ser igual o menor al horario de inicio."
-                return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'mensaje':mensaje})
+                return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias2, 'mensaje':mensaje})
             
         else:
             error = form.errors
             mensaje = None
-            return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'mensaje':mensaje, 'error':error})
+            return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias2, 'mensaje':mensaje, 'error':error})
             
             
     else:
