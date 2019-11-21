@@ -1974,7 +1974,17 @@ def editarEvaluacionNivel(request, pk):
             
             
 def agregarActividad(request):
-    nivel = Nivel.objects.all() 
+    nivel = []
+    niv = Nivel.objects.all() 
+    nive = {}
+    for n in  niv:
+        nive={
+                'nivel':n.nombre,
+                'id': n.id,
+                'repe': None
+            }
+        nivel.append(nive)
+    
     error = None
     if request.method == 'POST':
         form = ActividadForm(request.POST, request.FILES)
@@ -2080,7 +2090,16 @@ def agregarActividad(request):
 def editarActividad(request, pk):
     actividad1 = Actividad.objects.get(id = pk)
     repeticiones = Repeticion.objects.filter(actividad_id=pk)
-    nivel = Nivel.objects.all() 
+    nivel = []
+    niv = Nivel.objects.all() 
+    nive = {}
+    for n in  niv:
+        nive={
+                'nivel':n.nombre,
+                'id': n.id,
+                'repe': Repeticion.objects.get(actividad_id=pk, nivel_id=n.id).repeticionesMinimas
+            }
+        nivel.append(nive)
         
     if request.method == 'GET':
         form = ActividadForm(instance = actividad1)
