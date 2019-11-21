@@ -175,6 +175,9 @@ def ocultarMensajes(request):
             data['ocultar'] = d
             p = False
             data['profesor'] = p
+            mensajesNoLeidos = Inbox.get_unread_messages(alumno.user_id)
+            c = len(mensajesNoLeidos)
+            data['count']= c
         elif (Profesor.objects.filter(user_id=user.id).exists()):
             profesor = Profesor.objects.get(user_id=user.id)
             data['profesor_id'] = profesor.user_id
@@ -182,6 +185,9 @@ def ocultarMensajes(request):
             data['ocultar'] = d
             p = True
             data['profesor'] = p
+            mensajesNoLeidos = Inbox.get_unread_messages(profesor.user_id)
+            c = len(mensajesNoLeidos)
+            data['count']= c
     else:
         p = None
         data['profesor_id'] = p
@@ -189,6 +195,8 @@ def ocultarMensajes(request):
         data['ocultar'] = d
         p = False
         data['profesor'] = p
+        c = 0
+        data['count']= c
         
     print(data['ocultar'])
     

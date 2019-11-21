@@ -233,32 +233,48 @@
 </style>
 
 <script>
-    function ocultarMensajes(id) {
-        var id_profesor = "{{user.id}}"
-        $.ajax({
+        function ocultarMensajes(id) {
+          var id_profesor = "{{user.id}}"
+          $.ajax({
             data: { 'id': id },
             url: '/chat/ocultar_mensajes_ajax/', //El id que estoy guardando en data se va a enviar en esa url
             type: 'get',
             success: function (data) {
-                if (data['ocultar'] == false) {
-                    if (data['profesor'] == true) {
-                        var html = '<li class="nav-item">' +
-                            '<a class="nav-link" href="/chat/inbox_profesor/' + id_profesor + '">Mensajes</a>' +
-                            '</li>'
-                        $('#mensajes').html(html);
-                    } else {
-                        var html = '<li class="nav-item">' +
-                            '<a class="nav-link" href="/chat/inbox/' + id + '/' + data['profesor_id'] + '">Mensajes</a>' +
-                            '</li>'
-                        $('#mensajes').html(html);
-                    }
+              if (data['ocultar'] == false) {
+                if (data['profesor'] == true) {
+                  if (data['count'] != 0) {
+                    var html = '<li class="nav-item">' +
+                      '<a class="nav-link" href="/chat/inbox_profesor/' + id_profesor + '">Mensajes ' +
+                      '<span class="badge badge-warning"' + 'style="' + 'border-radius: 50%' + ';'+'width: 1.1rem'+';' +'text-align: center'+';'+ 'background-color: #FF4205;' + '">' + data['count'] + '</span>' + '</a>' +
+                      '</li>'
+                    $('#mensajes').html(html);
+                  } else {
+                    var html = '<li class="nav-item">' +
+                      '<a class="nav-link" href="/chat/inbox_profesor/' + id_profesor + '">Mensajes</a>' +
+                      '</li>'
+                    $('#mensajes').html(html);
+                  }
+                } else {
+                  if (data['count'] != 0) {
+                    var html = '<li class="nav-item">' +
+                      '<a class="nav-link" href="/chat/inbox/' + id + '/' + data['profesor_id'] + '">Mensajes ' +
+                        '<span class="badge badge-warning"' + 'style="' + 'border-radius: 50%' + ';'+'width: 1.1rem'+';' +'text-align: center'+';'+ 'background-color: #FF4205;' + '">' +data['count'] + '</span>' + '</a>' +
+                        '</li>'
+                    $('#mensajes').html(html);
+                  } else {
+                    var html = '<li class="nav-item">' +
+                      '<a class="nav-link" href="/chat/inbox/' + id + '/' + data['profesor_id'] + '">Mensajes</a>' +
+                      '</li>'
+                    $('#mensajes').html(html);
+                  }
                 }
-
+              }
+      
             }
-
-        });
-    }
-</script>
+      
+          });
+        }
+      </script>
 
 <body>
     <script>
@@ -326,7 +342,7 @@
     <div class="container mt-3">
         <div class="list-group-item active">
             <h3><a href="javascript:history.back()"><img src="{% static 'img/back_blanco.png'%}"></a>
-                Bandeja de entrada
+                Mensajería
             </h3>
         </div>
         <div class="messaging">
@@ -334,7 +350,7 @@
                 <div class="inbox_people">
                     <div class="headind_srch">
                         <div class="recent_heading">
-                            <h4>No leídos</h4>
+                            <h4>Recibidos</h4>
                         </div>
 
                     </div>
@@ -345,11 +361,23 @@
                                 <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png"
                                         alt="sunil"> </div>
                                 <div class="chat_ib">
+                                    {%if mensaje.read_at == None%}
+                                    <a href="/chat/inbox/{{user.id}}/{{mensaje.sender.id}}">
+                                        <h5><strong>{{mensaje.sender.first_name}},
+                                                {{mensaje.sender.last_name}}</strong><span
+                                                class="chat_date">{{mensaje.sent_at}}</span></h5>
+                                    </a>
+                                    <b>
+                                        <p>{{mensaje}}</p>
+                                    </b>
+                                    {%else%}
                                     <a href="/chat/inbox/{{user.id}}/{{mensaje.sender.id}}">
                                         <h5>{{mensaje.sender.first_name}}, {{mensaje.sender.last_name}}<span
                                                 class="chat_date">{{mensaje.sent_at}}</span></h5>
                                     </a>
                                     <p>{{mensaje}}</p>
+                                    {%endif%}
+
                                 </div>
                             </div>
                         </div>

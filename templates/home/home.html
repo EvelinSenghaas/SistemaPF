@@ -70,15 +70,31 @@
       success: function (data) {
         if (data['ocultar'] == false) {
           if (data['profesor'] == true) {
-            var html = '<li class="nav-item">' +
-              '<a class="nav-link" href="/chat/inbox_profesor/' + id_profesor + '">Mensajes</a>' +
-              '</li>'
-            $('#mensajes').html(html);
+            if (data['count'] != 0) {
+              var html = '<li class="nav-item">' +
+                '<a class="nav-link" href="/chat/inbox_profesor/' + id_profesor + '">Mensajes ' +
+                '<span class="badge badge-warning"' + 'style="' + 'border-radius: 50%' + ';'+'width: 1.1rem'+';' +'text-align: center'+';'+ 'background-color: #FF4205;' + '">' + data['count'] + '</span>' + '</a>' +
+                '</li>'
+              $('#mensajes').html(html);
+            } else {
+              var html = '<li class="nav-item">' +
+                '<a class="nav-link" href="/chat/inbox_profesor/' + id_profesor + '">Mensajes</a>' +
+                '</li>'
+              $('#mensajes').html(html);
+            }
           } else {
-            var html = '<li class="nav-item">' +
-              '<a class="nav-link" href="/chat/inbox/' + id + '/' + data['profesor_id'] + '">Mensajes</a>' +
-              '</li>'
-            $('#mensajes').html(html);
+            if (data['count'] != 0) {
+              var html = '<li class="nav-item">' +
+                '<a class="nav-link" href="/chat/inbox/' + id + '/' + data['profesor_id'] + '">Mensajes ' +
+                  '<span class="badge badge-warning"' + 'style="' + 'border-radius: 50%' + ';'+'width: 1.1rem'+';' +'text-align: center'+';'+ 'background-color: #FF4205;' + '">' +data['count'] + '</span>' + '</a>' +
+                  '</li>'
+              $('#mensajes').html(html);
+            } else {
+              var html = '<li class="nav-item">' +
+                '<a class="nav-link" href="/chat/inbox/' + id + '/' + data['profesor_id'] + '">Mensajes</a>' +
+                '</li>'
+              $('#mensajes').html(html);
+            }
           }
         }
 
