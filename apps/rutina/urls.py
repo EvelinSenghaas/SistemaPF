@@ -1,6 +1,6 @@
 from django.urls import path, re_path
 from django.contrib.auth.decorators import login_required
-from .views import Rutinas, ListadoDetalles, ListadoRutinas, ListadoActividades, EditarRutina, editarActividad, EditarDetalle, eliminarActividad, AgregarRutina, AgregarDetalle, agregarActividad, eliminarRutina, verRutina, verActividad, agregarRutina, inscribirseRutina, perfil, verClase, eliminarDetalle, agregarEvaluacionNivel, listadoEvaluacionNivel, editarEvaluacionNivel, verRevisiones, actualizarFicha, obtenerActividadesSesion, obtenerCantidadMusculos, auditoria, comprobarRevision, detalleAuditoria, obtenerRevisionActividadesSesion, seleccionarHorarioClaseRevision, comprobarActualizacionFicha, editarPerfil, listadoRutinas, ocultarClases, bajaRutina, evolucionActividad
+from .views import Rutinas, ListadoDetalles, ListadoRutinas, ListadoActividades, EditarRutina, editarActividad, EditarDetalle, eliminarActividad, AgregarRutina, AgregarDetalle, agregarActividad, eliminarRutina, verRutina, verActividad, agregarRutina, inscribirseRutina, perfil, verClase, eliminarDetalle, agregarEvaluacionNivel, listadoEvaluacionNivel, editarEvaluacionNivel, verRevisiones, actualizarFicha, obtenerActividadesSesion, obtenerCantidadMusculos, auditoria, comprobarRevision, detalleAuditoria, obtenerRevisionActividadesSesion, seleccionarHorarioClaseRevision, comprobarActualizacionFicha, editarPerfil, listadoRutinas, ocultarClases, bajaRutina, evolucionActividad, cambiarSistema, cambiarProfesor
 
 urlpatterns = [
     path('listado/<int:pk>',  login_required(listadoRutinas), name = 'rutinas'),
@@ -52,6 +52,9 @@ urlpatterns = [
     path('auditoria/', login_required(auditoria), name='auditoria'),
     
     path('editar_perfil/<int:pk>', login_required(editarPerfil), name='editar_perfil'),
+    
+    path('cambiar_a_sistema/<int:pk>', login_required(cambiarSistema), name='cambiar_a_sistema'),
+    path('cambiar_a_profesor/<int:pk>', login_required(cambiarProfesor), name='cambiar_a_profesor'),
     
     
 ]

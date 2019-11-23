@@ -8,104 +8,113 @@
 {%block contenido%}
 
 <body class="container mt-2">
-        <div class="card">
-            <div class="card-header alert-primary"><strong>Administracion de Actividad</strong></div>
-                <div class="card-body card-block">
-                    {%if error != None or error2 != None%}
-                        <div class="alert alert-danger" role="alert">
-                            <h4 class="alert-heading">Error</h4>
-                            {%if error != None%}
-                            {{error}}
-                            {%endif%}
-                            {%endif%}
-                            {%if error2 != None%}
-                                <ul>{{error2}}</ul>
-                            {%endif%}
-                        </div>
-                    
-                    <form method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                            <div class="form-group">
-                                <div class="row form-group">
-                                    <div class="col col-md-3">{{form.nombre.label}}</div>
-                                    <div class="col-12 col-md-9">{{form.nombre}}</div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row form-group">
-                                    <div class="col col-md-3">{{form.descripcion.label}}</div>
-                                    <div class="col-12 col-md-9">{{form.descripcion}}</div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row form-group">
-                                    <div class="col col-md-3">Gif explicativo</div>
-                                    <div class="col-12 col-md-9">
-                                        <div class="form-group">
-                                            {%if actividad.gif%}
-                                            <div class="card col col-md-4">
-                                            <img src="/media/{{actividad.gif}}" alt="" width="250" height="250">
-                                            </div>
-                                            {%endif%}
-                                            <br>
-                                            <input type="file" class="form-control-file" id="archivo" name="archivo">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row form-group">
-                                    <div class="col col-md-3">Selecciona los detalles</div>
-                                    <div class="col-12 col-md-9">
-                                        <select name="detalle_id" class="selectpicker" multiple data-live-search="true">
-                                        <option>
-                                            {%for det in form.detalle_id%}
-                                                {{det}}
-                                            {%endfor%}
-                                        </option>
-                                        </select>
-                                            
-                                    </div>
-                                </div>
-                            </div>                           
-                            <br>
-                            <div class="form-group">
-                                <div class="row form-group">
-                                    <div class="col col-md-3">Repeticiones por nivel</div>
-                                    <div class="col col-md-9">
-                                        <div class="checkbox">
-                                            {%for n in nivel%}
-                                            <div class="row">
-                                                <div class="input-group mb-2" style="margin-left:2%; width: 100%">
-                                                    <div class="input-group-prepend">
-                                                        <input type="hidden" name="nivel" value="{{n.id}}" >
-                                                      <div class="input-group-text" style="width: 110px; height: 38px;">{{n.nivel}}</div>
-                                                    </div>
-                                                    <input type="number" name="repeticionesMinimas" min="1" class="form-control col-3" placeholder="Repeticiones mínimas" max="50" value="{{n.repe}}">
-                                                </div>
-                                                
-                                            </div>
-                                            <br>
-                                            {%endfor%}
-                                         </div>
-                                    </div>
-                                </div>
-                            </div>
+    <div class="card">
+        <div class="card-header alert-primary"><strong>Administracion de Actividad</strong></div>
+        <div class="card-body card-block">
+            {%if error != None or error2 != None%}
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading">Error</h4>
+                {%if error != None%}
+                {{error}}
+                {%endif%}
+                {%endif%}
+                {%if error2 != None%}
+                <ul>{{error2}}</ul>
+                {%endif%}
+            </div>
 
-                            <div class="float-right"><a href="/rutinas/actividades/">
-                                <button type="button" class="btn btn-outline-danger">Cancelar</button></a>
-                                <button type="submit" class="btn btn-primary">Agregar</button>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <div class="row form-group">
+                        <div class="col col-md-3">{{form.nombre.label}}</div>
+                        <div class="col-12 col-md-9">{{form.nombre}}</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row form-group">
+                        <div class="col col-md-3">{{form.descripcion.label}}</div>
+                        <div class="col-12 col-md-9">{{form.descripcion}}</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row form-group">
+                        <div class="col col-md-3">Gif explicativo</div>
+                        <div class="col-12 col-md-9">
+                            <div class="form-group">
+                                {%if actividad.gif%}
+                                <div class="card col col-md-4">
+                                    <img src="/media/{{actividad.gif}}" alt="" width="250" height="250">
+                                </div>
+                                {%endif%}
+                                <br>
+                                <input type="file" class="form-control-file" id="archivo" name="archivo">
                             </div>
-                    </form>
-                </div>  
-            </div>      
-        
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row form-group">
+                        <div class="col col-md-3">Selecciona los detalles</div>
+                        <div class="col-12 col-md-9">
+                            <select name="detalle_id" class="selectpicker" multiple data-live-search="true">
+                                <option>
+                                    {%for det in form.detalle_id%}
+                                    {{det}}
+                                    {%endfor%}
+                                </option>
+                            </select>
+
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="form-group">
+                    <div class="row form-group">
+                        <div class="col col-md-3">Repeticiones por nivel</div>
+                        <div class="col col-md-9">
+                            <div class="checkbox">
+                                {%for n in nivel%}
+                                <div class="row">
+                                    <div class="input-group mb-2" style="margin-left:2%; width: 100%">
+                                        <div class="input-group-prepend">
+                                            <input type="hidden" name="nivel" value="{{n.id}}">
+                                            <div class="input-group-text" style="width: 110px; height: 38px;">
+                                                {{n.nivel}}</div>
+                                        </div>
+                                        <input type="number" name="repeticionesMinimas" min="1"
+                                            class="form-control col-3" placeholder="Repeticiones mínimas" max="50"
+                                            value="{{n.repe}}">
+                                    </div>
+
+                                </div>
+                                <br>
+                                {%endfor%}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="float-right"><a href="/rutinas/actividades/">
+                        <button type="button" class="btn btn-outline-danger">Cancelar</button></a>
+                    <button type="submit" class="btn btn-primary">Agregar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </body>
 
 <!--SCRIPTS-->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
@@ -114,7 +123,3 @@
 
 {%block pie%}
 {%endblock pie%}
-
-
-
-

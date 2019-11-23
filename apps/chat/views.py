@@ -89,7 +89,9 @@ def verConversacion (request):
     dic = {}
     for conver in conversacionAux:
         ahora = conver.sent_at
+        print(ahora)
         ahora = ahora - timedelta(hours=3)
+        print(ahora)
         dic = {
         'content': conver.content,
         'sender': conver.sender.id,

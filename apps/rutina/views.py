@@ -146,18 +146,21 @@ def calcularNivel(altura, circu, peso, actividad, sexo):
                 nivel = "intermedio"
             if (nombreContextura == "pequeña") or (nombreContextura == "mediana"):
                 nivel = "principiante"
+        print(nivel)
         return nivel
     if actividad == "poco":
         if (nombreImc == "delgado") or (nombreImc == "normal"):
             nivel = "intermedio"
         if (nombreImc == "gordo"):
             nivel = "principiante"
+        print(nivel)
         return nivel
     if actividad == "nada":
         if (nombreImc == "delgado"):
             nivel = "intermedio"
         else:
             nivel = "principiante"
+        print(nivel)
         return nivel
     
 
@@ -2506,7 +2509,80 @@ def bajaRutina(request, pk1, pk2):
     
             
     
+def cambiarSistema(request, pk):
+    user = User.objects.get(id=pk)
+    alumno = Alumno.objects.get(user_id=user.id)
+    fichaAlumno = FichaAlumno.objects.get(alumno_id=alumno.id)
+    if request.method == 'GET':
+        dias = Semana.objects.all()
+        error = None
+        return render (request, 'rutina/cambiarSistema.html', {'alumno':alumno, 'error':error, 'dias':dias})
+    else:
+        peticion = request.POST.copy()
+        
+        #Obtenemos los dias que seleccionó
+        try:
+            dias = peticion.pop('dias')
+        except:
+            error = "Usted debe seleccionar los dias en los que va a entrenar"
+            dias = Semana.objects.all()
+            return render (request, 'rutina/cambiarSistema.html', {'alumno':alumno, 'error':error, 'dias':dias}) 
+        
+        if len(dias) == 0:
+            error = "Usted debe seleccionar los dias en los que va a entrenar"
+            dias = Semana.objects.all()
+            return render (request, 'rutina/cambiarSistema.html', {'alumno':alumno, 'error':error, 'dias':dias})
+        
+        #Obtenemos la frecuencia con la que hace actividad fisica
+        actividad = peticion.pop('actividad')
+        actividad = actividad[0]
+        
+        
+        
+        #Obtenemos la circunferencia de la muñeca y le asignamos
+        try:
+            circu = peticion.pop('circu')
+            circu = circu[0]
+            float(circu)
+        except:
+            error = "Debe ingresar correctamente la circunferencia de su muñeca, recuerde que debe usar puntos y no comas"
+            dias = Semana.objects.all()
+            return render (request, 'rutina/cambiarSistema.html', {'alumno':alumno, 'error':error, 'dias':dias})
+        
+        #Calculamos el nivel y le asigamos             
+        nivel = calcularNivel(float(fichaAlumno.altura), circu, float(fichaAlumno.peso), actividad, fichaAlumno.sexo)
+        nivel = nivel.capitalize()
+        
+        alumno.nivel_id = Nivel.objects.get(nombre=nivel)
+        
+        #Ponemos el atributo de entrenamiento por sistema en VERDADERO
+        alumno.entrenamiento_sistema = True
+        
+        #Le cargamos la circunferencia de la muñéca
+        
+        fichaAlumno.circunferenciaMuneca = circu
+        
+        
+        #Le asignamos los dias que selecciono para entrenar con el sistema
+        for dia in dias:
+            alumno.semana_id.add(Semana.objects.get(id=dia))
+            
+        #Le sacamos las disponibilidades que tiene
+        disponibilidades = DisponibilidadProfesor.objects.filter(alumno_id=alumno.id)
+        for disp in disponibilidades:
+            DisponibilidadProfesor.objects.filter(id=disp.id).update(alumno_id=None, ocupado=False)
+            
+            
+        alumno.save()
+        fichaAlumno.save()
+        return redirect('/rutinas/ver_perfil/'+str(user.id))
+            
+
+
+def cambiarProfesor(request, pk):
+    pass
     
+        
     
     
     
