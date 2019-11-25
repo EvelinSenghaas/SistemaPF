@@ -82,6 +82,7 @@ class Alumno(models.Model):
     profesor_id = models.ForeignKey(Profesor, on_delete=models.CASCADE, verbose_name="Profesor")
     nivel_id = models.ForeignKey('rutina.Nivel', related_name='rutina', on_delete=models.CASCADE, verbose_name="Nivel", null=True, blank=True)
     semana_id = models.ManyToManyField(Semana, verbose_name="Dias", blank=True)
+    fechaCambioEntrenamiento = models.DateField(blank = True, null = True, verbose_name="Fecha de cambio de entrenamiento")
     
     class Meta:
         verbose_name = 'Alumno'

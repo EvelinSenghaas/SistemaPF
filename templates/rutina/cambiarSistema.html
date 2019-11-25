@@ -79,7 +79,7 @@
                         <div class="row form-group">
                             <div class="col col-md-3">Días disponibles</div>
                             <div class="col-12 col-md-9">
-                                <select class="selectpicker" name="dias" multiple data-live-search="true">
+                                <select class="selectpicker" name="dias" multiple>
                                     {%for dia in dias%}
                                     <option value="{{dia.id}}">
                                         {{dia}}
@@ -99,7 +99,7 @@
                 </p>
             </div>
         </div>
-        <!-- Modal para eliminar -->
+        <!-- Modal para confirmar -->
         <div class="modal fade bs-example-modal-md2" id="myModal2" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">

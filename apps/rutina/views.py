@@ -578,7 +578,7 @@ def verClase(request, pk):
         if not alumno.entrenamiento_sistema:
             if request.method == 'GET':
                 disponibilidad = DisponibilidadProfesor.objects.filter(alumno_id=alumno.id)
-                
+                print(disponibilidad)
                 now = datetime.now()
                 dia = now.strftime("%A")
                 dia = traducirDia(dia)
@@ -936,7 +936,7 @@ def verClase(request, pk):
                 alumnos = []
                 print(len(alum))
                 for alu in alum:
-                    if Sesion.objects.filter(alumno_id=alu.alumno_id).exists():
+                    if Sesion.objects.filter(alumno_id=alu.alumno_id).exists() and alu.alumno_id.entrenamiento_sistema == True:
                         ultimaSesion = Sesion.objects.filter(alumno_id=alu.alumno_id).latest()
                         if ultimaSesion.claseRevision==True:
                             alumnos.append(alu)
@@ -1281,9 +1281,11 @@ def perfil(request, pk):
         return redirect('/home/')
     
     if listaActividades == []:
-        return render (request, 'home/verPerfil.html', { 'alumno': alumno, 'mensaje':mensaje, 'ficha':ficha, 'edad':edad, 'disponibilidad':disponibilidad, 'sesiones':sesiones})
+        hoy = date.today()
+        return render (request, 'home/verPerfil.html', { 'alumno': alumno, 'mensaje':mensaje, 'ficha':ficha, 'edad':edad, 'disponibilidad':disponibilidad, 'sesiones':sesiones, 'hoy':hoy})
     else:
-        return render (request, 'home/verPerfil.html', { 'alumno': alumno, 'mensaje':mensaje, 'ficha':ficha, 'edad':edad, 'disponibilidad':disponibilidad, 'sesiones':sesiones, 'listaActividades':listaActividades})
+        hoy = date.today()
+        return render (request, 'home/verPerfil.html', { 'alumno': alumno, 'mensaje':mensaje, 'ficha':ficha, 'edad':edad, 'disponibilidad':disponibilidad, 'sesiones':sesiones, 'listaActividades':listaActividades, 'hoy':hoy})
     
 #Esta funcion va destinada solamente al alumno
 def editarPerfil(request, pk):
@@ -2564,7 +2566,6 @@ def cambiarSistema(request, pk):
         alumno.entrenamiento_sistema = True
         
         #Le cargamos la circunferencia de la muñéca
-        
         fichaAlumno.circunferenciaMuneca = circu
         
         
@@ -2577,6 +2578,9 @@ def cambiarSistema(request, pk):
         for disp in disponibilidades:
             DisponibilidadProfesor.objects.filter(id=disp.id).update(alumno_id=None, ocupado=False)
             
+        
+        #Guardamos la fecha del cambio
+        alumno.fechaCambioEntrenamiento = date.today()
             
         alumno.save()
         fichaAlumno.save()
@@ -2586,8 +2590,47 @@ def cambiarSistema(request, pk):
 
 
 def cambiarProfesor(request, pk):
-    pass
+    user = User.objects.get(id=pk)
+    alumno = Alumno.objects.get(user_id=user.id)
+    profesor = Profesor.objects.get(id=alumno.profesor_id.id)
+    fichaAlumno = FichaAlumno.objects.get(alumno_id=alumno.id)
+    if request.method == 'GET':
+        dias = DisponibilidadProfesor.objects.filter(ocupado=False, profesor_id=profesor.id)
+        error = None
+        return render (request, 'rutina/cambiarProfesor.html', {'alumno':alumno, 'error':error, 'dias':dias})
+    else:
+        peticion = request.POST.copy()
     
+        #Obtenemos los dias que seleccionó
+        try:
+            dias = peticion.pop('dias')
+        except:
+            error = "Usted debe seleccionar los horarios en los que va a entrenar con el profesor"
+            dias = Semana.objects.all()
+            return render (request, 'rutina/cambiarProfesor.html', {'alumno':alumno, 'error':error, 'dias':dias}) 
+        
+        if len(dias) == 0:
+            error = "Usted debe seleccionar los horarios en los que va a entrenar con el profesor"
+            dias = Semana.objects.all()
+            return render (request, 'rutina/cambiarProfesor.html', {'alumno':alumno, 'error':error, 'dias':dias})
+        
+        #Le asignamos la disponibilidad
+        for dia in dias:
+            print(dia)
+            DisponibilidadProfesor.objects.filter(id=dia).update(alumno_id=alumno, ocupado=True)
+        #Le sacamos los dias al alumno
+        alumno.semana_id.clear()
+        
+        
+        #Le ponemos el atributo de entrenamiento de sistema en False
+        alumno.entrenamiento_sistema = False
+        
+        #Guardamos la fecha del cambio
+        alumno.fechaCambioEntrenamiento = date.today()
+        
+        alumno.save()
+        messages.success(request, 'El modo de entrenamiento fué cambiado con éxito.')
+        return redirect('/rutinas/ver_perfil/'+str(user.id))
         
     
     

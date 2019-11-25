@@ -1,0 +1,97 @@
+{% extends 'home/home.html'%}
+{% load staticfiles%}
+
+<head>
+    {%block titulo%}Cambiar modo de entrenamiento{%endblock titulo%}
+
+</head>
+
+{%block imagen_principal%}
+{%endblock imagen_principal%}
+
+{%block contenido%}
+<form method="POST">
+    {% csrf_token %}
+
+    <body class="container mt-2">
+        <div class="card">
+            <div class="card-header alert-primary"><strong>Cambio de forma de entrenamiento</strong></div>
+            <div class="card-body card-block">
+                {%if error != None%}
+                <div class="alert alert-danger" role="alert">
+                    <h4 class="alert-heading">Error</h4>
+                    {{error}}
+                </div>
+                {%endif%}
+                <div class="alert alert-light">
+                    <p>Para poder entrenar con un profesor es necesario que selecciones los días y horarios en los que queres
+                        entrenar</p>
+                </div>
+                <div class="">
+                    <div class="form-group">
+                        <div class="row form-group">
+                            <div class="col col-md-3">Disponibilidad</div>
+                            <div class="col-12 col-md-9">
+                                <select class="selectpicker" name="dias" multiple data-live-search="true">
+                                    {%for dia in dias%}
+                                    <option value="{{dia.id}}">
+                                        {{dia}}
+                                    </option>
+                                    {%endfor%}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p align="right">
+                    <a href="/rutinas/ver_perfil/{{user.id}}"><button type="button"
+                            class="btn btn-outline-danger">Cancelar</button></a>
+                    <a href="#" data-toggle="modal" data-target=".bs-example-modal-md2">
+                        <button type="button" class="btn btn-primary">Inscribirse</button>
+                    </a>
+                </p>
+            </div>
+        </div>
+        <!-- Modal para confirmar -->
+        <div class="modal fade bs-example-modal-md2" id="myModal2" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">Confirmar cambio</h4>
+                        <button type="button" class="close" data-dismiss="modal"><span
+                                aria-hidden="true">×</span></button>
+
+                    </div>
+                    <div class="modal-body">
+                        <h5>Con este cambio usted pasaría a realizar un entrenamiento a cargo del profesor</h5>
+                        <p>¿Seguro que desea continuar?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="sumbit" class="btn btn-outline-success">Confirmar</button>
+                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+</form>
+
+</body>
+
+{%endblock contenido%}
+{%block scripts%}
+<!--SCRIPTS-->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+{%endblock scripts%}
+{%block pie%}
+{%endblock pie%}

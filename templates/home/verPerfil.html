@@ -419,9 +419,14 @@
                                     <div class="col-12 col-md-9">
                                         {%if alumno.entrenamiento_sistema == True%}
                                         <label style="color:rgb(130, 128, 128)">Por sistema</label>
+                                        {%if user.id == alumno.user_id and alumno.fechaCambioEntrenamiento != hoy%}
+                                        <a href="/rutinas/cambiar_a_profesor/{{user.id}}"><b>Cambiar a profesor</b></a>
+                                        {%endif%}
                                         {%else%}
                                         <label style="color:rgb(130, 128, 128)">Con profesor </label>
+                                        {%if user.id == alumno.user_id and alumno.fechaCambioEntrenamiento != hoy%}
                                         <a href="/rutinas/cambiar_a_sistema/{{user.id}}"><b>Cambiar a sistema</b></a>
+                                        {%endif%}
                                         {%endif%}
                                     </div>
                                 </div>
