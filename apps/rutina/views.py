@@ -1399,7 +1399,8 @@ def editarPerfil(request, pk):
                 return render (request, 'home/editarPerfil.html', {'alumno':alumno, 'ficha':ficha, 'disponibilidad':disponibilidad, 'dias':dias, 'error':error})
             
             
-            
+            messages.success(request, 'Los datos del perfil fueron modificados con éxito.')
+
         else:
             #Formulario de entrenamiento con profesor
             
@@ -1933,8 +1934,10 @@ def agregarEvaluacionNivel(request, pk):
                 evaluacionNivel = form.save(commit=False)
                 evaluacionNivel.profesor_id = profesor
                 evaluacionNivel.save()
+                messages.success(request, 'Evaluación de nivel modificada con éxito.')
             else:
                 error = form.errors
+                messages.error(request, 'No se pudo agregar la Evaluación de nivel.')
     else:
         form = EvaluacionNivelForm()
         return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form})
@@ -1969,8 +1972,10 @@ def editarEvaluacionNivel(request, pk):
                 if form.is_valid():
                     evaluacionNivel = form.save(commit=False)
                     evaluacionNivel.save()
+                    messages.success(request, 'Evaluación de nivel modificada con éxito.')
                 else:
                     error = form.errors
+                    messages.error(request, 'No se pudo agregar la Evaluación de nivel.')
                     return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form, 'error':error})
         
     return redirect('/rutinas/administrar_evaluacion_nivel/'+str(profesor.user_id))
@@ -2575,6 +2580,7 @@ def cambiarSistema(request, pk):
             
         alumno.save()
         fichaAlumno.save()
+        messages.success(request, 'El modo de entrenamiento fué cambiado con éxito.')
         return redirect('/rutinas/ver_perfil/'+str(user.id))
             
 

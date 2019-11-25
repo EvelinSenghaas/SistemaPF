@@ -19,7 +19,10 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <link href=" {% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet">
-
+    <!-- Toast -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+    <!-- Toast -->
+    <script src="{% static 'toastr/toastr.min.js' %}"></script>
     <title>Actividades</title>
 </head>
 {%block imagen_principal%}
@@ -32,16 +35,46 @@
 
     {% for message in messages %}
     {% if message.tags == 'success'%}
-    <ul class="alert alert-success alert-dismissible">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        <p {% if message.tags %} class="{{ message.tags }}" {% endif %}><strong>{{ message }}</strong></p>
-    </ul>
+    <script>
+        toastr["success"]("{{message}}", 'Completado', {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "3500",
+            "hideDuration": "3500",
+            "timeOut": "3500",
+            "extendedTimeOut": "3500",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        });
+    </script>
     {%endif%}
     {% if message.tags == 'error'%}
-    <ul class="alert alert-danger alert-dismissible">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        <p {% if message.tags %} class="{{ message.tags }}" {% endif %}><strong>{{ message }}</strong></p>
-    </ul>
+    <script>
+        toastr["error"]("{{message}}", 'Error', {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "7000",
+            "hideDuration": "7000",
+            "timeOut": "7000",
+            "extendedTimeOut": "7000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        });
+    </script>
     {%endif%}
     {% endfor %}
 

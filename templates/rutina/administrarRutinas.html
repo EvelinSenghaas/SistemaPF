@@ -2,204 +2,246 @@
 {% load staticfiles%}
 
 <head>
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
-        <!-- Bootstrap core CSS -->
-      <link href=" {% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-    
-      <!-- Custom styles for this template -->
-      <link href="{% static 'css/modern-business.css' %}" rel="stylesheet">
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    
-        <link href=" {% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet">
-        <title>Rutinas</title>
+  <!-- Toast -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+  <!-- Bootstrap core CSS -->
+  <link href=" {% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/modern-business.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <link href=" {% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet">
+  <title>Rutinas</title>
 </head>
 
-            {%block imagen_principal%}
-            {%endblock imagen_principal%}
+{%block imagen_principal%}
+{%endblock imagen_principal%}
 
 
-    {%block contenido%}
-    <section class="container mt-2">
-            {% if messages %}
-        
-            {% for message in messages %}
-            {% if message.tags == 'success'%}
-            <ul class="alert alert-success alert-dismissible">
-              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-              <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
-            </ul> 
-            {%endif%}
-            {% if message.tags == 'error'%}
-            <ul class="alert alert-danger alert-dismissible">
-              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-              <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
-            </ul> 
-            {%endif%}
-            {% endfor %}
-           
-            {% endif %}
-        <div class="list-group" >
-            <div class="list-group-item active">
-                <div class="row">
-                    <div class="col col-sm-11 col-md-11 col-lg-11">
-                        <a href="javascript:history.back()"><h5><img src="{% static 'img/back_blanco.png'%}"></a>Lista de Rutinas</h5></div>
-                    {% if perms.rutina.add_rutina and not user.is_staff%}
-                    <div class="col col-sm-1 col-md-1 col-lg-1">
-                        <a class="btn btn-light" href="/rutinas/agregar_rutina/{{user.id}}" src="">
-                        <img src="{% static 'img/img_agregar_rutina.png'%}" alt=""></a>
-                    </div>
-                    {%endif%}
-                </div>
-            </div>
-        </div> 
+{%block contenido%}
+<section class="container mt-2">
+  {% if messages %}
 
-        <!-- ############################################################### -->
+  {% for message in messages %}
+  {% if message.tags == 'success'%}
+  <script>
+    toastr["success"]("{{message}}",'Completado',{
+      "closeButton": true,
+      "debug": false,
+      "newestOnTop": false,
+      "progressBar": false,
+      "positionClass": "toast-top-right",
+      "preventDuplicates": false,
+      "onclick": null,
+      "showDuration": "3500",
+      "hideDuration": "3500",
+      "timeOut": "3500",
+      "extendedTimeOut": "3500",
+      "showEasing": "swing",
+      "hideEasing": "linear",
+      "showMethod": "fadeIn",
+      "hideMethod": "fadeOut"
+    });
+  </script>
+  {%endif%}
+  {% if message.tags == 'error'%}
+  <script>
+      toastr["error"]("{{message}}",'Error',{
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "7000",
+        "hideDuration": "7000",
+        "timeOut": "7000",
+        "extendedTimeOut": "7000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      });
+    </script>
+  {%endif%}
+  {% endfor %}
 
-        <div class="mt-2">
-            <table class="table table-striped" id="mydatatable">
-              <thead class="card-header">
-                <tr>
-                  <th width="250">Nombre</th>
-
-                  <th width="800">Descripcion</th>
-
-                  {% if perms.rutina.change_rutina and perms.rutina.delete_rutina%}
-                  <th width="100">Acciones</th>
-                  {%endif%}
-                </tr>
-              </thead>
-              <tbody>
-                {% if perms.rutina.view_rutina%}
-                {% for rutina in rutinas %}
-                <tr>
-                  <td width="250"><a href="/rutinas/ver_rutina/{{rutina.id}}">{{rutina.nombre}}</a></td>
-
-                  <td width="800">{{rutina.descripcion}}</td>
-
-                  {% if perms.rutina.change_rutina and perms.rutina.delete_rutina%}
-                    <td width="100">
-                        
-                        
-                        {%if rutina.estado == True%}
-                        <a  href="/rutinas/editar_rutina/{{rutina.id}}"><img src="{%static 'img/edit.png'%}"></a>
-                        <!-- <a href="/rutinas/eliminar_rutina/{{rutina.id}}"><img src="{%static 'img/activo.png'%}" alt=""></a> -->
-                        <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg2{{rutina.id}}">
-                                <img src="{%static 'img/activo.png'%}" alt=""></a>
-                        {%endif%}
-                        {%if rutina.estado == False%}
-                        <a  href="/rutinas/editar_rutina/{{rutina.id}}"><img src="{%static 'img/edit.png'%}"></a>
-                        <!-- <a href="/rutinas/eliminar_rutina/{{rutina.id}}"><img src="{%static 'img/inactivo.png'%}" alt=""></a> -->
-                        <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg2{{rutina.id}}">
-                                <img src="{%static 'img/inactivo.png'%}" alt=""></a>
-                        {%endif%}
-                        </td>
-                        {%endif%}
-                </tr>
-                <!-- Modal para eliminar -->
-                <div class="modal fade bs-example-modal-lg2{{rutina.id}}" id="myModal2{{rutina.id}}" tabindex="-1" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title" id="myModalLabel{{rutina.id}}">Confirmar eliminación</h4>
-                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                                </button>
-                                
-                            </div>
-                            <div class="modal-body">
-                                
-                                    <p>Usted esta queriendo modificar el estado de la rutina <strong>{{rutina.nombre}}</strong>. Si cambia su estado, pasará a estar inactivo en el sistema.</p>
-                            
-                                    <p>¿Seguro que desea modificar el estado de <strong>{{rutina.nombre}}</strong>?</p>
-                                
-                            </div>
-                            <div class="modal-footer">
-                                <a href="/rutinas/eliminar_rutina/{{rutina.id}}">
-                                  <button type="button" class="btn btn-danger" >Confirmar</button>
-                                </a>
-                                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-                              </div>
-            
-                        </div>
-                    </div>
-                </div> 
-              {%endfor%}
-              </tbody>
-            </table>
+  {% endif %}
+  <div class="list-group">
+    <div class="list-group-item active">
+      <div class="row">
+        <div class="col col-sm-11 col-md-11 col-lg-11">
+          <a href="javascript:history.back()">
+            <h5><img src="{% static 'img/back_blanco.png'%}">
+          </a>Lista de Rutinas</h5>
+        </div>
+        {% if perms.rutina.add_rutina and not user.is_staff%}
+        <div class="col col-sm-1 col-md-1 col-lg-1">
+          <a class="btn btn-light" href="/rutinas/agregar_rutina/{{user.id}}" src="">
+            <img src="{% static 'img/img_agregar_rutina.png'%}" alt=""></a>
         </div>
         {%endif%}
-        
-    </section>
-    
-    {%endblock contenido%}
-    {%block scripts%}
-    <!-- Bootstrap core JavaScript -->
-    <script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
-    <script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+      </div>
+    </div>
+  </div>
 
-    <!-- Bootstrap core JavaScript -->
-    <script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
-    <script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <!-- ############################################################### -->
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <!-- Datatables -->
-    <script src="{% static 'datatables/jquery.dataTables.min.js' %}"></script>
-    <script src="{% static 'datatables/dataTables.bootstrap4.min.js' %}"></script>
-    {%endblock scripts%}
-  {%block tabla%}
-    <script>
-        $(document).ready( function () {
-          $('#mydatatable').DataTable({
-            "paging": true,
-            "language": {
-              "sProcessing":     "Procesando...",
-                          "sLengthMenu":     "Ver _MENU_",
-                          "sZeroRecords":    "No se encontraron resultados",
-                          "sEmptyTable":     "No hay resultados",
-                          "sInfo":           "Viendo _START_-_END_ de _TOTAL_.",
-                          "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                          "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                          "sInfoPostFix":    "",
-                          "sSearch":         "Buscar:",
-                          "sUrl":            "",
-                          "sInfoThousands":  ",",
-                          "sLoadingRecords": "Cargando...",
-                          "oPaginate": {
-                              "sFirst":    "Primero",
-                              "sLast":     "Último",
-                              "sNext":     "Siguiente",
-                              "sPrevious": "Anterior"
-                          },
-                          "oAria": {
-                              "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                              "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                          },
-                          "buttons": {
-                              "copy": "Copiar",
-                              "colvis": "Visibilidad"
-                          }
-          },
-            
-          });
-        });
-    </script>
+  <div class="mt-2">
+    <table class="table table-striped" id="mydatatable">
+      <thead class="card-header">
+        <tr>
+          <th width="250">Nombre</th>
+
+          <th width="800">Descripcion</th>
+
+          {% if perms.rutina.change_rutina and perms.rutina.delete_rutina%}
+          <th width="100">Acciones</th>
+          {%endif%}
+        </tr>
+      </thead>
+      <tbody>
+        {% if perms.rutina.view_rutina%}
+        {% for rutina in rutinas %}
+        <tr>
+          <td width="250"><a href="/rutinas/ver_rutina/{{rutina.id}}">{{rutina.nombre}}</a></td>
+
+          <td width="800">{{rutina.descripcion}}</td>
+
+          {% if perms.rutina.change_rutina and perms.rutina.delete_rutina%}
+          <td width="100">
+
+
+            {%if rutina.estado == True%}
+            <a href="/rutinas/editar_rutina/{{rutina.id}}"><img src="{%static 'img/edit.png'%}"></a>
+            <!-- <a href="/rutinas/eliminar_rutina/{{rutina.id}}"><img src="{%static 'img/activo.png'%}" alt=""></a> -->
+            <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg2{{rutina.id}}">
+              <img src="{%static 'img/activo.png'%}" alt=""></a>
+            {%endif%}
+            {%if rutina.estado == False%}
+            <a href="/rutinas/editar_rutina/{{rutina.id}}"><img src="{%static 'img/edit.png'%}"></a>
+            <!-- <a href="/rutinas/eliminar_rutina/{{rutina.id}}"><img src="{%static 'img/inactivo.png'%}" alt=""></a> -->
+            <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg2{{rutina.id}}">
+              <img src="{%static 'img/inactivo.png'%}" alt=""></a>
+            {%endif%}
+          </td>
+          {%endif%}
+        </tr>
+        <!-- Modal para eliminar -->
+        <div class="modal fade bs-example-modal-lg2{{rutina.id}}" id="myModal2{{rutina.id}}" tabindex="-1" role="dialog"
+          aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel{{rutina.id}}">Confirmar eliminación</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                </button>
+
+              </div>
+              <div class="modal-body">
+
+                <p>Usted esta queriendo modificar el estado de la rutina <strong>{{rutina.nombre}}</strong>. Si cambia
+                  su estado, pasará a estar inactivo en el sistema.</p>
+
+                <p>¿Seguro que desea modificar el estado de <strong>{{rutina.nombre}}</strong>?</p>
+
+              </div>
+              <div class="modal-footer">
+                <a href="/rutinas/eliminar_rutina/{{rutina.id}}">
+                  <button type="button" class="btn btn-danger">Confirmar</button>
+                </a>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        {%endfor%}
+      </tbody>
+    </table>
+  </div>
+  {%endif%}
+
+</section>
+
+{%endblock contenido%}
+{%block scripts%}
+<!-- Bootstrap core JavaScript -->
+<script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Bootstrap core JavaScript -->
+<script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+  integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+  integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<!-- Datatables -->
+<script src="{% static 'datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'datatables/dataTables.bootstrap4.min.js' %}"></script>
+{%endblock scripts%}
+{%block tabla%}
+<script>
+  $(document).ready(function () {
+    $('#mydatatable').DataTable({
+      "paging": true,
+      "language": {
+        "sProcessing": "Procesando...",
+        "sLengthMenu": "Ver _MENU_",
+        "sZeroRecords": "No se encontraron resultados",
+        "sEmptyTable": "No hay resultados",
+        "sInfo": "Viendo _START_-_END_ de _TOTAL_.",
+        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+        "sInfoPostFix": "",
+        "sSearch": "Buscar:",
+        "sUrl": "",
+        "sInfoThousands": ",",
+        "sLoadingRecords": "Cargando...",
+        "oPaginate": {
+          "sFirst": "Primero",
+          "sLast": "Último",
+          "sNext": "Siguiente",
+          "sPrevious": "Anterior"
+        },
+        "oAria": {
+          "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+          "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+        },
+        "buttons": {
+          "copy": "Copiar",
+          "colvis": "Visibilidad"
+        }
+      },
+
+    });
+  });
+</script>
 {%endblock tabla%}
-    <script>
-        $(document).ready(function(){
-            $('#delete').click(function(){
-                $('#delModal').modal('show');
-            });
-        });
-    </script>
+<script>
+  $(document).ready(function () {
+    $('#delete').click(function () {
+      $('#delModal').modal('show');
+    });
+  });
+</script>
 
 {%block pie%}
 {%endblock pie%}

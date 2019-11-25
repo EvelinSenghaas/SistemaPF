@@ -2,106 +2,141 @@
 {% load staticfiles%}
 
 <head>
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
-        <!-- Bootstrap core CSS -->
-      <link href=" {% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-    
-      <!-- Custom styles for this template -->
-      <link href="{% static 'css/modern-business.css' %}" rel="stylesheet">
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    
-    
-        <title>Evaluación de nivel</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap core CSS -->
+    <link href=" {% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/modern-business.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Evaluación de nivel</title>
 </head>
 
-            {%block imagen_principal%}
-            {%endblock imagen_principal%}
+{%block imagen_principal%}
+{%endblock imagen_principal%}
 
 
-    {%block contenido%}
-    <section class="container mt-2">
-            {% if messages %}
-        
-            {% for message in messages %}
-            {% if message.tags == 'success'%}
-            <ul class="alert alert-success alert-dismissible">
-              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-              <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
-            </ul> 
-            {%endif%}
-            {% if message.tags == 'error'%}
-            <ul class="alert alert-danger alert-dismissible">
-              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-              <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
-            </ul> 
-            {%endif%}
-            {% endfor %}
-            {% endif %}
-        <div class="list-group" >
-            <div class="list-group-item active">
-                <div class="row">
-                    <div class="col col-sm-11 col-md-11 col-lg-11">
-                        <a href="javascript:history.back()"><h5><img src="{% static 'img/back_blanco.png'%}"></a>Evaluaciones de nivel</h5></div>
-                    {% if perms.rutina.add_evaluacionnivel and not user.is_staff%}
-                    <div class="col col-sm-1 col-md-1 col-lg-1">
-                        <a class="btn btn-light" href="/rutinas/agregar_evaluacion_nivel/{{user.id}}" src="">
-                        <img src="{% static 'img/img_agregar_rutina.png'%}" alt=""></a>
-                    </div>
-                    {%endif%}
+{%block contenido%}
+<section class="container mt-2">
+    {% if messages %}
+
+    {% for message in messages %}
+    {% if message.tags == 'success'%}
+    <script>
+        toastr["success"]("{{message}}", 'Completado', {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "3500",
+            "hideDuration": "3500",
+            "timeOut": "3500",
+            "extendedTimeOut": "3500",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        });
+    </script>
+    {%endif%}
+    {% if message.tags == 'error'%}
+    <script>
+        toastr["error"]("{{message}}", 'Error', {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "7000",
+            "hideDuration": "7000",
+            "timeOut": "7000",
+            "extendedTimeOut": "7000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        });
+    </script>
+    {%endif%}
+    {% endfor %}
+
+    {% endif %}
+    <div class="list-group">
+        <div class="list-group-item active">
+            <div class="row">
+                <div class="col col-sm-11 col-md-11 col-lg-11">
+                    <a href="javascript:history.back()">
+                        <h5><img src="{% static 'img/back_blanco.png'%}">
+                    </a>Evaluaciones de nivel</h5>
                 </div>
+                {% if perms.rutina.add_evaluacionnivel and not user.is_staff%}
+                <div class="col col-sm-1 col-md-1 col-lg-1">
+                    <a class="btn btn-light" href="/rutinas/agregar_evaluacion_nivel/{{user.id}}" src="">
+                        <img src="{% static 'img/img_agregar_rutina.png'%}" alt=""></a>
+                </div>
+                {%endif%}
             </div>
         </div>
-        <div class="card-header">
-            <div class="row">
-                <div class="col-3">
-                    <b>Nivel</b>
-                </div>
-                <div class="col-3">
-                    <b>Cantidad de sesiones</b>
-                </div>
-                <div class="col-5">
-                    <b>Profesor</b>
-                </div>
-                {% if perms.rutina.change_evaluacionnivel%}
-                <div class="col-0">
-                    <b>Acciones</b>
-                </div>
-        
-                {%endif%}
+    </div>
+    <div class="card-header">
+        <div class="row">
+            <div class="col-3">
+                <b>Nivel</b>
             </div>
-        </div>   
-        {% if perms.rutina.view_evaluacionnivel%}
-        {% for ev in evaluacionNivel %}
-        <div class="list-group-item">
-            <div class="row">
-                <div class="col-3">
-                    {{ev.nivel_id}}</a>
-                </div>
-                <div class="col-3" >
-                    {{ev.cantSesiones}}
-                </div>
-                <div class="col-5">
-                    {{ev.profesor_id}}
-                </div>
-                {% if perms.rutina.change_evaluacionnivel%}
-                <div class="col-0">
-                    <a  href="/rutinas/editar_evaluacion_nivel/{{ev.id}}"><img src="{%static 'img/edit.png'%}"></a>
-                </div>
-                {%endif%}
+            <div class="col-3">
+                <b>Cantidad de sesiones</b>
             </div>
-        </div>     
-        {%endfor%}
-        {%endif%}
-        
-    </section>
-    
-    {%endblock contenido%}
+            <div class="col-5">
+                <b>Profesor</b>
+            </div>
+            {% if perms.rutina.change_evaluacionnivel%}
+            <div class="col-0">
+                <b>Acciones</b>
+            </div>
+
+            {%endif%}
+        </div>
+    </div>
+    {% if perms.rutina.view_evaluacionnivel%}
+    {% for ev in evaluacionNivel %}
+    <div class="list-group-item">
+        <div class="row">
+            <div class="col-3">
+                {{ev.nivel_id}}</a>
+            </div>
+            <div class="col-3">
+                {{ev.cantSesiones}}
+            </div>
+            <div class="col-5">
+                {{ev.profesor_id}}
+            </div>
+            {% if perms.rutina.change_evaluacionnivel%}
+            <div class="col-0">
+                <a href="/rutinas/editar_evaluacion_nivel/{{ev.id}}"><img src="{%static 'img/edit.png'%}"></a>
+            </div>
+            {%endif%}
+        </div>
+    </div>
+    {%endfor%}
+    {%endif%}
+
+</section>
+
+{%endblock contenido%}
 
 {%block pie%}
 {%endblock pie%}

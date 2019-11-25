@@ -23,13 +23,19 @@
   <link href=" {% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet">
 
 
-
   <!-- Datatable -->
   <link href=" {% static 'datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
 
+  <script src="{% static 'js/jquery-3.4.1.js' %}"></script>
+  <!-- Toast -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+  <!-- Toast -->
+  <script src="{% static 'toastr/toastr.min.js' %}"></script>
+
+
   <title>Detalles</title>
 </head>
-<script src="{% static 'js/jquery-3.4.1.js' %}"></script>
+
 <script>
   function ocultarClase(id) {
     console.log('me llaman');
@@ -61,7 +67,7 @@
             if (data['count'] != 0) {
               var html = '<li class="nav-item">' +
                 '<a class="nav-link" href="/chat/inbox_profesor/' + id_profesor + '">Mensajes ' +
-                '<span class="badge badge-warning"' + 'style="' + 'border-radius: 50%' + ';'+'width: 1.1rem'+';' +'text-align: center'+';'+ 'background-color: #FF4205;' + '">' + data['count'] + '</span>' + '</a>' +
+                '<span class="badge badge-warning"' + 'style="' + 'border-radius: 50%' + ';' + 'width: 1.1rem' + ';' + 'text-align: center' + ';' + 'background-color: #FF4205;' + '">' + data['count'] + '</span>' + '</a>' +
                 '</li>'
               $('#mensajes').html(html);
             } else {
@@ -74,8 +80,8 @@
             if (data['count'] != 0) {
               var html = '<li class="nav-item">' +
                 '<a class="nav-link" href="/chat/inbox/' + id + '/' + data['profesor_id'] + '">Mensajes ' +
-                  '<span class="badge badge-warning"' + 'style="' + 'border-radius: 50%' + ';'+'width: 1.1rem'+';' +'text-align: center'+';'+ 'background-color: #FF4205;' + '">' +data['count'] + '</span>' + '</a>' +
-                  '</li>'
+                '<span class="badge badge-warning"' + 'style="' + 'border-radius: 50%' + ';' + 'width: 1.1rem' + ';' + 'text-align: center' + ';' + 'background-color: #FF4205;' + '">' + data['count'] + '</span>' + '</a>' +
+                '</li>'
               $('#mensajes').html(html);
             } else {
               var html = '<li class="nav-item">' +
@@ -153,28 +159,50 @@
 
 
   <section class="container mt-3">
-
-
     {% if messages %}
 
     {% for message in messages %}
     {% if message.tags == 'success'%}
-    <input type="hidden" id="mensaje" value="{{message}}">
-    <ul class="alert alert-success alert-dismissible">
-      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-      <p {% if message.tags %} class="{{ message.tags }}" {% endif %}><strong>{{ message }}</strong></p>
-    </ul>
-    <script type="text/javascript">
-      var mensaje = document.getElementById("mensaje").value;
-              //alertify.message('Mensaje Normal',10, null);
-              //var notification = alertify.notify('sample', 'success', 5, function(){  console.log('dismissed'); });
+    <script>
+      toastr["success"]("{{message}}", 'Completado', {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "3500",
+        "hideDuration": "3500",
+        "timeOut": "3500",
+        "extendedTimeOut": "3500",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      });
     </script>
     {%endif%}
     {% if message.tags == 'error'%}
-    <ul class="alert alert-danger alert-dismissible">
-      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-      <p {% if message.tags %} class="{{ message.tags }}" {% endif %}><strong>{{ message }}</strong></p>
-    </ul>
+    <script>
+      toastr["error"]("{{message}}", 'Error', {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "7000",
+        "hideDuration": "7000",
+        "timeOut": "7000",
+        "extendedTimeOut": "7000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      });
+    </script>
     {%endif%}
     {% endfor %}
 

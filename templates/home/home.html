@@ -10,7 +10,6 @@
   <meta name="author" content="">
 
   <title> {%block titulo%} FitRou Home {%endblock titulo%}</title>
-
   <!-- Bootstrap core CSS -->
   <link href=" {% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
@@ -38,6 +37,13 @@
   <link href=" {% static 'datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
 
 
+  <!-- Jquery para toast -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <!-- Toast -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+  <!-- Toast -->
+  <script src="{% static 'toastr/toastr.min.js' %}"></script>
 </head>
 <script src="{% static 'js/jquery-3.4.1.js' %}"></script>
 {%block javascript%}
@@ -73,7 +79,7 @@
             if (data['count'] != 0) {
               var html = '<li class="nav-item">' +
                 '<a class="nav-link" href="/chat/inbox_profesor/' + id_profesor + '">Mensajes ' +
-                '<span class="badge badge-warning"' + 'style="' + 'border-radius: 50%' + ';'+'width: 1.1rem'+';' +'text-align: center'+';'+ 'background-color: #FF4205;' + '">' + data['count'] + '</span>' + '</a>' +
+                '<span class="badge badge-warning"' + 'style="' + 'border-radius: 50%' + ';' + 'width: 1.1rem' + ';' + 'text-align: center' + ';' + 'background-color: #FF4205;' + '">' + data['count'] + '</span>' + '</a>' +
                 '</li>'
               $('#mensajes').html(html);
             } else {
@@ -86,8 +92,8 @@
             if (data['count'] != 0) {
               var html = '<li class="nav-item">' +
                 '<a class="nav-link" href="/chat/inbox/' + id + '/' + data['profesor_id'] + '">Mensajes ' +
-                  '<span class="badge badge-warning"' + 'style="' + 'border-radius: 50%' + ';'+'width: 1.1rem'+';' +'text-align: center'+';'+ 'background-color: #FF4205;' + '">' +data['count'] + '</span>' + '</a>' +
-                  '</li>'
+                '<span class="badge badge-warning"' + 'style="' + 'border-radius: 50%' + ';' + 'width: 1.1rem' + ';' + 'text-align: center' + ';' + 'background-color: #FF4205;' + '">' + data['count'] + '</span>' + '</a>' +
+                '</li>'
               $('#mensajes').html(html);
             } else {
               var html = '<li class="nav-item">' +
