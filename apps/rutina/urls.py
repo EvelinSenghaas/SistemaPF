@@ -1,6 +1,6 @@
 from django.urls import path, re_path
 from django.contrib.auth.decorators import login_required
-from .views import Rutinas, ListadoDetalles, ListadoRutinas, ListadoActividades, EditarRutina, editarActividad, EditarDetalle, eliminarActividad, AgregarRutina, AgregarDetalle, agregarActividad, eliminarRutina, verRutina, verActividad, agregarRutina, inscribirseRutina, perfil, verClase, eliminarDetalle, agregarEvaluacionNivel, listadoEvaluacionNivel, editarEvaluacionNivel, verRevisiones, actualizarFicha, obtenerActividadesSesion, obtenerCantidadMusculos, auditoria, comprobarRevision, detalleAuditoria, obtenerRevisionActividadesSesion, seleccionarHorarioClaseRevision, comprobarActualizacionFicha, editarPerfil, listadoRutinas, ocultarClases, bajaRutina
+from .views import Rutinas, ListadoDetalles, ListadoRutinas, ListadoActividades, EditarRutina, editarActividad, EditarDetalle, eliminarActividad, AgregarRutina, AgregarDetalle, agregarActividad, eliminarRutina, verRutina, verActividad, agregarRutina, inscribirseRutina, perfil, verClase, eliminarDetalle, agregarEvaluacionNivel, listadoEvaluacionNivel, editarEvaluacionNivel, verRevisiones, actualizarFicha, obtenerActividadesSesion, obtenerCantidadMusculos, auditoria, comprobarRevision, detalleAuditoria, obtenerRevisionActividadesSesion, seleccionarHorarioClaseRevision, comprobarActualizacionFicha, editarPerfil, listadoRutinas, ocultarClases, bajaRutina, evolucionActividad
 
 urlpatterns = [
     path('listado/<int:pk>',  login_required(listadoRutinas), name = 'rutinas'),
@@ -46,6 +46,7 @@ urlpatterns = [
     path('obtener_revision_sesion_ajax/', login_required(obtenerRevisionActividadesSesion), name='obtener_revision_sesion_ajax'),
     path('comprobar_actualizacion_ficha_ajax/', login_required(comprobarActualizacionFicha), name='comprobar_actualizacion_ficha_ajax'),
     path('ocultar_clases_ajax/', login_required(ocultarClases), name='ocultar_clases_ajax'),
+    path('evolucion_actividad_ajax/', login_required(evolucionActividad), name='evolucion_actividad_ajax'),
     
     
     path('auditoria/', login_required(auditoria), name='auditoria'),

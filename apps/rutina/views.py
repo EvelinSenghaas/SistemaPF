@@ -107,10 +107,10 @@ def traducirDia(dia):
     
 #Metodo para calcular el nivel a asignar al alumno
 def calcularNivel(altura, circu, peso, actividad, sexo):
-    print(type(altura))
+    print(altura)
     
     if sexo == 'M':
-        contextura = (float(altura)/float(circu))
+        contextura = (float(altura*100)/float(circu))
         if contextura > 10.4:
             nombreContextura = "pequeña"
         if 9.6 <= contextura <= 10.4:
@@ -126,7 +126,7 @@ def calcularNivel(altura, circu, peso, actividad, sexo):
         if contextura < 10.1:
             nombreContextura = "grande"
 
-    altura = float(altura)/100
+    altura = float(altura)
     imc = float(peso) / (altura*altura)
     if imc < 18.4:
         nombreImc = "delgado"
@@ -137,6 +137,8 @@ def calcularNivel(altura, circu, peso, actividad, sexo):
 
 
     if actividad == "mucho":
+        print(actividad)
+        print(nombreImc)
         if (nombreImc == "delgado") or (nombreImc == "normal"):
             nivel = "avanzado"
         else:
@@ -851,7 +853,8 @@ def verClase(request, pk):
                                                      esfuerzoActividad=int(esfuerzo[i]), 
                                                      actividad_id=Actividad.objects.get(id=actividad_id[i]), 
                                                      sesion_id=sesion,
-                                                     nombreActividad=Actividad.objects.get(id=actividad_id[i]).nombre)
+                                                     nombreActividad=Actividad.objects.get(id=actividad_id[i]).nombre,
+                                                     nivel_id = str(sesion.alumno_id.nivel_id.nombre))
                     i+=1
                 
                 
@@ -1040,6 +1043,45 @@ def ocultarClases(request):
 def realizarRevision(request, pk):
     pass    
 
+
+def evolucionActividad(request):
+    actividad = request.GET['actividad']
+    idAlumno = request.GET['alumno']
+    data = {}
+    sesiones = []
+    actividadesPrincipiante = []
+    actividadesIntermedio = []
+    actividadesAvanzado = []    
+    
+    
+    actividades = EsfuerzoActividad.objects.filter(actividad_id__nombre=actividad, alumno_id=idAlumno)
+    
+    for acti in actividades:
+        if acti.nivel_id == 'Principiante':
+            actividadesPrincipiante.append(acti.esfuerzoActividad)
+            actividadesIntermedio.append(None)
+            actividadesAvanzado.append(None)
+        if acti.nivel_id == 'Intermedio':
+            actividadesIntermedio.append(acti.esfuerzoActividad)
+            actividadesAvanzado.append(None)
+        if acti.nivel_id == 'Avanzado':
+            actividadesAvanzado.append(acti.esfuerzoActividad)
+            
+        sesiones.append('Sesion'+' '+str(acti.sesion_id.fechaSesion))
+
+    data['actividadesPrincipiante'] = actividadesPrincipiante
+    data['actividadesIntermedio'] = actividadesIntermedio
+    data['actividadesAvanzado'] = actividadesAvanzado
+    data['sesiones'] = sesiones
+                
+            
+    
+    return HttpResponse(
+                json.dumps(data),
+                content_type="application/json")
+
+
+
 def perfil(request, pk):
     if (Alumno.objects.filter(user_id=pk).exists()):
         if Alumno.objects.get(user_id = pk).entrenamiento_sistema:
@@ -1051,6 +1093,148 @@ def perfil(request, pk):
             mensaje = None
             disponibilidad = alumno.semana_id.all()
  
+ 
+            """
+            ACA HAGO EL MODULO INTELIGENTE
+                voy a obtener todas las sesiones de un nivel
+                voy a crear tres listas, una por cada nivel. Donde voy a guardar todas las sesiones de ese nivel
+                por cada lista de sesiones por nivel, voy a comparar aquellas actividades que se repitieron y voy a guardar el esfuerzo de cada una
+            """
+            listaActividades = set()
+            print(listaActividades)
+            listaPrincipiante = []
+            auxiPrincipiante = []
+            listaIntermedio = []
+            auxiIntermedio = []
+            listaAvanzado = []
+            auxiAvanzado = []
+            
+            dataPrincipiante = {}
+            dataIntermedio = {}
+            dataAvanzado = {}
+            
+            aux = EsfuerzoActividad.objects.filter(alumno_id=alumno.id, nivel_id="Principiante")
+            aux2 = EsfuerzoActividad.objects.filter(alumno_id=alumno.id, nivel_id="Intermedio")
+            aux3 = EsfuerzoActividad.objects.filter(alumno_id=alumno.id, nivel_id="Avanzado")
+            
+            auxListaPrincipiante =[]
+            for x in aux:
+                auxListaPrincipiante.append(x)
+            
+            #-------------------------------Principiante--------------------------------------------------
+            print('')
+            print('Principiante')
+            for x in auxListaPrincipiante:
+                print(x)
+            i = 0
+            j = 1
+            while (i < len(auxListaPrincipiante)):
+                auxiPrincipiante = []
+                elem = auxListaPrincipiante[i]
+                j = j + i
+                if (j < len(auxListaPrincipiante)):
+                    while (j < len(auxListaPrincipiante)):
+                        if (elem.actividad_id.nombre == auxListaPrincipiante[j].actividad_id.nombre):
+                            if not elem in listaPrincipiante:
+                                listaPrincipiante.append(elem)
+                                auxiPrincipiante.append(elem)
+                            listaPrincipiante.append(auxListaPrincipiante[j])
+                            auxiPrincipiante.append(auxListaPrincipiante[j])
+                            dataPrincipiante['data'] = auxiPrincipiante
+                            dataPrincipiante['label'] = str(elem.actividad_id.nombre)
+                            listaActividades.add(str(elem.actividad_id.nombre))
+                            j +=1
+                        else:
+                            j += 1
+                j = 1
+                i += 1
+                
+            print('lista')
+            print(listaPrincipiante)
+            
+            print(' ')
+            print('diccionario')
+            print(dataPrincipiante)
+            
+            #-----------------------------------Intermedio---------------------------------------------------------------
+            auxListaIntermedio =[]
+            for x in aux2:
+                auxListaIntermedio.append(x)
+            
+            print('')
+            print('Intermedio')
+            for x in auxListaIntermedio:
+                print(x)
+            i = 0
+            j = 1
+            while (i < len(auxListaIntermedio)):
+                auxiIntermedio = []
+                elem = auxListaIntermedio[i]
+                j = j + i
+                if (j < len(auxListaIntermedio)):
+                    while (j < len(auxListaIntermedio)):
+                        if (elem.actividad_id.nombre == auxListaIntermedio[j].actividad_id.nombre):
+                            if not elem in listaIntermedio:
+                                listaIntermedio.append(elem)
+                                auxiIntermedio.append(elem)
+                            listaIntermedio.append(auxListaIntermedio[j])
+                            auxiIntermedio.append(auxListaIntermedio[j])
+                            dataIntermedio[str(elem.actividad_id.nombre)] = auxiIntermedio
+                            listaActividades.add(str(elem.actividad_id.nombre))
+                            j +=1
+                        else:
+                            j += 1
+                j = 1
+                i += 1
+                
+            print('lista')
+            print(listaIntermedio)
+            
+            print(' ')
+            print('diccionario')
+            print(dataIntermedio)
+            
+            
+            #-------------------------------------------Avanzado-----------------------------------------------------------
+            auxListaAvanzado =[]
+            for x in aux3:
+                auxListaAvanzado.append(x)
+            
+            print('')
+            print('Avanzado')
+            for x in auxListaAvanzado:
+                print(x)
+            i = 0
+            j = 1
+            while (i < len(auxListaAvanzado)):
+                auxiAvanzado = []
+                elem = auxListaAvanzado[i]
+                j = j + i
+                if (j < len(auxListaAvanzado)):
+                    while (j < len(auxListaAvanzado)):
+                        if (elem.actividad_id.nombre == auxListaAvanzado[j].actividad_id.nombre):
+                            if not elem in listaAvanzado:
+                                listaAvanzado.append(elem)
+                                auxiAvanzado.append(elem)
+                            listaAvanzado.append(auxListaAvanzado[j])
+                            auxiAvanzado.append(auxListaAvanzado[j])
+                            dataAvanzado[str(elem.actividad_id.nombre)] = auxiAvanzado
+                            listaActividades.add(str(elem.actividad_id.nombre))
+                            j +=1
+                        else:
+                            j += 1
+                j = 1
+                i += 1
+                
+            print('lista')
+            print(listaAvanzado)
+            
+            print(' ')
+            print('diccionario')
+            print(dataAvanzado)
+            
+            print(listaActividades)
+            
             try:
                 sesiones = Sesion.objects.filter(alumno_id=alumno.id)
                 ultimaSesion = Sesion.objects.filter(alumno_id=alumno.id).latest()
@@ -1072,7 +1256,7 @@ def perfil(request, pk):
         mensaje = "El alumno no existe"
         return redirect('/home/')
     
-    return render (request, 'home/verPerfil.html', { 'alumno': alumno, 'mensaje':mensaje, 'ficha':ficha, 'edad':edad, 'disponibilidad':disponibilidad, 'sesiones':sesiones})
+    return render (request, 'home/verPerfil.html', { 'alumno': alumno, 'mensaje':mensaje, 'ficha':ficha, 'edad':edad, 'disponibilidad':disponibilidad, 'sesiones':sesiones, 'dataPrincipiante':dataPrincipiante, 'dataIntermedio':dataIntermedio, 'dataAvanzado':dataAvanzado, 'listaActividades':listaActividades})
     
 #Esta funcion va destinada solamente al alumno
 def editarPerfil(request, pk):

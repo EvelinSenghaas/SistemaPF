@@ -125,6 +125,126 @@
                 }
         </script>
 
+        <script>
+            var sesiones2 = []
+            var dataPrincipiante = []
+            var dataIntermedio = []
+            var dataAvanzado = []
+        </script>
+        <script>
+                function evolucionActividad(){
+                    var actividad = $('#selectActividad').val();
+                    var alumno = "{{alumno.id}}"
+                    $.ajax({
+                        data : {'actividad' : actividad, 'alumno':alumno},
+                        url : '/rutinas/evolucion_actividad_ajax/', //El id que estoy guardando en data se va a enviar en esa url
+                        type : 'get',
+                        success : function(data){
+                            /*Object.keys(data).forEach(function(key) {
+                                if (key == 'actividadesPrincipiante'){
+                                    dataPrincipiante.push(data[key]);
+                                }else if (key == 'actividadesIntermedio'){
+                                    dataIntermedio.push(data[key]);
+                                }else if (key == 'actividadesAvanzado'){
+                                    dataAvanzado.push(data[key]);
+                                }else if (key == 'sesiones'){
+                                    sesiones2.push(data[key]);
+                                }
+                              })*/
+                            
+                            if (data['actividadesPrincipiante'] != ''){
+                                dataPrincipiante = data['actividadesPrincipiante'];
+                            }
+                            else{
+                                dataAvanzado.push(0);
+                            }
+                            
+                            if (data['actividadesIntermedio'] != ''){
+                                dataIntermedio = data['actividadesIntermedio'];
+                            }
+                            else{
+                                dataAvanzado.push(0);
+                            }
+                            
+                            if (data['actividadesAvanzado'] != ''){
+                            dataAvanzado = data['actividadesAvanzado'];}
+                            else{
+                                dataAvanzado.push(0);
+                            }
+
+                            sesiones2 = data['sesiones'];
+
+                            
+                            console.log('');
+                            console.log(sesiones2);
+                            console.log(dataPrincipiante);
+                            console.log(dataIntermedio);
+                            console.log(dataAvanzado);
+                            var line_chart_2 = new Chart(document.getElementById("lineChart2"), {
+                                type: 'line',
+                                data: {
+                                labels: sesiones2,
+                                datasets: [{ 
+                                    data: dataPrincipiante,
+                                    label: "Principiante",
+                                    borderColor: "#20E872",
+                                    fill: false
+                                    }, { 
+                                    data: dataIntermedio,
+                                    label: "Intermedio",
+                                    borderColor: "#FFB052",
+                                    fill: false
+                                    }, { 
+                                    data: dataAvanzado,
+                                    label: "Avanzado",
+                                    borderColor: "#FF154D",
+                                    fill: false
+                                    }
+                                ]
+                                },
+                                options: {
+                                  title: {
+                                    display: true,
+                                    text: 'Esfuerzo por actividad en cada nivel',
+                                    fontSize : 17,
+                                  },
+                                  
+                                  scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            stepSize: 1,
+                                            min: 0,
+                                            max: 10
+                                        },
+                                      scaleLabel: {
+                                        display: true,
+                                        labelString: 'Esfuerzo',
+                                        fontSize : 16
+                                      }
+                                    }],
+                                    xAxes: [{
+                                        ticks: {
+                                            beginAtZero: false,
+                                            stepSize: 1,
+                                            min: 0,
+                                            max: 10
+                                        },
+                                      scaleLabel: {
+                                        display: true,
+                                        labelString: 'Sesiones',
+                                        fontSize : 16
+                                      }
+                                    }],
+                                  }
+                                },
+                            });
+                        }
+
+                    });
+                             
+                }
+        </script>
+
         <div class="container">
                 <div class="row profile mt-1 ">
                     <div class="col-md-3">
@@ -396,6 +516,7 @@
                                             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                               <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Esfuerzo</a>
                                               <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Músculos</a>
+                                              <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile2" role="tab" aria-controls="nav-profile" aria-selected="false">Evolución de actividad</a>
                                             </div>
                                           </nav>
                                           <div class="tab-content" id="nav-tabContent">
@@ -425,6 +546,35 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="nav-profile2" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                                <div class="card-body">
+                                                        <div class="form-group">
+                                                            <div class="row">
+                                                                <br>
+                                                                <div class="col-3">Seleccione una actividad</div>
+                                                                <div class="col-3">
+                                                                    <select name="selectActividad" id="selectActividad" class="custom-select">
+                                                                        {%for actividad in listaActividades%}
+                                                                        <option value="{{actividad}}" >{{actividad}}</option>
+                                                                        {%endfor%}
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-1">
+                                                                    <button type="button" class="btn btn-primary" id="graficar" onclick="evolucionActividad()">Graficar</button>
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <div class="row form-group">
+                                                                
+                                                                {%if sesiones == None%}
+                                                                <label style="color:rgb(130, 128, 128)">No se puede mostrar la evolución porque no hrealizado sesiones.</label>
+                                                                {%else%}
+                                                                <canvas id="lineChart2" height="auto" width="auto"></canvas>
+                                                                {%endif%}
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                             </div>
                                           </div>
                                 
@@ -618,6 +768,12 @@
 
 
             </script>
+
+            <!-- Aca vamos a armar los datos para el chart -->
+
+
+
+
             <script>
                 var radar_chart = new Chart(document.getElementById('radarChart').getContext("2d"), {
                     type: 'radar',

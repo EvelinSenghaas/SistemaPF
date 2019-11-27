@@ -128,7 +128,7 @@ class EsfuerzoActividad(models.Model):
     actividad_id = models.ForeignKey(Actividad, on_delete=models.CASCADE, verbose_name="Actividad")
     sesion_id = models.ForeignKey(Sesion, on_delete=models.CASCADE)
     nombreActividad =  models.CharField(max_length = 60, blank = True, null = True)
-    
+    nivel_id = models.CharField(max_length = 60, blank = True, null = True, verbose_name="Nivel de sesion")
     
     class Meta:
         verbose_name = 'Esfuerzo de actividad'
