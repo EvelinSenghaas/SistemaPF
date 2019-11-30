@@ -236,15 +236,19 @@
         <tbody>
           {%for detalle in detalles%}
           <tr>
+            {%if detalle.categoria == "Tren inferior"%}
+            <td width="300">Tren Inferior</td>
+            {%else%}
             <td width="300">{{detalle.categoria}}</td>
+            {%endif%}
 
             <td width="600">{{detalle.musculo}}</td>
 
             {% if perms.rutina.change_detalle and perms.rutina.delete_detalle%}
             <td width="auto">
-              <a href="/rutinas/editar_detalle/{{detalle.id}}"><img src="{%static 'img/edit.png'%}"></a>
+              <a href="/rutinas/editar_detalle/{{detalle.id}}" title="Modificar detalle"><img src="{%static 'img/edit.png'%}"></a>
 
-              <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg2{{detalle.id}}">
+              <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg2{{detalle.id}}" title="Eliminar detalle">
                 <img src="{%static 'img/delete.png'%}" alt="">
               </a>
             </td>

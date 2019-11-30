@@ -120,9 +120,9 @@
 
                     {% if perms.rutina.change_actividad and perms.rutina.delete_actividad%}
                     <td>
-                        <a href="/rutinas/editar_actividad/{{actividad.id}}"><img src="{%static 'img/edit.png'%}"></a>
+                        <a href="/rutinas/editar_actividad/{{actividad.id}}" title="Modificar actividad"><img src="{%static 'img/edit.png'%}"></a>
 
-                        <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg2{{actividad.id}}">
+                        <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg2{{actividad.id}}" title="Eliminar actividad">
                             <img src="{%static 'img/delete.png'%}" alt="">
                         </a>
                     </td>

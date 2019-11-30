@@ -90,6 +90,6 @@ class EvaluacionNivelForm(forms.ModelForm):
             'cantSesiones' : forms.NumberInput(
                 attrs = { 'class':'form-control'}
                 ), 'nivel_id' : forms.Select(
-                attrs = { 'class':'form-class'}
+                attrs = { 'class':'form-control', 'style':'width: 150px;'}
                 ),
         }

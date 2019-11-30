@@ -334,12 +334,12 @@
               <td><a href="/rutinas/ver_perfil/{{alumno.user_id}}">{{alumno.nombre}}, {{alumno.apellido}} </a></td>
               <td>{{alumno.fecha_nac}} años</td>
               <td><a href="/rutinas/ver_rutina/{{alumno.rutina_id.id}}">{{alumno.rutina_id}}</a></td>
-              {%if alumno.nivel_id == None%}
+              {%if not alumno.entrenamiento_sistema%}
               <td>Profesor a cargo</td>
               {%else%}
               <td>Sistema</td>
               {%endif%}
-              {%if alumno.nivel_id == None%}
+              {%if not alumno.entrenamiento_sistema%}
               <td>-</td>
               {%else%}
               <td>{{alumno.nivel_id}}</td>

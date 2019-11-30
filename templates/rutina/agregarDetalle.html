@@ -6,35 +6,63 @@
 {%endblock imagen_principal%}
 
 {%block contenido%}
+
 <body class="container mt-2">
     <div class="card">
-        <div class="card-header alert-primary"><strong>Administracion de Detalles</strong></div>
-            <div class="card-body card-block">  
-                {%if form.errors%}
-                <div class="alert alert-danger" role="alert">
-                    <h4 class="alert-heading">Error</h4>
-                        {{form.errors}}
-                </div>
-                {%endif%}
-                <form method="POST">
-                    {% csrf_token %}
-                    <div class="">
-                        <div class="form-group">
-                            <label for="">{{form.categoria.label}}</label>
-                            {{form.categoria}}
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleFormControlTextarea1">{{form.musculo.label}}</label>
-                            {{form.musculo}}
-                        </div>
-                        <div class="float-right"><a href="/rutinas/administrar_detalles/">
-                            <button type="button" class="btn btn-outline-danger">Cancelar</button></a>
-                            <button type="submit" class="btn btn-primary">Agregar</button>
-                        </div>
-                    </div>
-                </form>
+        <div class="card-header alert-primary">
+            <div class="row">
+                <div class="col-11"><strong>Administracion de Detalles</strong></div>
+                <div class="col-auto"><a tabindex="0" class="" role="button" data-toggle="popover" data-trigger="focus"
+                        title="Consideraciones" data-content=""><img src="{% static 'img/help.png'%}" alt=""></a></div>
             </div>
-        </div> 
+            <script>
+                $(function () {
+                    $('[data-toggle="popover"]').popover()
+                })
+            </script>
+        </div>
+        <div class="card-body card-block">
+            {%if form.errors%}
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading">Error</h4>
+                {{form.errors}}
+            </div>
+            {%endif%}
+            <form method="POST">
+                {% csrf_token %}
+                <div class="">
+                    <div class="form-group">
+                        <label for="">Tren</label>
+                        {%if form.categoria.value == None%}
+                        <select name="categoria" class="form-control" style="width: 200px;">
+                            <option value="Tren Superior">Tren Superior</option>
+
+                            <option value="Tren inferior">Tren Inferior</option>
+                        </select>
+                        {%else%}
+                        <select name="categoria" class="form-control" style="width: 200px;">
+                            {%if form.categoria.value == "Tren Superior"%}
+                            <option value="Tren Superior" selected>Tren Superior</option>
+                            <option value="Tren inferior">Tren Inferior</option>
+                            {%else%}
+                            <option value="Tren inferior" selected>Tren Inferior</option>
+                            <option value="Tren Superior">Tren Superior</option>
+                            {%endif%}
+                        </select>
+                        {%endif%}
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">{{form.musculo.label}}</label>
+                        {{form.musculo}}
+                    </div>
+                    <div class="float-right"><a href="/rutinas/administrar_detalles/">
+                            <button type="button" class="btn btn-outline-danger">Cancelar</button></a>
+                        <button type="submit" class="btn btn-primary">Agregar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
     </div>
 </body>
 {%endblock contenido%}

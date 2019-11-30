@@ -1094,6 +1094,7 @@ def evolucionActividad(request):
     data['actividadesIntermedio'] = actividadesIntermedio
     data['actividadesAvanzado'] = actividadesAvanzado
     data['sesiones'] = sesiones
+    print(sesiones)
                 
             
     
@@ -1936,7 +1937,7 @@ def agregarEvaluacionNivel(request, pk):
                 evaluacionNivel = form.save(commit=False)
                 evaluacionNivel.profesor_id = profesor
                 evaluacionNivel.save()
-                messages.success(request, 'Evaluación de nivel modificada con éxito.')
+                messages.success(request, 'Evaluación de nivel agregada con éxito.')
             else:
                 error = form.errors
                 messages.error(request, 'No se pudo agregar la Evaluación de nivel.')
