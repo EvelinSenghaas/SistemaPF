@@ -1371,10 +1371,6 @@ def editarPerfil(request, pk):
             sexo = str(sexo[0])
             FichaAlumno.objects.filter(alumno_id=alumno.id).update(sexo=sexo)
             
-            #Grupo sanguíneo
-            grupo_sanguineo = peticion.pop('grupo_sanguineo')
-            grupo_sanguineo = str(grupo_sanguineo[0])
-            FichaAlumno.objects.filter(alumno_id=alumno.id).update(grupo_sanguineo=grupo_sanguineo)
             
             #Dias de entrenamiento
             try:

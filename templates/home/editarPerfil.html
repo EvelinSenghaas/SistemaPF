@@ -7,116 +7,123 @@
 {%block contenido%}
 
 <script>
-        // Material Select Initialization
-        $(document).ready(function() {
-            $('#select').selectpicker();
-        });
-    </script>
-    <div class="container mt-2">
-        
+    // Material Select Initialization
+    $(document).ready(function () {
+        $('#select').selectpicker();
+    });
+</script>
+<div class="container mt-2">
+
     <!-- Si el alumno entrena por el sistema -->
     {%if alumno.entrenamiento_sistema%}
-    
+
     <!-- Datos basicos -->
     <div class="card" id="formSistema">
         <form method="POST">
             {% csrf_token %}
             <div class="card-header alert-primary"><strong>Editar mis datos</strong></div>
-                <div class="card-body card-block">
-                    {%if error != None%}
-                    <div class="alert alert-danger" role="alert">
-                            {{error}}
-                    </div>
-                    {%endif%}
-                    <div class="alert alert-light"> 
-                        <p>Tené en cuenta que los datos que no estan disponibles para modificar podrán cambiarse en otra instancia</p>
-                    </div>
-                        <div class="">
+            <div class="card-body card-block">
+                {%if error != None%}
+                <div class="alert alert-danger" role="alert">
+                    {{error}}
+                </div>
+                {%endif%}
+                <div class="alert alert-light">
+                    <p>Tené en cuenta que los datos que no estan disponibles para modificar podrán cambiarse en otra
+                        instancia</p>
+                </div>
+                <div class="">
 
-                            <div class="form-group">
-                                <div class="row form-group">
-                                    <div class="col col-md-3">Sexo:</div>
-                                    <div class="col-12 col-md-9">
-                                        <select class="browser-default custom-select" name="sexo">
-                                            {%if ficha.sexo == 'M'%}
-                                            <option value="M" selected>Masculino</option>
-                                            <option value="F">Femenino</option>
-                                            {%endif%}
-                                            
-                                            {%if ficha.sexo == 'F'%}
-                                            <option value="F" selected>Femenino</option>
-                                            <option value="M">Masculino</option>
-                                            {%endif%}
-                                        </select>
-                                    </div>
-                                </div>
+                    <div class="form-group">
+                        <div class="row form-group">
+                            <div class="col col-md-3">Sexo:</div>
+                            <div class="col-12 col-md-9">
+                                <select class="browser-default custom-select" name="sexo">
+                                    {%if ficha.sexo == 'M'%}
+                                    <option value="M" selected>Masculino</option>
+                                    <option value="F">Femenino</option>
+                                    {%endif%}
+
+                                    {%if ficha.sexo == 'F'%}
+                                    <option value="F" selected>Femenino</option>
+                                    <option value="M">Masculino</option>
+                                    {%endif%}
+                                </select>
                             </div>
-                            <div class="form-group">
-                                <div class="row form-group">
-                                    <div class="col col-md-3">Peso</div>
-                                    <div class="col-12 col-md-9">
-                                        <input type="text" class="form-control" name="peso" value="{{ficha.peso}} Kg" disabled>
-                                    </div>
-                                </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row form-group">
+                            <div class="col col-md-3">Peso</div>
+                            <div class="col-12 col-md-9">
+                                <input type="text" class="form-control" name="peso" value="{{ficha.peso}} Kg" disabled>
                             </div>
-                            <div class="form-group">
-                                <div class="row form-group">
-                                    <div class="col col-md-3">Altura</div>
-                                    <div class="col-12 col-md-9">
-                                        <input type="text" class="form-control" name="altura" value="{{ficha.altura}} m" disabled>
-                                    </div>
-                                </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row form-group">
+                            <div class="col col-md-3">Altura</div>
+                            <div class="col-12 col-md-9">
+                                <input type="text" class="form-control" name="altura" value="{{ficha.altura}} m"
+                                    disabled>
                             </div>
-                            <div class="form-group">
-                                <div class="row form-group">
-                                    <div class="col col-md-3">Circunferencia de la muñeca</div>
-                                    <div class="col-12 col-md-9">
-                                        <input type="text" class="form-control" name="circu" value="{{ficha.circunferenciaMuneca}} cm" disabled>
-                                    </div>
-                                </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row form-group">
+                            <div class="col col-md-3">Circunferencia de la muñeca</div>
+                            <div class="col-12 col-md-9">
+                                <input type="text" class="form-control" name="circu"
+                                    value="{{ficha.circunferenciaMuneca}} cm" disabled>
                             </div>
-                            <div class="form-group">
-                                    <div class="row form-group">
-                                        <div class="col col-md-3">Nombre</div>
-                                        <div class="col-12 col-md-9">
-                                            <input type="text" class="form-control" name="nombre" value="{{alumno.nombre}}" required>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row form-group">
-                                        <div class="col col-md-3">Apellido</div>
-                                        <div class="col-12 col-md-9">
-                                            <input type="text" class="form-control" name="apellido" value="{{alumno.apellido}}" required>
-                                        </div>
-                                    </div>
-                                </div>                                        
-                                <div class="form-group">
-                                    <div class="row form-group">
-                                        <div class="col col-md-3">Correo electrónico</div>
-                                            <div class="col-12 col-md-9">
-                                                <input type="email" class="form-control" name="email" value="{{user.email}}" required>
-                                                
-                                        </div>
-                                    </div>
-                                </div>
-                            <div class="form-group">
-                                <div class="row form-group">
-                                    <div class="col col-md-3">Fecha de nacimiento</div>
-                                    <div class="col-12 col-md-9">
-                                        <input type="text" class="form-control" name="fechaNac" value="{{alumno.fecha_nac}}" disabled>
-                                    </div>
-                                </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row form-group">
+                            <div class="col col-md-3">Nombre</div>
+                            <div class="col-12 col-md-9">
+                                <input type="text" class="form-control" name="nombre" value="{{alumno.nombre}}" pattern="[A-Za-z ]+"
+                                    required>
                             </div>
-                            <div class="form-group">
-                                <div class="row form-group">
-                                    <div class="col col-md-3">Profesión</div>
-                                        <div class="col-12 col-md-9">
-                                            <input type="text" class="form-control" name="profesion" value="{{ficha.profesion}}" required>
-                                        </div>
-                                </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row form-group">
+                            <div class="col col-md-3">Apellido</div>
+                            <div class="col-12 col-md-9">
+                                <input type="text" class="form-control" name="apellido" value="{{alumno.apellido}}" pattern="[A-Za-z ]+"
+                                    required>
                             </div>
-                            <div class="form-group">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row form-group">
+                            <div class="col col-md-3">Correo electrónico</div>
+                            <div class="col-12 col-md-9">
+                                <input type="email" class="form-control" name="email" value="{{user.email}}" required>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row form-group">
+                            <div class="col col-md-3">Fecha de nacimiento</div>
+                            <div class="col-12 col-md-9">
+                                <input type="text" class="form-control" name="fechaNac" value="{{alumno.fecha_nac}}"
+                                    disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row form-group">
+                            <div class="col col-md-3">Profesión</div>
+                            <div class="col-12 col-md-9">
+                                <input type="text" class="form-control" name="profesion" value="{{ficha.profesion}}" pattern="[A-Za-z ]+"
+                                    required>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="form-group">
                                 <div class="row form-group">
                                     <div class="col col-md-3">Grupo sanguíneo</div>
                                         <div class="col-12 col-md-9">
@@ -145,145 +152,151 @@
                                             </select>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                
-        </div>
-                    <!-- Datos de los horarios -->
-                        <div class="card active mt-1">
-                                <div class="card-header alert-primary"><strong>Horarios</strong></div>
-                                    <div class="card-body card-block">
-                                        <div class="alert alert-light"> 
-                                            <p>Los días seleccionados corresponden a los días en los que se encuentra entrenando actualmente</p>
-                                        </div>
-                                        <div class="">
-                                            <div class="form-group">
-                                                <div class="row form-group">
-                                                    <div class="col col-md-3">Días de entrenamiento</div>
-                                                    <div class="col-12 col-md-9">
-                                                        <select class="browser-default custom-select"  name="dias" multiple>
-                                                            {%for dia in dias%}
-                                                            {%if dia in disponibilidad%}
-                                                            <option value="{{dia.id}}" selected>{{dia}}</option>
-                                                            {%else%}
-                                                            <option value="{{dia.id}}">{{dia}}</option>
-                                                            {%endif%}
-                                                            {%endfor%}
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div> 
-                                        </div>
-                                        <p align="right">
-                                            <a href="/rutinas/ver_perfil/{{user.id}}"><button type="button" class="btn btn-outline-danger">Cancelar</button></a>
-                                            <button type="submit" class="btn btn-primary">Guardar</button>
-                                        </p>
-                                    </div>
-                        </div>
-                        <input type="hidden" name="entrenamiento" value="sistema">
-        </form>
+                                </div> -->
+                </div>
+            </div>
 
     </div>
+    <!-- Datos de los horarios -->
+    <div class="card active mt-1">
+        <div class="card-header alert-primary"><strong>Horarios</strong></div>
+        <div class="card-body card-block">
+            <div class="alert alert-light">
+                <p>Los días seleccionados corresponden a los días en los que se encuentra entrenando actualmente</p>
+            </div>
+            <div class="">
+                <div class="form-group">
+                    <div class="row form-group">
+                        <div class="col col-md-3">Días de entrenamiento</div>
+                        <div class="col-12 col-md-9">
+                            <select class="browser-default custom-select" name="dias" multiple>
+                                {%for dia in dias%}
+                                {%if dia in disponibilidad%}
+                                <option value="{{dia.id}}" selected>{{dia}}</option>
+                                {%else%}
+                                <option value="{{dia.id}}">{{dia}}</option>
+                                {%endif%}
+                                {%endfor%}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p align="right">
+                <a href="/rutinas/ver_perfil/{{user.id}}"><button type="button"
+                        class="btn btn-outline-danger">Cancelar</button></a>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </p>
+        </div>
+    </div>
+    <input type="hidden" name="entrenamiento" value="sistema">
+    </form>
+
+</div>
 
 
-    <!-- Si el alumno entrena con un profesor -->
-    {%else%}
-        <!-- Datos básicos -->
-        <div class="card" id="formProfesor">
-                <form method="POST">
-                    {% csrf_token %}
-                    <div class="card-header alert-primary"><strong>Editar mis datos</strong></div>
-                        <div class="card-body card-block">
-                            <div class="alert alert-light"> 
-                                <p>Tené en cuenta que los datos que no estan disponibles para modificar podrán cambiarse en otra instancia</p>
-                            </div>
-                                <div class="">
-        
-                                    <div class="form-group">
-                                        <div class="row form-group">
-                                            <div class="col col-md-3">Sexo:</div>
-                                            <div class="col-12 col-md-9">
-                                                <select class="browser-default custom-select" name="sexo">
-                                                    {%if ficha.sexo == 'M'%}
-                                                    <option value="M" selected>Masculino</option>
-                                                    <option value="F">Femenino</option>
-                                                    {%endif%}
-                                                    
-                                                    {%if ficha.sexo == 'F'%}
-                                                    <option value="F" selected>Femenino</option>
-                                                    <option value="M">Masculino</option>
-                                                    {%endif%}
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row form-group">
-                                            <div class="col col-md-3">Peso</div>
-                                            <div class="col-12 col-md-9">
-                                                <input type="text" class="form-control" name="peso" value="{{ficha.peso}} Kg" disabled>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row form-group">
-                                            <div class="col col-md-3">Altura</div>
-                                            <div class="col-12 col-md-9">
-                                                <input type="text" class="form-control" name="altura" value="{{ficha.altura}} m" disabled>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row form-group">
-                                            <div class="col col-md-3">Circunferencia de la muñeca</div>
-                                            <div class="col-12 col-md-9">
-                                                <input type="text" class="form-control" name="circu" value="{{ficha.circunferenciaMuneca}} cm" disabled>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                            <div class="row form-group">
-                                                <div class="col col-md-3">Nombre</div>
-                                                <div class="col-12 col-md-9">
-                                                    <input type="text" class="form-control" name="nombre" value="{{alumno.nombre}}" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="row form-group">
-                                                <div class="col col-md-3">Apellido</div>
-                                                <div class="col-12 col-md-9">
-                                                    <input type="text" class="form-control" name="apellido" value="{{alumno.apellido}}" required>
-                                                </div>
-                                            </div>
-                                        </div>                                        
-                                        <div class="form-group">
-                                            <div class="row form-group">
-                                                <div class="col col-md-3">Correo electrónico</div>
-                                                    <div class="col-12 col-md-9">
-                                                        <input type="email" class="form-control" name="email" value="{{user.email}}" required>
-                                                        
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <div class="form-group">
-                                        <div class="row form-group">
-                                            <div class="col col-md-3">Fecha de nacimiento</div>
-                                            <div class="col-12 col-md-9">
-                                                <input type="text" class="form-control" name="fechaNac" value="{{alumno.fecha_nac}}" disabled>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row form-group">
-                                            <div class="col col-md-3">Profesión</div>
-                                                <div class="col-12 col-md-9">
-                                                    <input type="text" class="form-control" name="profesion" value="{{ficha.profesion}}" required>
-                                                </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
+<!-- Si el alumno entrena con un profesor -->
+{%else%}
+<!-- Datos básicos -->
+<div class="card" id="formProfesor">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="card-header alert-primary"><strong>Editar mis datos</strong></div>
+        <div class="card-body card-block">
+            <div class="alert alert-light">
+                <p>Tené en cuenta que los datos que no estan disponibles para modificar podrán cambiarse en otra
+                    instancia</p>
+            </div>
+            <div class="">
+
+                <div class="form-group">
+                    <div class="row form-group">
+                        <div class="col col-md-3">Sexo:</div>
+                        <div class="col-12 col-md-9">
+                            <select class="browser-default custom-select" name="sexo">
+                                {%if ficha.sexo == 'M'%}
+                                <option value="M" selected>Masculino</option>
+                                <option value="F">Femenino</option>
+                                {%endif%}
+
+                                {%if ficha.sexo == 'F'%}
+                                <option value="F" selected>Femenino</option>
+                                <option value="M">Masculino</option>
+                                {%endif%}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row form-group">
+                        <div class="col col-md-3">Peso</div>
+                        <div class="col-12 col-md-9">
+                            <input type="text" class="form-control" name="peso" value="{{ficha.peso}} Kg" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row form-group">
+                        <div class="col col-md-3">Altura</div>
+                        <div class="col-12 col-md-9">
+                            <input type="text" class="form-control" name="altura" value="{{ficha.altura}} m" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row form-group">
+                        <div class="col col-md-3">Circunferencia de la muñeca</div>
+                        <div class="col-12 col-md-9">
+                            <input type="text" class="form-control" name="circu"
+                                value="{{ficha.circunferenciaMuneca}} cm" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row form-group">
+                        <div class="col col-md-3">Nombre</div>
+                        <div class="col-12 col-md-9">
+                            <input type="text" class="form-control" name="nombre" value="{{alumno.nombre}}" pattern="[A-Za-z ]+" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row form-group">
+                        <div class="col col-md-3">Apellido</div>
+                        <div class="col-12 col-md-9">
+                            <input type="text" class="form-control" name="apellido" value="{{alumno.apellido}}" pattern="[A-Za-z ]+"
+                                required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row form-group">
+                        <div class="col col-md-3">Correo electrónico</div>
+                        <div class="col-12 col-md-9">
+                            <input type="email" class="form-control" name="email" value="{{user.email}}" required>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row form-group">
+                        <div class="col col-md-3">Fecha de nacimiento</div>
+                        <div class="col-12 col-md-9">
+                            <input type="text" class="form-control" name="fechaNac" value="{{alumno.fecha_nac}}"
+                                disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row form-group">
+                        <div class="col col-md-3">Profesión</div>
+                        <div class="col-12 col-md-9">
+                            <input type="text" class="form-control" name="profesion" value="{{ficha.profesion}}" pattern="[A-Za-z ]+"
+                                required>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="form-group">
                                         <div class="row form-group">
                                             <div class="col col-md-3">Grupo sanguíneo</div>
                                                 <div class="col-12 col-md-9">
@@ -312,46 +325,47 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                    <!-- Datos de los horarios -->
-                            <div class="card active mt-1">
-                                    <div class="card-header alert-primary"><strong>Horarios</strong></div>
-                                        <div class="card-body card-block">
-                                            <div class="alert alert-light"> 
-                                                <p>Los horarios seleccionados corresponden a los horarios en los que se encuentra entrenando actualmente</p>
-                                            </div>
-                                            <div class="">
-                                                <div class="form-group">
-                                                    <div class="row form-group">
-                                                        <div class="col col-md-3">Horarios</div>
-                                                        <div class="col-12 col-md-9">
-                                                                <select class="browser-default custom-select"  name="dias" multiple>
-                                                                    {%for disp in disponibilidad%}
-                                                                    {%if disp in dias%}
-                                                                    <option value="{{disp.id}}" selected>{{disp}}</option>
-                                                                    {%else%}
-                                                                    <option value="{{disp.id}}">{{disp}}</option>
-                                                                    {%endif%}
-                                                                    {%endfor%}
-                                                                </select>
-                                                        </div>
-                                                    </div>
-                                                </div> 
-                                            </div>
-                                            <p align="right">
-                                                <a href="/rutinas/ver_perfil/{{user.id}}"><button type="button" class="btn btn-outline-danger">Cancelar</button></a>
-                                                <button type="submit" class="btn btn-primary">Guardar</button>
-                                            </p>
-                                        </div>
-                            </div>
-                            <input type="hidden" name="entrenamiento" value="profesor">
-            </form>
-    
-                
-    {%endif%}
+                                        </div> -->
+            </div>
+        </div>
+</div>
+<!-- Datos de los horarios -->
+<div class="card active mt-1">
+    <div class="card-header alert-primary"><strong>Horarios</strong></div>
+    <div class="card-body card-block">
+        <div class="alert alert-light">
+            <p>Los horarios seleccionados corresponden a los horarios en los que se encuentra entrenando actualmente</p>
+        </div>
+        <div class="">
+            <div class="form-group">
+                <div class="row form-group">
+                    <div class="col col-md-3">Horarios</div>
+                    <div class="col-12 col-md-9">
+                        <select class="browser-default custom-select" name="dias" multiple>
+                            {%for disp in disponibilidad%}
+                            {%if disp in dias%}
+                            <option value="{{disp.id}}" selected>{{disp}}</option>
+                            {%else%}
+                            <option value="{{disp.id}}">{{disp}}</option>
+                            {%endif%}
+                            {%endfor%}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p align="right">
+            <a href="/rutinas/ver_perfil/{{user.id}}"><button type="button"
+                    class="btn btn-outline-danger">Cancelar</button></a>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </p>
+    </div>
+</div>
+<input type="hidden" name="entrenamiento" value="profesor">
+</form>
+
+
+{%endif%}
 
 {%endblock contenido%}
 
