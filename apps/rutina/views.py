@@ -1929,6 +1929,35 @@ def agregarEvaluacionNivel(request, pk):
         nivel = peticion.pop('nivel_id')
         nivel = nivel[0]
         
+        cantSesiones = peticion.pop('cantSesiones')
+        cantSesiones = cantSesiones[0]
+        #print(int(peticion.pop('cantSesiones')))
+        #Controlamos que la cantidad de sesiones no sea menor a la que actualemnte tienen los niveles inferiores
+        if nivel == 3:
+            #Avanzado
+            if int(cantSesiones) <= EvaluacionNivel.objects.get(nivel_id=Nivel.objects.get(id=2), profesor_id = profesor).cantSesiones:
+                error = 'La cantidad de sesiones para el nivel Avanzado no puede ser menor o igual que las del nivel Intermedio'
+                return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form, 'error':error})
+            if int(cantSesiones) <= EvaluacionNivel.objects.get(nivel_id=Nivel.objects.get(id=1), profesor_id = profesor).cantSesiones:
+                error = 'La cantidad de sesiones para el nivel Avanzado no puede ser menor o igual que las del nivel Principiante'
+                return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form, 'error':error})
+        elif nivel == 2:
+            #Intermedio
+            if int(cantSesiones) <= EvaluacionNivel.objects.get(nivel_id=Nivel.objects.get(id=1), profesor_id = profesor).cantSesiones:
+                error = 'La cantidad de sesiones para el nivel Intermedio no puede ser menor o igual que las del nivel Principiante'
+                return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form, 'error':error})
+            if int(cantSesiones) >= EvaluacionNivel.objects.get(nivel_id=Nivel.objects.get(id=3), profesor_id = profesor).cantSesiones:
+                error = 'La cantidad de sesiones para el nivel Intermedio no puede ser mayor o igual que las del nivel Avanzado'
+                return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form, 'error':error})
+        elif nivel == 1:
+            #Principiante
+            if int(cantSesiones) >= EvaluacionNivel.objects.get(nivel_id=Nivel.objects.get(id=2), profesor_id = profesor).cantSesiones:
+                error = 'La cantidad de sesiones para el nivel Principiante no puede ser mayor o igual que las del nivel Intermedio'
+                return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form, 'error':error})
+            if int(cantSesiones) >= EvaluacionNivel.objects.get(nivel_id=Nivel.objects.get(id=3), profesor_id = profesor).cantSesiones:
+                error = 'La cantidad de sesiones para el nivel Principiante no puede ser mayor o igual que las del nivel Avanzado'
+                return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form, 'error':error})
+        
         if (EvaluacionNivel.objects.filter(nivel_id=nivel, profesor_id = profesor).exists()):
             error = 'No puede ingresar una evaluación de nivel para mas de un nivel'
             return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form, 'error':error})
@@ -1962,8 +1991,38 @@ def editarEvaluacionNivel(request, pk):
         print('entro al post')
         form = EvaluacionNivelForm(request.POST, instance = form)
         peticion = request.POST.copy()
+        print(peticion)
         nivel = peticion.pop('nivel_id')
-        nivel = nivel[0]
+        nivel = int(nivel[0])
+        
+        cantSesiones = peticion.pop('cantSesiones')
+        cantSesiones = cantSesiones[0]
+        #print(int(peticion.pop('cantSesiones')))
+        #Controlamos que la cantidad de sesiones no sea menor a la que actualemnte tienen los niveles inferiores
+        if nivel == 3:
+            #Avanzado
+            if int(cantSesiones) <= EvaluacionNivel.objects.get(nivel_id=Nivel.objects.get(id=2), profesor_id = profesor).cantSesiones:
+                error = 'La cantidad de sesiones para el nivel Avanzado no puede ser menor o igual que las del nivel Intermedio'
+                return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form, 'error':error})
+            if int(cantSesiones) <= EvaluacionNivel.objects.get(nivel_id=Nivel.objects.get(id=1), profesor_id = profesor).cantSesiones:
+                error = 'La cantidad de sesiones para el nivel Avanzado no puede ser menor o igual que las del nivel Principiante'
+                return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form, 'error':error})
+        elif nivel == 2:
+            #Intermedio
+            if int(cantSesiones) <= EvaluacionNivel.objects.get(nivel_id=Nivel.objects.get(id=1), profesor_id = profesor).cantSesiones:
+                error = 'La cantidad de sesiones para el nivel Intermedio no puede ser menor o igual que las del nivel Principiante'
+                return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form, 'error':error})
+            if int(cantSesiones) >= EvaluacionNivel.objects.get(nivel_id=Nivel.objects.get(id=3), profesor_id = profesor).cantSesiones:
+                error = 'La cantidad de sesiones para el nivel Intermedio no puede ser mayor o igual que las del nivel Avanzado'
+                return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form, 'error':error})
+        elif nivel == 1:
+            #Principiante
+            if int(cantSesiones) >= EvaluacionNivel.objects.get(nivel_id=Nivel.objects.get(id=2), profesor_id = profesor).cantSesiones:
+                error = 'La cantidad de sesiones para el nivel Principiante no puede ser mayor o igual que las del nivel Intermedio'
+                return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form, 'error':error})
+            if int(cantSesiones) >= EvaluacionNivel.objects.get(nivel_id=Nivel.objects.get(id=3), profesor_id = profesor).cantSesiones:
+                error = 'La cantidad de sesiones para el nivel Principiante no puede ser mayor o igual que las del nivel Avanzado'
+                return render (request, 'rutina/agregarEvaluacionNivel.html', {'profesor':profesor, 'form':form, 'error':error})
         
         if (EvaluacionNivel.objects.filter(nivel_id=nivel, profesor_id = profesor).exists()):
             print('entro al primer if')
@@ -2002,6 +2061,7 @@ def agregarActividad(request):
         form2 = RepeticionForm(request.POST)
         
         peticion = request.POST.copy()
+        print(peticion)
         peticion2 = request.FILES.copy()
         print(peticion2)
         print(peticion)
@@ -2034,10 +2094,13 @@ def agregarActividad(request):
         try:
             avanzado = rep_min[0]
             int(avanzado)
+            print(avanzado)
             intermedio = rep_min[1]
             int(intermedio)
+            print(intermedio)
             principiante = rep_min[2]
             int(principiante)
+            print(principiante)
         except:
             error = "\n Por favor ingrese correctamente las repeticiones por nivel, tenga en cuenta que deben ser un numero entero"
             return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error})
@@ -2121,6 +2184,7 @@ def editarActividad(request, pk):
         form2 = RepeticionForm(request.POST)
         
         peticion = request.POST.copy()
+        print(peticion)
         
         try:
             detalles = peticion.pop('detalle_id')
@@ -2146,10 +2210,13 @@ def editarActividad(request, pk):
         try:
             avanzado = rep_min[0]
             int(avanzado)
+            print("Avanzado ", str(avanzado))
             intermedio = rep_min[1]
             int(intermedio)
+            print("Intermedio ", str(intermedio))
             principiante = rep_min[2]
             int(principiante)
+            print("Principiante ", str(principiante))
         except:
             error = "\n Por favor ingrese correctamente las repeticiones por nivel, tenga en cuenta que deben ser un numero entero"
             return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error})
@@ -2157,16 +2224,16 @@ def editarActividad(request, pk):
         if avanzado > intermedio:
             if avanzado > principiante:
                 pass
-            else:
+            elif(principiante >= avanzado):
                 error = "\n Las repeticiones para el nivel Principiante no pueden ser mayores que para el nivel Avanzado"
                 return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error})
-        else:
+        elif(intermedio >= avanzado):
             error = "\n Las repeticiones para el nivel Intermedio no pueden ser mayores que para el nivel Avanzado"
             return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error})
         
         if intermedio > principiante:
             pass
-        else:
+        elif(principiante >= intermedio):
             error = "\n Las repeticiones para el nivel Principiante no pueden ser mayores que para el nivel Intermedio"
             return render(request, 'rutina/agregarActividad.html',{'form':form, 'form2':form2,'nivel':nivel,'error':error})
         

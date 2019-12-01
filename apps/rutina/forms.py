@@ -48,7 +48,7 @@ class RutinaForm (forms.ModelForm):
         }
         widgets = {
             'nombre' : forms.TextInput(
-                attrs = { 'class':'form-control', 'placeholder': 'Ingrese el nombre de la rutina'}
+                attrs = { 'class':'form-control', 'placeholder': 'Ingrese el nombre de la rutina', 'pattern':'[A-Za-z ]+'}
                 ), 'descripcion' : forms.Textarea(
                     attrs = {
                         'class' : 'form-control', 'placeholder': 'Ingrese la descripcion de la rutina'
