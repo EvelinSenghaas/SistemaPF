@@ -445,6 +445,14 @@
               var titulo = document.getElementById('titulo_reporte').value;
               var profesor = $('#profesor').val();
               var filtrado = $('#filtrado').val();
+
+              var titulo_header = "{{titulo_header}}"
+              var direccion_header = "{{direccion_header}}"
+              var contacto_header = "{{contacto_header}}"
+
+              console.log(titulo_header);
+              console.log(direccion_header);
+              console.log(contacto_header);  
               doc['header'] = (function () {
                 return {
                   columns: [
@@ -455,7 +463,8 @@
 
                     {
                       alignment: 'center',
-                      text: [{ text: "FitRou Rutinas \n", bold: true, fontSize: 16 }, { text: "Tronador 1019 Oberá, Misiones. \n Teléfono: 03755 264077 \n \n \n" },
+                      text: [{ text: titulo_header+" \n" , bold: true, fontSize: 16 }, { text: direccion_header+" \n"},
+                      {text:contacto_header+ "\n \n \n" },
                       { text: '' + filtrado, bold: true, fontSize: 11, alignment: 'left' }],
                       fontSize: 10,
                       margin: [-30, 40, 0, 0]

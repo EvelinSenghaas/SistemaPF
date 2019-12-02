@@ -153,4 +153,20 @@ class FichaAlumno (models.Model):
 
 
 
-
+class Auditoria (models.Model):
+    id = models.AutoField(primary_key=True, null=False)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    titulo = models.CharField(max_length = 60, blank = False, null = False)
+    calle = models.CharField(max_length = 30, blank = False, null = False)
+    altura = models.IntegerField(primary_key = False, null=False, blank = False)
+    ciudad = models.CharField(max_length = 30, blank = False, null = False)
+    provincia = models.CharField(max_length = 30, blank = False, null = False)
+    telefono = models.CharField(max_length = 10, blank = False, null = False)
+    
+    class Meta:
+        verbose_name = 'Auditoria'
+        verbose_name_plural = 'Auditorias'
+        ordering = ['user']
+    
+    def __str__(self):
+        return 'Configuracion '+str(self.user)

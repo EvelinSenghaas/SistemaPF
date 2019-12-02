@@ -1,0 +1,117 @@
+{%extends 'home/home.html'%}
+{%load staticfiles%}
+{%block titulo%}Reportes{%endblock titulo%}
+
+{%block imagen_principal%}
+{%endblock imagen_principal%}
+{%block contenido%}
+
+<body class="container mt-2">
+    {% if messages %}
+
+    {% for message in messages %}
+    {% if message.tags == 'success'%}
+    <script>
+        toastr["success"]("{{message}}", 'Completado', {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "3500",
+            "hideDuration": "3500",
+            "timeOut": "3500",
+            "extendedTimeOut": "3500",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        });
+    </script>
+    {%endif%}
+    {% if message.tags == 'error'%}
+    <script>
+        toastr["error"]("{{message}}", 'Error', {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "7000",
+            "hideDuration": "7000",
+            "timeOut": "7000",
+            "extendedTimeOut": "7000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        });
+    </script>
+    {%endif%}
+    {% endfor %}
+
+    {% endif %}
+    <div class="card">
+        <div class="card-header alert-primary">
+            <div class="row">
+                <div class="col-11"><strong>Parametrización de reportes</strong></div>
+                <div class="col-auto"><a tabindex="0" class="" role="button" data-toggle="popover" data-trigger="focus"
+                        title="Consideraciones" data-content=""><img src="{% static 'img/help.png'%}" alt=""></a></div>
+            </div>
+        </div>
+        <div class="card-body card-block">
+            {%if error%}
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading">Error</h4>
+                {{error}}
+            </div>
+            {%endif%}
+            <form method="POST">
+                {% csrf_token %}
+                <div class="">
+                    <div class="form-group">
+                        <div class="row form-group">
+                            <div class="col col-md-2 my-auto">Título</div>
+                            <div class="col-md-9 my-auto">{{form.titulo}}</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row form-group">
+                            <div class="col col-md-2 my-auto">Calle</div>
+                            <div class="col-md-4 my-auto">{{form.calle}}</div>
+                            <div class="col col-md-1 my-auto">Altura</div>
+                            <div class="col-md-2 my-auto">{{form.altura}}</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row form-group">
+                            <div class="col col-md-2 my-auto">Ciudad</div>
+                            <div class="col-md-4 my-auto">{{form.ciudad}}</div>
+                            <div class="col col-md-auto my-auto">Provincia</div>
+                            <div class="col-md-3 my-auto">{{form.provincia}}</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row form-group">
+                            <div class="col col-md-2 my-auto">Teléfono</div>
+                            <div class="col-md-3 my-auto">{{form.telefono}}</div>
+                        </div>
+                    </div>
+                    <div class="float-right"><a href="/home/administracion/">
+                            <button type="button" class="btn btn-outline-danger">Cancelar</button></a>
+                        <button type="submit" class="btn btn-primary">Agregar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+</body>
+{%endblock contenido%}
+
+{%block pie%}
+{%endblock pie%}

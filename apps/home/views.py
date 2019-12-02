@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, resolve_url
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login as dj_login, logout, authenticate
 from django.contrib import messages
-from .forms import NewUserForm, UsuarioForm, LoginForm, DisponibilidadForm
+from .forms import NewUserForm, UsuarioForm, LoginForm, DisponibilidadForm, AuditoriaForm
 from django.views.generic import TemplateView, ListView, UpdateView, CreateView, DeleteView
 from apps.rutina.views import ListadoRutinas
 from django.contrib.auth.models import User, Permission
@@ -14,7 +14,7 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from .models import Profesor, Alumno, FichaAlumno, Semana, DisponibilidadProfesor
+from .models import Profesor, Alumno, FichaAlumno, Semana, DisponibilidadProfesor, Auditoria
 from ..rutina.models import Rutina, Nivel
 import sweetify
 
@@ -402,6 +402,17 @@ def listadoAlumnos(request, pk):
     else:
         return redirect('/home')
     
+    
+    print(Auditoria.objects.all())
+    auditoria = Auditoria.objects.get(user_id=user.id)
+    titulo_header = str(auditoria.titulo)
+    direccion_header = str(auditoria.calle) +' '+str(auditoria.altura) +' '+ str(auditoria.ciudad)+', '+ str(auditoria.provincia)
+    contacto_header = 'Teléfono: '+str(auditoria.telefono)
+    print(titulo_header)
+    print(direccion_header)
+    print(contacto_header)
+    
+    
     if request.method == 'GET':  
         if (Alumno.objects.filter(profesor_id=profesor.id).exists()):
             alumnos = Alumno.objects.filter(profesor_id=profesor.id)
@@ -413,7 +424,8 @@ def listadoAlumnos(request, pk):
             
         filtrado = 'Listado de alumnos filtrado por Rutinas, Tipo entrenamiento y Nivel'
             
-        return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas, 'filtrado':filtrado})
+        return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas, 'filtrado':filtrado, 'titulo_header':titulo_header, 'direccion_header':direccion_header, 'contacto_header':contacto_header})
+    
     
     if request.method == 'POST':
         rutinas = Rutina.objects.filter(estado=True)
@@ -469,9 +481,10 @@ def listadoAlumnos(request, pk):
         if nivel != "Nivel":
             nivelSeleccionado = nivel
         else:
-            nivelSeleccionado = None
+            nivelSeleccionado = None    
+    
                  
-    return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas, 'ruti':ruti, 'entrenamientoSeleccionado':entrenamientoSeleccionado, 'nivelSeleccionado':nivelSeleccionado,'filtrado':filtrado})         
+    return render(request, 'rutina/listadoAlumnos.html', {'profesor' : profesor, 'mensaje' : mensaje, 'alumnos' : alumnos, 'rutinas':rutinas, 'ruti':ruti, 'entrenamientoSeleccionado':entrenamientoSeleccionado, 'nivelSeleccionado':nivelSeleccionado,'filtrado':filtrado,'titulo_header':titulo_header, 'direccion_header':direccion_header, 'contacto_header':contacto_header})         
         
 
 
@@ -703,3 +716,24 @@ def agregarDisponibilidad(request, pk):
         return render(request, 'rutina/agregarDisponibilidad.html',{'form':form, 'dias':dias, 'mensaje':mensaje, 'dias':dias})
     
     return redirect ('/home/administracion/')
+
+
+def reportes(request,pk):
+    user = User.objects.get(id=pk)
+    auditoria = Auditoria.objects.get(user_id=user.id)
+    
+    
+    
+    if request.method == 'GET':
+        form = AuditoriaForm(instance=auditoria)
+    else:
+        form = AuditoriaForm(request.POST, instance=auditoria)
+        if form.is_valid():
+            
+            form.save()
+            messages.success(request, 'Cambio realizado con éxito')
+        else:
+            error = form.errors
+            messages.error(request, 'Fallo al realizar el cambio')
+            return render (request, 'home/reportes.html',{'form':form, 'error':error})
+    return render (request, 'home/reportes.html',{'form':form})

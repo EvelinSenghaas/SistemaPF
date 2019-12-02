@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Rutina, Actividad, Detalle, Nivel, Repeticion, EvaluacionNivel, Sesion, Revision, EsfuerzoActividad, RevisionSesion
-from ..home.models import Alumno, FichaAlumno, Profesor, Semana, DisponibilidadProfesor
+from ..home.models import Alumno, FichaAlumno, Profesor, Semana, DisponibilidadProfesor, Auditoria
 from ..home.forms import AlumnoForm, FichaForm
 from .forms import DetalleForm, ActividadForm, RutinaForm, NivelForm, RepeticionForm, EvaluacionNivelForm
 from django.views.generic import View, TemplateView, ListView, UpdateView, CreateView, DeleteView
@@ -1735,6 +1735,14 @@ def auditoria(request):
     sql="select id,  login_type, username, datetime, remote_ip from easyaudit_loginevent"
     cursor1.execute(sql)
     
+    auditoria = Auditoria.objects.get(user_id=request.user.id)
+    titulo_header = str(auditoria.titulo)
+    direccion_header = str(auditoria.calle) +' '+str(auditoria.altura) +' '+ str(auditoria.ciudad)+', '+ str(auditoria.provincia)
+    contacto_header = 'Teléfono: '+str(auditoria.telefono)
+    print(titulo_header)
+    print(direccion_header)
+    print(contacto_header)
+    
     
     for fila in cursor1.fetchall():       
         diccionario = {
@@ -1818,7 +1826,7 @@ def auditoria(request):
     
             
             
-    return render (request, 'rutina/auditoria.html', {'logs':logs, 'objetos':objetos, 'modelos':modelos})
+    return render (request, 'rutina/auditoria.html', {'logs':logs, 'objetos':objetos, 'modelos':modelos, 'titulo_header':titulo_header, 'direccion_header':direccion_header, 'contacto_header':contacto_header})
 
 #Esta funcion es para mostrar detalles de la auditoria cuando se selecciona un objeto
 def detalleAuditoria(request):

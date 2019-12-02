@@ -1,5 +1,5 @@
 from django import forms
-from .models import Usuario, Profesor, Alumno, FichaAlumno, DisponibilidadProfesor
+from .models import Usuario, Profesor, Alumno, FichaAlumno, DisponibilidadProfesor, Auditoria
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User, Permission
 
@@ -125,4 +125,28 @@ class DisponibilidadForm(forms.ModelForm):
                 )}
     
     
+class AuditoriaForm(forms.ModelForm):
+    class Meta:
+        model = Auditoria
+        fields = ['titulo', 'calle', 'altura', 'ciudad', 'provincia', 'telefono']
+        
+        widgets = {
+            'titulo' : forms.TextInput(
+                attrs = { 'class':'form-control', 'placeholder':'Ingrese el título', 'required': True, 'pattern':'[A-Za-z ]+'}
+                ),
+            'calle' : forms.TextInput(
+                attrs = { 'class':'form-control', 'placeholder':'Ingrese la calle', 'required': True, 'pattern':'[A-Za-z ]+'}
+                ),
+            'altura' : forms.NumberInput(
+                attrs = { 'class':'form-control', 'placeholder':'Ingrese la altura', 'required': True}
+                ),
+            'ciudad' : forms.TextInput(
+                attrs = { 'class':'form-control', 'placeholder':'Ingrese la ciudad', 'required': True, 'pattern':'[A-Za-z ]+'}
+                ),
+            'provincia' : forms.TextInput(
+                attrs = { 'class':'form-control', 'placeholder':'Ingrese la provincia', 'required': True, 'pattern':'[A-Za-z ]+'}
+                ),
+            'telefono' : forms.NumberInput(
+                attrs = { 'class':'form-control', 'placeholder':'Ingrese el telefono', 'required': True, 'pattern':'[0-9]'}
+                )}
         
