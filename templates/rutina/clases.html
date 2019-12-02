@@ -67,8 +67,8 @@
                         '</h5>'
                             
                     }
-                    $('#revision').html(html);
-                    $('#revision2').html(html2);
+                    $('#revision'+id).html(html);
+                    $('#revision2'+id).html(html2);
                 }
 
             });              
@@ -200,7 +200,7 @@
                             <div class="col-3">
                                 {{alumno.alumno_id.rutina_id}}
                             </div>
-                            <div class="auto" id="revision">
+                            <div class="auto" id="revision{{alumno.alumno_id.id}}">
                                 
                             </div>
                         </div>
@@ -303,7 +303,7 @@
                         <div class="col-3">
                             {{alumno.alumno_id.rutina_id}}
                         </div>
-                        <div class="auto" id="revision2">
+                        <div class="auto" id="revision2{{alumno.alumno_id.id}}">
                             
                         </div>
                     </div>

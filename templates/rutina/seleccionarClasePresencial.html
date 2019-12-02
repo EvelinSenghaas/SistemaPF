@@ -9,7 +9,7 @@
 <script src="{% static 'js/jquery-3.4.1.js' %}"></script>
 
 <body class="container mt-2" onload="mensaje();">
-        <div id="formhorario">
+        <div id="formhorario" class="card">
                 <input type="hidden" id="mensaje" value="{{mensaje3}}">
                 <form method="POST" >
                         {% csrf_token %}
@@ -41,7 +41,7 @@
                                     <div class="row form-group">
                                         <div class="col col-md-3">Horarios</div>
                                         <div class="col-12 col-md-9">
-                                            <select name="disponibilidad" class="selectpicker" data-live-search="true">
+                                            <select name="disponibilidad" class="selectpicker" data-live-search="true" style="width: 500px;">
                                                 <option selected>Selecciona un horario</option>
                                                 {%for disp in disponibilidad%}
                                                     <option value="{{disp.id}}">

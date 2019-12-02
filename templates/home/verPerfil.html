@@ -40,9 +40,9 @@
 
                 }
                 var html2 = ""
-                $('#contenido').html(html);
+                $('#contenido'+id).html(html);
                 console.log(html);
-                $('#revision').html(html2);
+                $('#revision'+id).html(html2);
                 console.log(html2);
             },
 
@@ -96,7 +96,7 @@
                         '</div>' +
                         '</div>'
 
-                    $('#revision').html(html2);
+                    $('#revision'+id).html(html2);
                     console.log(html2);
                 }
             },
@@ -689,7 +689,7 @@
 
                                     <td width="150">
                                         <a href="#" onclick="verActividades('{{sesion.id}}')" data-toggle="modal"
-                                            data-target=".bs-example-modal-lg2">{{sesion.fechaSesion}} </a>
+                                            data-target=".bs-example-modal-lg2{{sesion.id}}">{{sesion.fechaSesion}} </a>
                                     </td>
 
                                     <td width="120">{{sesion.esfuerzoSesion}}/10</td>
@@ -698,12 +698,12 @@
                                     <td width="auto">{{sesion.rutina_id}}</td>
                                 </tr>
                                 <!-- Modal para ver sesiones -->
-                                <div class="modal fade bs-example-modal-lg2" id="myModal2" tabindex="-1" role="dialog"
+                                <div class="modal fade bs-example-modal-lg2{{sesion.id}}" id="myModal2" tabindex="-1" role="dialog"
                                     aria-hidden="true">
-                                    <div class="modal-dialog modal-lg">
+                                    <div class="modal-dialog modal-lg{{sesion.id}}">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h4 class="modal-title" id="myModalLabel">Detalles de la sesion</h4>
+                                                <h4 class="modal-title" id="myModalLabel">Detalles de la sesion ({{sesion.fechaSesion}})</h4>
                                                 <button type="button" class="close" data-dismiss="modal"><span
                                                         aria-hidden="true">×</span></button>
                                             </div>
@@ -718,8 +718,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div id="contenido"></div>
-                                                <div id="revision"></div>
+                                                <div id="contenido{{sesion.id}}"></div>
+                                                <div id="revision{{sesion.id}}"></div>
 
 
                                             </div>

@@ -108,7 +108,7 @@ def traducirDia(dia):
 #Metodo para calcular el nivel a asignar al alumno
 def calcularNivel(altura, circu, peso, actividad, sexo):
     print(altura)
-    
+    print(actividad)
     if sexo == 'M':
         contextura = ((float(altura)*100)/float(circu))
         if contextura > 10.4:
@@ -128,15 +128,15 @@ def calcularNivel(altura, circu, peso, actividad, sexo):
 
     altura = float(altura)
     imc = float(peso) / (altura*altura)
-    if imc < 18.4:
+    if imc < 20:
         nombreImc = "delgado"
-    if 18.4 <= imc <= 24.9:
+    if 20 <= imc <= 24.9:
         nombreImc = "normal"
     if imc > 24.9:
         nombreImc = "gordo"
 
 
-    if actividad == "mucho":
+    """if actividad == "mucho":
         print(actividad)
         print(nombreImc)
         if (nombreImc == "delgado") or (nombreImc == "normal"):
@@ -160,8 +160,46 @@ def calcularNivel(altura, circu, peso, actividad, sexo):
             nivel = "intermedio"
         else:
             nivel = "principiante"
-        print(nivel)
-        return nivel
+        print(nivel)"""
+        
+    
+    if actividad == "mucho":
+        if nombreContextura == "pequeña":
+            if nombreImc == "delgado":
+                nivel = "avanzado"
+            elif nombreImc == "normal":
+                nivel = "intermedio"
+            elif nombreImc == "gordo":
+                nivel = "principiante"
+                
+        elif nombreContextura == "mediana":
+            if nombreImc == "delgado":
+                nivel = "Avanzado"
+            elif nombreImc == "normal":
+                nivel = "intermedio"
+            elif nombreImc == "gordo":
+                nivel = "principiante"
+        
+        elif nombreContextura == "grande":
+            if nombreImc == "delgado" or nombreImc == "normal":
+                nivel = "intermedio"
+            elif nombreImc == "gordo":
+                nivel = "principiante"
+                
+    if actividad == "poco":
+        if nombreContextura == "pequeña":
+            if nombreImc == "delgado":
+                nivel = "intermedio"
+            else:
+                nivel = "principiante"
+        else:
+            nivel = "principiante"
+    
+    if actividad == "nada":
+        nivel = "principiante"        
+    
+    return nivel
+                        
     
 
 
@@ -936,6 +974,7 @@ def verClase(request, pk):
                 alumnos = []
                 print(len(alum))
                 for alu in alum:
+                    print(alu)
                     if Sesion.objects.filter(alumno_id=alu.alumno_id).exists() and alu.alumno_id.entrenamiento_sistema == True:
                         ultimaSesion = Sesion.objects.filter(alumno_id=alu.alumno_id).latest()
                         if ultimaSesion.claseRevision==True:
