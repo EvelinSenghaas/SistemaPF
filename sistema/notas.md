@@ -8,5 +8,5 @@ Correcciones para la presentacion final
 - [ ] Agregar minimo de edad para inscribirse a rutina de 6 años
 - [ ] Controlar que al editar una disponibilidad se le consulte al alumno 
 - [ ] Enviar email al subir de nivel.
-- [ ] Mejorar el titulo del reporte de alumnos
+- [x] Mejorar el titulo del reporte de alumnos
 

@@ -1735,6 +1735,8 @@ def auditoria(request):
     sql="select id,  login_type, username, datetime, remote_ip from easyaudit_loginevent"
     cursor1.execute(sql)
     
+    usuarios = User.objects.all()
+    
     auditoria = Auditoria.objects.get(user_id=request.user.id)
     titulo_header = str(auditoria.titulo)
     direccion_header = str(auditoria.calle) +' '+str(auditoria.altura) +' '+ str(auditoria.ciudad)+', '+ str(auditoria.provincia)
@@ -1826,7 +1828,7 @@ def auditoria(request):
     
             
             
-    return render (request, 'rutina/auditoria.html', {'logs':logs, 'objetos':objetos, 'modelos':modelos, 'titulo_header':titulo_header, 'direccion_header':direccion_header, 'contacto_header':contacto_header})
+    return render (request, 'rutina/auditoria.html', {'logs':logs, 'objetos':objetos, 'modelos':modelos, 'titulo_header':titulo_header, 'direccion_header':direccion_header, 'contacto_header':contacto_header, 'usuarios':usuarios})
 
 #Esta funcion es para mostrar detalles de la auditoria cuando se selecciona un objeto
 def detalleAuditoria(request):
